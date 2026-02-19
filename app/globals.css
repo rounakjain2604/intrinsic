@@ -1,0 +1,77 @@
+@import "tailwindcss";
+
+:root {
+  /* Backgrounds — warm, layered, paper-like */
+  --bg-base: #FAF8F5;
+  --bg-surface: #F5F1EA;
+  --bg-elevated: #EDE8DF;
+  --bg-ink: #2D2A26;
+
+  /* Borders — warm, not clinical grey */
+  --border-default: rgba(45, 42, 38, 0.10);
+  --border-strong: rgba(45, 42, 38, 0.20);
+
+  /* Crayon accent palette — the signature */
+  --crayon-coral: #E8694A;
+  --crayon-blue: #4A7FC1;
+  --crayon-green: #5B9E6F;
+  --crayon-amber: #D4882A;
+  --crayon-purple: #7B6BAE;
+
+  /* Text hierarchy — warm, not cold grey */
+  --text-primary: #2D2A26;
+  --text-secondary: #6B6560;
+  --text-muted: #A09890;
+  --text-inverse: #FAF8F5;
+}
+
+@theme inline {
+  --color-background: var(--bg-base);
+  --color-foreground: var(--text-primary);
+
+  /* Custom colors → bg-ink, text-ink, border-ink, etc. */
+  --color-ink: #2D2A26;
+
+  /* Cream palette → bg-cream-base, bg-cream-surface, bg-cream-elevated */
+  --color-cream-base: #FAF8F5;
+  --color-cream-surface: #F5F1EA;
+  --color-cream-elevated: #EDE8DF;
+
+  /* Crayon palette → text-crayon-coral, bg-crayon-blue, etc. */
+  --color-crayon-coral: #E8694A;
+  --color-crayon-blue: #4A7FC1;
+  --color-crayon-green: #5B9E6F;
+  --color-crayon-amber: #D4882A;
+  --color-crayon-purple: #7B6BAE;
+
+  /* Muted → text-muted */
+  --color-muted: #A09890;
+
+  /* Font families → font-serif, font-sans, font-mono */
+  --font-sans: var(--font-sans);
+  --font-serif: var(--font-serif);
+  --font-mono: var(--font-mono);
+}
+
+body {
+  background: #FAF8F5;
+  color: var(--text-primary);
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+/* Animations */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.animate-fade-up { animation: fadeUp 0.5s ease-out both; }
+.animate-fade-in { animation: fadeIn 0.4s ease-out both; }
+.delay-75 { animation-delay: 75ms; }
+.delay-150 { animation-delay: 150ms; }
+.delay-300 { animation-delay: 300ms; }
