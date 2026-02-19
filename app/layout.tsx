@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Lora, DM_Sans, DM_Mono } from "next/font/google";
 import { Navbar } from "@/components/shared/Navbar";
+import { Footer } from "@/components/shared/Footer";
 import "./globals.css";
 
 const lora = Lora({
@@ -50,7 +51,8 @@ export default function RootLayout({
         </div>
         <div className="relative z-10">
           <Navbar />
-          {children}
+          <main>{children}</main>
+          <Footer />
         </div>
       </body>
     </html>
