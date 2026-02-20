@@ -18,55 +18,52 @@ export function Navbar() {
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${scrolled
-          ? "bg-[#FAF8F5]/80 backdrop-blur-xl border-b border-[#2D2A26]/10 py-4 shadow-[0_4px_30px_rgba(45,42,38,0.03)]"
-          : "bg-transparent py-6"
+        ? "bg-[#FAF8F5]/90 backdrop-blur-xl border-b border-[#2D2A26]/10 py-4 shadow-sm"
+        : "bg-transparent py-6"
         }`}
     >
-      <div className="max-w-7xl mx-auto px-6 h-12 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
         {/* Logo Area */}
         <div className="flex-shrink-0">
-          <Link href="/" className="flex items-center gap-2 group">
-            <span className="font-[family-name:var(--font-serif)] text-2xl font-bold text-[#2D2A26] tracking-tight group-hover:opacity-80 transition-opacity">
-              Intrinsic
+          <Link href="/" className="flex items-center group">
+            <span className={`font-[family-name:var(--font-sans)] text-2xl font-bold tracking-tighter transition-colors ${scrolled ? "text-[#2D2A26]" : "text-[#FAF8F5]"}`}>
+              INTRINSIC
             </span>
           </Link>
         </div>
 
-        {/* Center Navigation Links (Hidden on mobile for now) */}
-        <div className="hidden md:flex items-center space-x-8">
+        {/* Center Navigation Links */}
+        <div className="hidden md:flex items-center space-x-12">
           <Link
-            href="/chapters"
-            className="font-[family-name:var(--font-sans)] text-sm font-medium text-[#6B6560] hover:text-[#2D2A26] transition-colors"
+            href="#philosophy"
+            className={`font-[family-name:var(--font-sans)] text-sm font-medium transition-colors ${scrolled ? "text-[#6B6560] hover:text-[#2D2A26]" : "text-[#FAF8F5]/70 hover:text-[#FAF8F5]"}`}
           >
-            Chapters
+            Philosophy
           </Link>
           <Link
-            href="/pricing"
-            className="font-[family-name:var(--font-sans)] text-sm font-medium text-[#6B6560] hover:text-[#2D2A26] transition-colors"
+            href="#protocol"
+            className={`font-[family-name:var(--font-sans)] text-sm font-medium transition-colors ${scrolled ? "text-[#6B6560] hover:text-[#2D2A26]" : "text-[#FAF8F5]/70 hover:text-[#FAF8F5]"}`}
           >
-            Pricing
+            Protocol
           </Link>
           <Link
-            href="/about"
-            className="font-[family-name:var(--font-sans)] text-sm font-medium text-[#6B6560] hover:text-[#2D2A26] transition-colors"
+            href="#membership"
+            className={`font-[family-name:var(--font-sans)] text-sm font-medium transition-colors ${scrolled ? "text-[#6B6560] hover:text-[#2D2A26]" : "text-[#FAF8F5]/70 hover:text-[#FAF8F5]"}`}
           >
-            About
+            Membership
           </Link>
         </div>
 
         {/* Right CTA Buttons */}
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center">
           <Link
-            href="/sign-in"
-            className="hidden sm:block font-[family-name:var(--font-sans)] text-sm font-medium text-[#6B6560] hover:text-[#2D2A26] transition-colors"
+            href="/assessment"
+            className={`font-[family-name:var(--font-sans)] text-sm font-medium px-6 py-2.5 rounded-full transition-all ${scrolled
+                ? "bg-[#2D2A26] text-[#FAF8F5] hover:bg-[#1A1816] shadow-sm"
+                : "bg-[#FAF8F5] text-[#2D2A26] hover:bg-white"
+              }`}
           >
-            Sign In
-          </Link>
-          <Link
-            href="/dashboard"
-            className="font-[family-name:var(--font-sans)] text-sm font-medium bg-[#E8694A] text-[#FAF8F5] px-5 py-2.5 rounded-lg hover:bg-[#D45E40] transition-colors shadow-sm hover:shadow"
-          >
-            Get Started
+            Begin Assessment
           </Link>
         </div>
       </div>

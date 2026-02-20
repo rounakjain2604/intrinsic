@@ -1,31 +1,28 @@
 import { Metadata } from "next";
 import Hero from "@/components/landing/Hero";
-import ChapterPreview from "@/components/landing/ChapterPreview";
+import Features from "@/components/landing/Features";
+import Manifesto from "@/components/landing/Manifesto";
+import Process from "@/components/landing/Process";
 import PricingSection from "@/components/landing/PricingSection";
-import EmailCapture from "@/components/landing/EmailCapture";
 
 export const metadata: Metadata = {
-  title: "Intrinsic — CFA Level 2 Visual Notes",
-  description: "Visual CFA Level 2 study notes with hand-drawn diagrams. 5 chapters free forever.",
+  title: "Intrinsic — The Biological Protocol",
+  description: "Advanced biological optimization for the high-performing few.",
 };
 
 export default function Home() {
   return (
-    <main className="overflow-x-hidden selection:bg-[#E8694A]/20 selection:text-[#2D2A26]">
+    <main className="overflow-x-hidden selection:bg-[#E8694A]/20 selection:text-[#2D2A26] bg-[#FAF8F5]">
       <div className="relative">
         <Hero />
       </div>
 
-      <div className="relative z-10 bg-gradient-to-b from-[#FAF8F5] to-white/50 pb-20 md:pb-32">
-        <ChapterPreview />
-      </div>
+      <Features />
+      <Manifesto />
+      <Process />
 
-      <div className="relative z-20 bg-white shadow-[0_-20px_40px_rgba(45,42,38,0.02)] rounded-t-[3rem] pb-20 md:pb-32 overflow-hidden">
+      <div className="relative z-20 pb-0 overflow-hidden bg-white">
         <PricingSection />
-      </div>
-
-      <div className="relative z-30 pb-32 -mt-10">
-        <EmailCapture />
       </div>
     </main>
   );

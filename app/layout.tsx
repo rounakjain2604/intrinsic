@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Lora, DM_Sans, DM_Mono } from "next/font/google";
 import { SmoothScroll } from "@/components/shared/SmoothScroll";
 import { Navbar } from "@/components/shared/Navbar";
-import { Footer } from "@/components/shared/Footer";
+import Footer from "@/components/shared/Footer";
 import "./globals.css";
 
 const lora = Lora({
