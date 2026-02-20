@@ -11,12 +11,13 @@
   --border-default: rgba(45, 42, 38, 0.10);
   --border-strong: rgba(45, 42, 38, 0.20);
 
-  /* Crayon accent palette — matching the logo signature */
-  --crayon-red: #B53A3A;
-  --crayon-blue: #3E6FA8;
-  --crayon-green: #59925B;
-  --crayon-orange: #EC8B31;
+  /* Crayon accent palette — per MASTER_SKILL spec */
+  --crayon-coral: #E8694A;
+  --crayon-blue: #4A7FC1;
+  --crayon-green: #5B9E6F;
+  --crayon-amber: #D4882A;
   --crayon-purple: #7B6BAE;
+  --crayon-red: #C94F3A;
 
   /* Text hierarchy — warm, not cold grey */
   --text-primary: #2D2A26;
@@ -37,12 +38,13 @@
   --color-cream-surface: #F5F1EA;
   --color-cream-elevated: #EDE8DF;
 
-  /* Crayon palette → text-crayon-red, bg-crayon-blue, etc. */
-  --color-crayon-red: var(--crayon-red);
+  /* Crayon palette → text-crayon-coral, bg-crayon-blue, etc. */
+  --color-crayon-coral: var(--crayon-coral);
   --color-crayon-blue: var(--crayon-blue);
   --color-crayon-green: var(--crayon-green);
-  --color-crayon-orange: var(--crayon-orange);
+  --color-crayon-amber: var(--crayon-amber);
   --color-crayon-purple: var(--crayon-purple);
+  --color-crayon-red: var(--crayon-red);
 
   /* Muted → text-muted */
   --color-muted: #A09890;
@@ -59,9 +61,17 @@ body {
   font-family: var(--font-sans), system-ui, sans-serif;
 }
 
-/* Animations */
+/* === Premium Motion System === */
+
+/* Reveal-up: mask clip animation for headlines */
+@keyframes revealUp {
+  from { clip-path: inset(100% 0 0 0); transform: translateY(40px); }
+  to { clip-path: inset(0 0 0 0); transform: translateY(0); }
+}
+
+/* Fade + slide up for general content */
 @keyframes fadeUp {
-  from { opacity: 0; transform: translateY(12px); }
+  from { opacity: 0; transform: translateY(40px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
@@ -70,8 +80,90 @@ body {
   to { opacity: 1; }
 }
 
-.animate-fade-up { animation: fadeUp 0.5s ease-out both; }
-.animate-fade-in { animation: fadeIn 0.4s ease-out both; }
-.delay-75 { animation-delay: 75ms; }
+/* SVG line draw */
+@keyframes lineDraw {
+  to { stroke-dashoffset: 0; }
+}
+
+/* Underline draw */
+@keyframes underlineDraw {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+/* Subtle progress bar fill */
+@keyframes progressFill {
+  from { width: 0%; }
+  to { width: var(--progress, 0%); }
+}
+
+.animate-fade-up { animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.animate-fade-in { animation: fadeIn 0.5s ease-out both; }
+.animate-reveal-up { animation: revealUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) both; }
+
+.delay-100 { animation-delay: 100ms; }
 .delay-150 { animation-delay: 150ms; }
+.delay-200 { animation-delay: 200ms; }
 .delay-300 { animation-delay: 300ms; }
+.delay-400 { animation-delay: 400ms; }
+.delay-500 { animation-delay: 500ms; }
+.delay-600 { animation-delay: 600ms; }
+
+/* Premium card hover — consistent lift + warm shadow */
+.card-hover {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease-out;
+}
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(45, 42, 38, 0.08);
+}
+
+/* Underline draw on hover */
+.hover-underline-draw {
+  position: relative;
+}
+.hover-underline-draw::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 1.5px;
+  background: var(--crayon-coral);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.hover-underline-draw:hover::after {
+  transform: scaleX(1);
+}
+
+/* Snap scroll container */
+.snap-container {
+  scroll-snap-type: y mandatory;
+  overflow-y: auto;
+  height: 100vh;
+}
+
+.snap-section {
+  scroll-snap-align: start;
+  min-height: 100vh;
+}
+
+/* Reduced motion respect */
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-up,
+  .animate-fade-in,
+  .animate-reveal-up {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    clip-path: none !important;
+  }
+  .card-hover:hover {
+    transform: none;
+  }
+  .snap-container {
+    scroll-snap-type: none;
+  }
+}

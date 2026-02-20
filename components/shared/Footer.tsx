@@ -1,72 +1,77 @@
-import Link from 'next/link';
+import Link from "next/link";
 
 export default function Footer() {
-    return (
-        <footer className="bg-[#1A1816] pt-24 pb-12 px-6">
-            <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between gap-16 md:gap-8 mb-20">
+  return (
+    <footer className="bg-[#EDE8DF] pt-16 pb-10 px-6">
+      <div className="max-w-5xl mx-auto">
+        {/* Top row */}
+        <div className="flex flex-col md:flex-row justify-between items-start gap-10 mb-12">
+          {/* Brand */}
+          <div className="max-w-sm">
+            <Link href="/" className="inline-block mb-4">
+              <span className="font-[family-name:var(--font-sans)] text-xl font-bold tracking-tighter text-[#2D2A26]">
+                INTRINSIC
+              </span>
+            </Link>
+            <p className="font-[family-name:var(--font-sans)] text-[#6B6560] text-sm leading-relaxed">
+              Visual study notes that make complex CFA Level 2 concepts click.
+            </p>
+          </div>
 
-                {/* Left Section */}
-                <div className="md:w-1/3 flex flex-col border-white/5 relative z-10">
-                    <Link href="/" className="mb-6 inline-block">
-                        <span className="font-[family-name:var(--font-sans)] text-3xl font-bold tracking-tighter text-[#FAF8F5]">
-                            INTRINSIC
-                        </span>
-                    </Link>
-                    <p className="font-[family-name:var(--font-sans)] text-[#FAF8F5]/60 font-light max-w-sm mb-8 leading-relaxed hover:text-[#FAF8F5]/80 transition-colors">
-                        Visual study notes that make complex CFA Level 2 concepts click intuitively. Master the curriculum without the brain-drain.
-                    </p>
-                    <div className="flex items-center gap-4">
-                        <div className="w-2 h-2 rounded-full bg-crayon-green animate-pulse" />
-                        <span className="font-[family-name:var(--font-mono)] text-xs text-crayon-green uppercase tracking-widest font-semibold drop-shadow-sm">System Online</span>
-                    </div>
-                </div>
-
-                {/* Right Section / Links */}
-                <div className="md:w-2/3 grid grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12 relative z-10">
-
-                    <div className="flex flex-col">
-                        <h4 className="font-[family-name:var(--font-mono)] text-xs font-bold text-[#FAF8F5] uppercase tracking-widest mb-6 border-b border-white/10 pb-3">Explore</h4>
-                        <ul className="flex flex-col gap-4">
-                            <li><Link href="/chapters" className="text-[#FAF8F5]/60 hover:text-[#FAF8F5] transition-colors font-light">Chapters</Link></li>
-                            <li><Link href="#method" className="text-[#FAF8F5]/60 hover:text-[#FAF8F5] transition-colors font-light">The Method</Link></li>
-                            <li><Link href="#pricing" className="text-[#FAF8F5]/60 hover:text-[#FAF8F5] transition-colors font-light">Pricing</Link></li>
-                            <li><Link href="/dashboard" className="text-[#FAF8F5]/60 hover:text-[#FAF8F5] transition-colors font-light">Dashboard</Link></li>
-                        </ul>
-                    </div>
-
-                    <div className="flex flex-col">
-                        <h4 className="font-[family-name:var(--font-mono)] text-xs font-bold text-[#FAF8F5] uppercase tracking-widest mb-6 border-b border-white/10 pb-3">Company</h4>
-                        <ul className="flex flex-col gap-4">
-                            <li><Link href="#about" className="text-[#FAF8F5]/60 hover:text-[#FAF8F5] transition-colors font-light">About Us</Link></li>
-                            <li><Link href="#careers" className="text-[#FAF8F5]/60 hover:text-[#FAF8F5] transition-colors font-light">Careers</Link></li>
-                            <li><Link href="#press" className="text-[#FAF8F5]/60 hover:text-[#FAF8F5] transition-colors font-light">Press Inquiries</Link></li>
-                            <li><Link href="#contact" className="text-[#FAF8F5]/60 hover:text-[#FAF8F5] transition-colors font-light">Contact</Link></li>
-                        </ul>
-                    </div>
-
-                    <div className="flex flex-col col-span-2 lg:col-span-1">
-                        <h4 className="font-[family-name:var(--font-mono)] text-xs font-bold text-[#FAF8F5] uppercase tracking-widest mb-6 border-b border-white/10 pb-3">Sign Up</h4>
-                        <p className="text-[#FAF8F5]/60 font-light mb-4 text-sm max-w-xs">Join the private list for quarterly research briefs.</p>
-                        <div className="flex p-1 bg-white/5 rounded-full border border-white/10 hover:border-white/20 transition-colors focus-within:border-white/30 focus-within:bg-white/10">
-                            <input type="email" placeholder="Email Address" className="bg-transparent text-[#FAF8F5] px-4 py-2 text-sm w-full focus:outline-none placeholder-[#FAF8F5]/30 font-light" />
-                            <button className="bg-[#FAF8F5] text-[#1A1816] w-9 h-9 rounded-full flex items-center justify-center shrink-0 hover:bg-crayon-orange hover:text-white transition-colors" aria-label="Subscribe">
-                                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
-                            </button>
-                        </div>
-                    </div>
-
-                </div>
+          {/* Links */}
+          <div className="flex gap-16">
+            <div>
+              <h4 className="font-[family-name:var(--font-mono)] text-xs font-medium text-[#2D2A26] uppercase tracking-widest mb-4">
+                Explore
+              </h4>
+              <ul className="flex flex-col gap-3">
+                <li>
+                  <a href="#chapters" className="font-[family-name:var(--font-sans)] text-sm text-[#6B6560] hover:text-[#2D2A26] transition-colors">
+                    Chapters
+                  </a>
+                </li>
+                <li>
+                  <a href="#pricing" className="font-[family-name:var(--font-sans)] text-sm text-[#6B6560] hover:text-[#2D2A26] transition-colors">
+                    Pricing
+                  </a>
+                </li>
+                <li>
+                  <a href="#subscribe" className="font-[family-name:var(--font-sans)] text-sm text-[#6B6560] hover:text-[#2D2A26] transition-colors">
+                    Newsletter
+                  </a>
+                </li>
+              </ul>
             </div>
-
-            {/* Bottom Legal */}
-            <div className="max-w-7xl mx-auto pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-6 relative z-10">
-                <p className="text-[#FAF8F5]/40 text-sm font-light">© {new Date().getFullYear()} Intrinsic Education. All rights reserved.</p>
-                <div className="flex flex-wrap justify-center gap-x-6 gap-y-2">
-                    <Link href="#privacy" className="text-[#FAF8F5]/40 hover:text-[#FAF8F5] text-sm transition-colors font-light">Privacy Policy</Link>
-                    <Link href="#terms" className="text-[#FAF8F5]/40 hover:text-[#FAF8F5] text-sm transition-colors font-light">Terms of Service</Link>
-                    <Link href="#disclaimer" className="text-[#FAF8F5]/40 hover:text-[#FAF8F5] text-sm transition-colors font-light">Disclaimer</Link>
-                </div>
+            <div>
+              <h4 className="font-[family-name:var(--font-mono)] text-xs font-medium text-[#2D2A26] uppercase tracking-widest mb-4">
+                Legal
+              </h4>
+              <ul className="flex flex-col gap-3">
+                <li>
+                  <Link href="#privacy" className="font-[family-name:var(--font-sans)] text-sm text-[#6B6560] hover:text-[#2D2A26] transition-colors">
+                    Privacy
+                  </Link>
+                </li>
+                <li>
+                  <Link href="#terms" className="font-[family-name:var(--font-sans)] text-sm text-[#6B6560] hover:text-[#2D2A26] transition-colors">
+                    Terms
+                  </Link>
+                </li>
+              </ul>
             </div>
-        </footer>
-    );
+          </div>
+        </div>
+
+        {/* Divider */}
+        <div className="border-t border-[#2D2A26]/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="font-[family-name:var(--font-sans)] text-xs text-[#A09890]">
+            &copy; {new Date().getFullYear()} Intrinsic Education. All rights reserved.
+          </p>
+          <p className="font-[family-name:var(--font-sans)] text-xs text-[#A09890] text-center md:text-right max-w-md">
+            Not affiliated with or endorsed by CFA Institute. CFA&reg; is a registered trademark owned by CFA Institute.
+          </p>
+        </div>
+      </div>
+    </footer>
+  );
 }

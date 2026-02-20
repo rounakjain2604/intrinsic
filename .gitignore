@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# legacy intrinsic subdirectory (project moved to root)
+intrinsic/
+next-env.d.ts
