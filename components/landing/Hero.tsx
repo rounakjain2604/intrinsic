@@ -83,35 +83,61 @@ export default function Hero() {
                         </div>
 
                         {/* Simulated Hand-Drawn Chart Box */}
-                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[60%]">
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[110%] h-[70%] mt-4">
                             <svg viewBox="0 0 400 300" className="w-full h-full overflow-visible"
                                 style={{ filter: "url(#sketch-hero)" }}>
                                 <defs>
                                     <filter id="sketch-hero" x="-10%" y="-10%" width="120%" height="120%">
-                                        <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="3" result="noise" />
-                                        <feDisplacementMap in="SourceGraphic" in2="noise" scale="2" />
+                                        <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="4" result="noise" />
+                                        <feDisplacementMap in="SourceGraphic" in2="noise" scale="2.5" />
                                     </filter>
+                                    <linearGradient id="fillArea" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="0%" stopColor="#E8694A" stopOpacity="0.2" />
+                                        <stop offset="100%" stopColor="#E8694A" stopOpacity="0.0" />
+                                    </linearGradient>
                                 </defs>
-                                {/* Axes */}
-                                <path d="M 40 250 L 360 250" stroke="#2D2A26" strokeWidth="1.5" strokeOpacity="0.3" fill="none" />
-                                <path d="M 40 250 L 40 50" stroke="#2D2A26" strokeWidth="1.5" strokeOpacity="0.3" fill="none" />
 
-                                {/* Curve */}
-                                <path d="M 40 220 Q 150 200 200 120 T 360 80" stroke="#E8694A" strokeWidth="3" fill="none"
-                                    className="origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-1000 delay-100 ease-out" />
+                                {/* Background Grid Lines (Subtle) */}
+                                <path d="M 40 100 L 360 100" stroke="#2D2A26" strokeWidth="1" strokeOpacity="0.1" strokeDasharray="4 4" fill="none" />
+                                <path d="M 40 175 L 360 175" stroke="#2D2A26" strokeWidth="1" strokeOpacity="0.1" strokeDasharray="4 4" fill="none" />
+                                <path d="M 200 250 L 200 50" stroke="#2D2A26" strokeWidth="1" strokeOpacity="0.1" strokeDasharray="4 4" fill="none" />
+
+                                {/* Primary Axes */}
+                                <path d="M 40 250 L 360 250" stroke="#2D2A26" strokeWidth="2" strokeOpacity="0.8" fill="none" strokeLinecap="round" />
+                                <path d="M 40 250 L 40 50" stroke="#2D2A26" strokeWidth="2" strokeOpacity="0.8" fill="none" strokeLinecap="round" />
+
+                                {/* The Filled Area Under Curve */}
+                                <path d="M 40 220 Q 150 180 200 120 T 360 80 L 360 250 L 40 250 Z"
+                                    fill="url(#fillArea)"
+                                    className="opacity-0 group-hover:opacity-100 transition-opacity duration-1000 delay-500" />
+
+                                {/* The Main Curve */}
+                                <path d="M 40 220 Q 150 180 200 120 T 360 80"
+                                    stroke="#E8694A" strokeWidth="3.5" fill="none" strokeLinecap="round"
+                                    className="origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-[1500ms] delay-200 ease-[cubic-bezier(0.25,1,0.5,1)]" />
 
                                 {/* Data Points */}
-                                <circle cx="200" cy="120" r="4" fill="#F5F1EA" stroke="#E8694A" strokeWidth="2" className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-[800ms]" />
-                                <circle cx="360" cy="80" r="4" fill="#F5F1EA" stroke="#E8694A" strokeWidth="2" className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-[1000ms]" />
+                                <circle cx="200" cy="120" r="5" fill="#F5F1EA" stroke="#e8694a" strokeWidth="2.5" className="opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-[1200ms]" />
+                                <circle cx="360" cy="80" r="5" fill="#F5F1EA" stroke="#E8694A" strokeWidth="2.5" className="opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-[1600ms]" />
 
-                                {/* Annotation Box */}
-                                <g className="opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-[1200ms] transform translate-y-4 group-hover:translate-y-0">
-                                    <path d="M 220 70 L 320 70 L 320 110 L 220 110 Z" fill="#FFFDF9" stroke="#2D2A26" strokeWidth="1" />
-                                    <text x="270" y="94" fontFamily="DM Sans" fontSize="12" fill="#2D2A26" textAnchor="middle">Terminal Value</text>
+                                {/* Dashed drop-lines */}
+                                <path d="M 200 120 L 200 250" stroke="#E8694A" strokeWidth="1.5" strokeDasharray="6 6" fill="none" className="opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-[1200ms]" />
+                                <path d="M 360 80 L 360 250" stroke="#E8694A" strokeWidth="1.5" strokeDasharray="6 6" fill="none" className="opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-[1600ms]" />
+
+                                {/* Hand-drawn Annotation Pointer */}
+                                <g className="opacity-0 group-hover:opacity-100 transition duration-700 delay-[1800ms] transform translate-y-4 group-hover:translate-y-0 text-center origin-center">
+                                    <path d="M 290 50 Q 320 40 345 70" fill="none" stroke="#2D2A26" strokeWidth="1.5" strokeDasharray="4 4" markerEnd="url(#arrow)" />
+                                    <defs>
+                                        <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse">
+                                            <path d="M 0 0 L 10 5 L 0 10 z" fill="#2D2A26" />
+                                        </marker>
+                                    </defs>
+
+                                    <rect x="220" y="30" width="85" height="28" rx="6" fill="#FFFDF9" stroke="#2D2A26" strokeWidth="1.5" />
+                                    <text x="262.5" y="48" fontFamily="DM Sans" fontSize="11" fontWeight="600" fill="#2D2A26" textAnchor="middle">Terminal Val</text>
                                 </g>
                             </svg>
                         </div>
-
                     </div>
 
                     {/* Floating graphic element */}
