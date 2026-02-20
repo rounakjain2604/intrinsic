@@ -11,24 +11,20 @@ export const metadata: Metadata = {
 
 export default function Home() {
   return (
-    <main className="overflow-x-hidden">
-      <Hero />
+    <main className="overflow-x-hidden selection:bg-[#E8694A]/20 selection:text-[#2D2A26]">
+      <div className="relative">
+        <Hero />
+      </div>
 
-      <hr className="border-t border-[#2D2A26]/6 max-w-5xl mx-auto" />
-
-      <div className="py-24">
+      <div className="relative z-10 bg-gradient-to-b from-[#FAF8F5] to-white/50 pb-20 md:pb-32">
         <ChapterPreview />
       </div>
 
-      <hr className="border-t border-[#2D2A26]/6 max-w-5xl mx-auto" />
-
-      <div className="py-24">
+      <div className="relative z-20 bg-white shadow-[0_-20px_40px_rgba(45,42,38,0.02)] rounded-t-[3rem] pb-20 md:pb-32 overflow-hidden">
         <PricingSection />
       </div>
 
-      <hr className="border-t border-[#2D2A26]/6 max-w-5xl mx-auto" />
-
-      <div className="py-24 bg-[#F5F1EA]">
+      <div className="relative z-30 pb-32 -mt-10">
         <EmailCapture />
       </div>
     </main>
