@@ -35,35 +35,35 @@ export function Navbar() {
         {/* Center Navigation Links */}
         <div className="hidden md:flex items-center space-x-12">
           <Link
-            href="#philosophy"
+            href="/chapters"
             className={`font-[family-name:var(--font-sans)] text-sm font-medium transition-colors ${scrolled ? "text-[#6B6560] hover:text-[#2D2A26]" : "text-[#FAF8F5]/70 hover:text-[#FAF8F5]"}`}
           >
-            Philosophy
+            Chapters
           </Link>
           <Link
-            href="#protocol"
+            href="/pricing"
             className={`font-[family-name:var(--font-sans)] text-sm font-medium transition-colors ${scrolled ? "text-[#6B6560] hover:text-[#2D2A26]" : "text-[#FAF8F5]/70 hover:text-[#FAF8F5]"}`}
           >
-            Protocol
+            Pricing
           </Link>
           <Link
-            href="#membership"
+            href="/about"
             className={`font-[family-name:var(--font-sans)] text-sm font-medium transition-colors ${scrolled ? "text-[#6B6560] hover:text-[#2D2A26]" : "text-[#FAF8F5]/70 hover:text-[#FAF8F5]"}`}
           >
-            Membership
+            About
           </Link>
         </div>
 
         {/* Right CTA Buttons */}
         <div className="flex items-center">
           <Link
-            href="/assessment"
+            href="/chapters"
             className={`font-[family-name:var(--font-sans)] text-sm font-medium px-6 py-2.5 rounded-full transition-all ${scrolled
-                ? "bg-[#2D2A26] text-[#FAF8F5] hover:bg-[#1A1816] shadow-sm"
-                : "bg-[#FAF8F5] text-[#2D2A26] hover:bg-white"
+              ? "bg-[#2D2A26] text-[#FAF8F5] hover:bg-[#1A1816] shadow-sm"
+              : "bg-[#FAF8F5] text-[#2D2A26] hover:bg-white"
               }`}
           >
-            Begin Assessment
+            Start Learning
           </Link>
         </div>
       </div>

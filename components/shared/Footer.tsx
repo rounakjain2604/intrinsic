@@ -13,11 +13,11 @@ export default function Footer() {
                         </span>
                     </Link>
                     <p className="font-[family-name:var(--font-sans)] text-[#FAF8F5]/60 font-light max-w-sm mb-8 leading-relaxed hover:text-[#FAF8F5]/80 transition-colors">
-                        The quantitative biology infrastructure for human optimization. We measure, model, and maximize performance.
+                        Visual study notes that make complex CFA Level 2 concepts click intuitively. Master the curriculum without the brain-drain.
                     </p>
                     <div className="flex items-center gap-4">
                         <div className="w-2 h-2 rounded-full bg-[#E8694A] animate-pulse" />
-                        <span className="font-[family-name:var(--font-mono)] text-xs text-[#E8694A] uppercase tracking-widest font-semibold drop-shadow-sm">Accepting Applications</span>
+                        <span className="font-[family-name:var(--font-mono)] text-xs text-[#E8694A] uppercase tracking-widest font-semibold drop-shadow-sm">System Online</span>
                     </div>
                 </div>
 
@@ -27,10 +27,10 @@ export default function Footer() {
                     <div className="flex flex-col">
                         <h4 className="font-[family-name:var(--font-mono)] text-xs font-bold text-[#FAF8F5] uppercase tracking-widest mb-6 border-b border-white/10 pb-3">Explore</h4>
                         <ul className="flex flex-col gap-4">
-                            <li><Link href="#philosophy" className="text-[#FAF8F5]/60 hover:text-[#FAF8F5] transition-colors font-light">Philosophy</Link></li>
-                            <li><Link href="#protocol" className="text-[#FAF8F5]/60 hover:text-[#FAF8F5] transition-colors font-light">The Protocol</Link></li>
-                            <li><Link href="#membership" className="text-[#FAF8F5]/60 hover:text-[#FAF8F5] transition-colors font-light">Membership</Link></li>
-                            <li><Link href="#science" className="text-[#FAF8F5]/60 hover:text-[#FAF8F5] transition-colors font-light">Clinical Board</Link></li>
+                            <li><Link href="/chapters" className="text-[#FAF8F5]/60 hover:text-[#FAF8F5] transition-colors font-light">Chapters</Link></li>
+                            <li><Link href="#method" className="text-[#FAF8F5]/60 hover:text-[#FAF8F5] transition-colors font-light">The Method</Link></li>
+                            <li><Link href="#pricing" className="text-[#FAF8F5]/60 hover:text-[#FAF8F5] transition-colors font-light">Pricing</Link></li>
+                            <li><Link href="/dashboard" className="text-[#FAF8F5]/60 hover:text-[#FAF8F5] transition-colors font-light">Dashboard</Link></li>
                         </ul>
                     </div>
 
@@ -60,11 +60,11 @@ export default function Footer() {
 
             {/* Bottom Legal */}
             <div className="max-w-7xl mx-auto pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-6 relative z-10">
-                <p className="text-[#FAF8F5]/40 text-sm font-light">© {new Date().getFullYear()} Intrinsic Protocol. All rights reserved.</p>
+                <p className="text-[#FAF8F5]/40 text-sm font-light">© {new Date().getFullYear()} Intrinsic Education. All rights reserved.</p>
                 <div className="flex flex-wrap justify-center gap-x-6 gap-y-2">
                     <Link href="#privacy" className="text-[#FAF8F5]/40 hover:text-[#FAF8F5] text-sm transition-colors font-light">Privacy Policy</Link>
                     <Link href="#terms" className="text-[#FAF8F5]/40 hover:text-[#FAF8F5] text-sm transition-colors font-light">Terms of Service</Link>
-                    <Link href="#disclaimer" className="text-[#FAF8F5]/40 hover:text-[#FAF8F5] text-sm transition-colors font-light">Medical Disclaimer</Link>
+                    <Link href="#disclaimer" className="text-[#FAF8F5]/40 hover:text-[#FAF8F5] text-sm transition-colors font-light">Disclaimer</Link>
                 </div>
             </div>
         </footer>

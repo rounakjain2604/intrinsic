@@ -7,10 +7,10 @@ export default function PricingSection() {
 
                 <div className="text-center mb-24">
                     <h2 className="font-[family-name:var(--font-sans)] text-5xl md:text-6xl font-bold text-[#2D2A26] tracking-tighter mb-6">
-                        Access the Network.
+                        Pay for what you need.<br />Nothing else.
                     </h2>
                     <p className="font-[family-name:var(--font-sans)] text-xl text-[#6B6560] max-w-2xl mx-auto font-light">
-                        Select the tier that aligns with your biological objectives.
+                        The subscription era is over. We believe in owning your notes. Buy a chapter once, keep it forever.
                     </p>
                 </div>
 
@@ -18,92 +18,87 @@ export default function PricingSection() {
 
                     {/* Foundation Tier */}
                     <div className="bg-[#FAF8F5] rounded-3xl p-10 border border-[#2D2A26]/5 flex flex-col h-full shadow-[0_8px_30px_rgba(45,42,38,0.02)]">
-                        <h3 className="font-[family-name:var(--font-sans)] text-3xl font-bold text-[#2D2A26] mb-2 tracking-tight">Foundation</h3>
-                        <p className="font-[family-name:var(--font-sans)] text-[#6B6560] font-light mb-8 leading-relaxed">Quarterly diagnostic review and standard protocol generation.</p>
+                        <h3 className="font-[family-name:var(--font-sans)] text-3xl font-bold text-[#2D2A26] mb-2 tracking-tight">Free Forever</h3>
+                        <p className="font-[family-name:var(--font-sans)] text-[#6B6560] font-light mb-8 leading-relaxed">Start learning immediately. No credit card required.</p>
                         <div className="mb-8 border-b border-[#2D2A26]/10 pb-8">
-                            <span className="font-[family-name:var(--font-sans)] text-5xl font-bold text-[#2D2A26] tracking-tighter">$2,500</span>
-                            <span className="text-[#6B6560] ml-1">/yr</span>
+                            <span className="font-[family-name:var(--font-sans)] text-5xl font-bold text-[#2D2A26] tracking-tighter">$0</span>
                         </div>
                         <ul className="flex flex-col gap-5 mb-12 flex-1">
                             <li className="flex items-start gap-4 text-[#2D2A26] font-light">
                                 <svg className="w-5 h-5 text-[#E8694A] shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-                                Quarterly Blood Panel (40+ markers)
+                                5 foundational chapters
                             </li>
                             <li className="flex items-start gap-4 text-[#2D2A26] font-light">
                                 <svg className="w-5 h-5 text-[#E8694A] shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-                                Standard Supplement Protocol
+                                Instant reading access
                             </li>
                             <li className="flex items-start gap-4 text-[#2D2A26] font-light">
                                 <svg className="w-5 h-5 text-[#E8694A] shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-                                Digital Dashboard Access
+                                High-res visual diagrams
                             </li>
                         </ul>
-                        <Link href="#apply" className="w-full py-4 rounded-xl border border-[#2D2A26]/20 font-medium text-[#2D2A26] hover:bg-[#2D2A26] hover:text-[#FAF8F5] transition-colors text-center">
-                            Apply for Foundation
+                        <Link href="/chapters" className="w-full py-4 rounded-xl border border-[#2D2A26]/20 font-medium text-[#2D2A26] hover:bg-[#2D2A26] hover:text-[#FAF8F5] transition-colors text-center">
+                            Start Reading Free
                         </Link>
                     </div>
 
                     {/* Performance Tier (Emphasized) */}
                     <div className="bg-[#1A1816] rounded-3xl p-10 lg:py-14 border border-[#2D2A26]/20 flex flex-col h-full relative shadow-[0_20px_60px_rgba(45,42,38,0.15)] lg:-mx-4 z-10">
                         <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#E8694A] text-white text-xs font-bold uppercase tracking-widest py-1.5 px-4 rounded-full shadow-md">
-                            Most Selected
+                            Per Chapter
                         </div>
-                        <h3 className="font-[family-name:var(--font-sans)] text-3xl font-bold text-[#FAF8F5] mb-2 tracking-tight">Performance</h3>
-                        <p className="font-[family-name:var(--font-sans)] text-[#FAF8F5]/60 font-light mb-8 leading-relaxed">Continuous telemetry and dynamic, algorithmically adjusted prescriptions.</p>
-                        <div className="mb-8 border-b border-white/10 pb-8">
-                            <span className="font-[family-name:var(--font-sans)] text-6xl font-bold text-[#FAF8F5] tracking-tighter">$12,000</span>
-                            <span className="text-[#FAF8F5]/60 ml-1">/yr</span>
+                        <h3 className="font-[family-name:var(--font-sans)] text-3xl font-bold text-[#FAF8F5] mb-2 tracking-tight">Premium</h3>
+                        <p className="font-[family-name:var(--font-sans)] text-[#FAF8F5]/60 font-light mb-8 leading-relaxed">Permanent lifetime access to specific chapters and interactive tools.</p>
+                        <div className="mb-8 border-b border-white/10 pb-8 flex items-baseline">
+                            <span className="font-[family-name:var(--font-sans)] text-lg text-[#FAF8F5]/60 font-medium mr-2">From</span>
+                            <span className="font-[family-name:var(--font-sans)] text-6xl font-bold text-[#FAF8F5] tracking-tighter">$9<span className="text-4xl">.99</span></span>
                         </div>
                         <ul className="flex flex-col gap-5 mb-12 flex-1">
                             <li className="flex items-start gap-4 text-[#FAF8F5] font-light">
                                 <svg className="w-5 h-5 text-[#E8694A] shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-                                Monthly Advanced Diagnostics
+                                Everything in free
                             </li>
                             <li className="flex items-start gap-4 text-[#FAF8F5] font-light">
                                 <svg className="w-5 h-5 text-[#E8694A] shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-                                Continuous Glucose & Cortisol
+                                Full chapter content unlocked
                             </li>
                             <li className="flex items-start gap-4 text-[#FAF8F5] font-light">
                                 <svg className="w-5 h-5 text-[#E8694A] shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-                                Epigenetic Sequencing (2x/yr)
+                                Interactive practice tools
                             </li>
                             <li className="flex items-start gap-4 text-[#FAF8F5] font-light">
                                 <svg className="w-5 h-5 text-[#E8694A] shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-                                Personal Clinical Coordinator
+                                Lifetime permanent access
                             </li>
                         </ul>
-                        <Link href="#apply" className="w-full py-4 rounded-xl bg-[#E8694A] font-medium text-white hover:bg-[#D45E40] transition-colors text-center shadow-[0_8px_20px_rgba(232,105,74,0.3)]">
-                            Apply for Performance
+                        <Link href="/dashboard" className="w-full py-4 rounded-xl bg-[#E8694A] font-medium text-white hover:bg-[#D45E40] transition-colors text-center shadow-[0_8px_20px_rgba(232,105,74,0.3)]">
+                            Browse All Chapters
                         </Link>
                     </div>
 
                     {/* Consilium Tier */}
                     <div className="bg-[#FAF8F5] rounded-3xl p-10 border border-[#2D2A26]/5 flex flex-col h-full shadow-[0_8px_30px_rgba(45,42,38,0.02)]">
-                        <h3 className="font-[family-name:var(--font-sans)] text-3xl font-bold text-[#2D2A26] mb-2 tracking-tight">Consilium</h3>
-                        <p className="font-[family-name:var(--font-sans)] text-[#6B6560] font-light mb-8 leading-relaxed">Bespoke longevity research and dedicated medical board for the ultra-high-net-worth.</p>
+                        <h3 className="font-[family-name:var(--font-sans)] text-3xl font-bold text-[#2D2A26] mb-2 tracking-tight">Full Bundle</h3>
+                        <p className="font-[family-name:var(--font-sans)] text-[#6B6560] font-light mb-8 leading-relaxed">Save time and money by unlocking every chapter for the entire CFA Level 2 curriculum.</p>
                         <div className="mb-8 flex flex-col justify-center border-b border-[#2D2A26]/10 pb-8 h-[106px]">
-                            <span className="font-[family-name:var(--font-sans)] text-4xl font-bold text-[#2D2A26] tracking-tighter">Invite Only</span>
+                            <span className="font-[family-name:var(--font-sans)] text-5xl font-bold text-[#2D2A26] tracking-tighter">$249<span className="text-2xl">.99</span></span>
                         </div>
                         <ul className="flex flex-col gap-5 mb-12 flex-1">
                             <li className="flex items-start gap-4 text-[#2D2A26] font-light">
                                 <svg className="w-5 h-5 text-[#E8694A] shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-                                Everything in Performance
+                                All 40+ chapters unlocked instantly
                             </li>
                             <li className="flex items-start gap-4 text-[#2D2A26] font-light">
                                 <svg className="w-5 h-5 text-[#E8694A] shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-                                In-home Clinical Visits
+                                Huge discount vs per-chapter
                             </li>
                             <li className="flex items-start gap-4 text-[#2D2A26] font-light">
                                 <svg className="w-5 h-5 text-[#E8694A] shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-                                Experimental Therapeutic Access
-                            </li>
-                            <li className="flex items-start gap-4 text-[#2D2A26] font-light">
-                                <svg className="w-5 h-5 text-[#E8694A] shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-                                Dedicated Medical Director
+                                30-day money back guarantee
                             </li>
                         </ul>
                         <Link href="#apply" className="w-full py-4 rounded-xl border border-[#2D2A26]/20 font-medium text-[#2D2A26] hover:bg-[#2D2A26] hover:text-[#FAF8F5] transition-colors text-center">
-                            Request Review
+                            Get the Bundle
                         </Link>
                     </div>
 
