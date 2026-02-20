@@ -11,11 +11,11 @@
   --border-default: rgba(45, 42, 38, 0.10);
   --border-strong: rgba(45, 42, 38, 0.20);
 
-  /* Crayon accent palette — the signature */
-  --crayon-coral: #E8694A;
-  --crayon-blue: #4A7FC1;
-  --crayon-green: #5B9E6F;
-  --crayon-amber: #D4882A;
+  /* Crayon accent palette — matching the logo signature */
+  --crayon-red: #B53A3A;
+  --crayon-blue: #3E6FA8;
+  --crayon-green: #59925B;
+  --crayon-orange: #EC8B31;
   --crayon-purple: #7B6BAE;
 
   /* Text hierarchy — warm, not cold grey */
@@ -37,12 +37,12 @@
   --color-cream-surface: #F5F1EA;
   --color-cream-elevated: #EDE8DF;
 
-  /* Crayon palette → text-crayon-coral, bg-crayon-blue, etc. */
-  --color-crayon-coral: #E8694A;
-  --color-crayon-blue: #4A7FC1;
-  --color-crayon-green: #5B9E6F;
-  --color-crayon-amber: #D4882A;
-  --color-crayon-purple: #7B6BAE;
+  /* Crayon palette → text-crayon-red, bg-crayon-blue, etc. */
+  --color-crayon-red: var(--crayon-red);
+  --color-crayon-blue: var(--crayon-blue);
+  --color-crayon-green: var(--crayon-green);
+  --color-crayon-orange: var(--crayon-orange);
+  --color-crayon-purple: var(--crayon-purple);
 
   /* Muted → text-muted */
   --color-muted: #A09890;

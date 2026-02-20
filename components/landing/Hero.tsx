@@ -3,11 +3,10 @@ import Link from "next/link";
 export default function Hero() {
     return (
         <section className="relative min-h-[100vh] flex items-center pt-24 pb-16 px-6 overflow-hidden bg-[#1A1816]">
-            {/* Background Image with Overlay */}
             <div
-                className="absolute inset-0 z-0 opacity-40 mix-blend-luminosity"
+                className="absolute inset-0 z-0 opacity-50 mix-blend-luminosity"
                 style={{
-                    backgroundImage: 'url("https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&q=80&w=2070")',
+                    backgroundImage: 'url("/forest-bg.png")',
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
                 }}
@@ -26,7 +25,7 @@ export default function Hero() {
 
                 <h1 className="font-[family-name:var(--font-sans)] text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-bold text-[#FAF8F5] leading-[1.05] mb-8 tracking-tighter max-w-5xl">
                     Finally understand the <br />
-                    <span className="font-[family-name:var(--font-serif)] font-normal italic tracking-normal text-[#E8694A]">hardest concepts.</span>
+                    <span className="font-[family-name:var(--font-serif)] font-normal italic tracking-normal text-crayon-orange">hardest concepts.</span>
                 </h1>
 
                 <p className="font-[family-name:var(--font-sans)] text-lg md:text-xl text-[#FAF8F5]/70 max-w-2xl mx-auto mb-12 font-light leading-relaxed">

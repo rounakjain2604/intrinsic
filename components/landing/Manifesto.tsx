@@ -7,11 +7,11 @@ export default function Manifesto() {
                     Legacy prep asks <br className="hidden md:block" />
                     <span className="text-[#A09890] font-normal">"What to memorize?"</span>
                     <br /><br />
-                    We ask <span className="font-[family-name:var(--font-serif)] italic text-[#E8694A] font-normal tracking-normal pr-4">"What makes sense?"</span>
+                    We ask <span className="font-[family-name:var(--font-serif)] italic text-crayon-orange font-normal tracking-normal pr-4">"What makes sense?"</span>
                 </h2>
 
                 {/* Thin vertical red line connects text */}
-                <div className="h-32 w-px bg-gradient-to-b from-[#E8694A] to-transparent mb-12" />
+                <div className="h-32 w-px bg-gradient-to-b from-crayon-orange to-transparent mb-12" />
 
                 <p className="font-[family-name:var(--font-sans)] text-xl text-[#FAF8F5]/60 max-w-2xl font-light leading-relaxed">
                     Most providers drown you in thousands of pages of bullet points, trying to cover every possible detail. We don't. We employ visual models and brutal curation to focus exactly on the concepts that truly matter for passing the exam.

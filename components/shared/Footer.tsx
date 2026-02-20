@@ -16,8 +16,8 @@ export default function Footer() {
                         Visual study notes that make complex CFA Level 2 concepts click intuitively. Master the curriculum without the brain-drain.
                     </p>
                     <div className="flex items-center gap-4">
-                        <div className="w-2 h-2 rounded-full bg-[#E8694A] animate-pulse" />
-                        <span className="font-[family-name:var(--font-mono)] text-xs text-[#E8694A] uppercase tracking-widest font-semibold drop-shadow-sm">System Online</span>
+                        <div className="w-2 h-2 rounded-full bg-crayon-green animate-pulse" />
+                        <span className="font-[family-name:var(--font-mono)] text-xs text-crayon-green uppercase tracking-widest font-semibold drop-shadow-sm">System Online</span>
                     </div>
                 </div>
 
@@ -49,7 +49,7 @@ export default function Footer() {
                         <p className="text-[#FAF8F5]/60 font-light mb-4 text-sm max-w-xs">Join the private list for quarterly research briefs.</p>
                         <div className="flex p-1 bg-white/5 rounded-full border border-white/10 hover:border-white/20 transition-colors focus-within:border-white/30 focus-within:bg-white/10">
                             <input type="email" placeholder="Email Address" className="bg-transparent text-[#FAF8F5] px-4 py-2 text-sm w-full focus:outline-none placeholder-[#FAF8F5]/30 font-light" />
-                            <button className="bg-[#FAF8F5] text-[#1A1816] w-9 h-9 rounded-full flex items-center justify-center shrink-0 hover:bg-[#E8694A] hover:text-white transition-colors" aria-label="Subscribe">
+                            <button className="bg-[#FAF8F5] text-[#1A1816] w-9 h-9 rounded-full flex items-center justify-center shrink-0 hover:bg-crayon-orange hover:text-white transition-colors" aria-label="Subscribe">
                                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
                             </button>
                         </div>

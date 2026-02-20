@@ -25,15 +25,15 @@ export default function PricingSection() {
                         </div>
                         <ul className="flex flex-col gap-5 mb-12 flex-1">
                             <li className="flex items-start gap-4 text-[#2D2A26] font-light">
-                                <svg className="w-5 h-5 text-[#E8694A] shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                                <svg className="w-5 h-5 text-crayon-green shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
                                 5 foundational chapters
                             </li>
                             <li className="flex items-start gap-4 text-[#2D2A26] font-light">
-                                <svg className="w-5 h-5 text-[#E8694A] shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                                <svg className="w-5 h-5 text-crayon-green shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
                                 Instant reading access
                             </li>
                             <li className="flex items-start gap-4 text-[#2D2A26] font-light">
-                                <svg className="w-5 h-5 text-[#E8694A] shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                                <svg className="w-5 h-5 text-crayon-green shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
                                 High-res visual diagrams
                             </li>
                         </ul>
@@ -44,7 +44,7 @@ export default function PricingSection() {
 
                     {/* Performance Tier (Emphasized) */}
                     <div className="bg-[#1A1816] rounded-3xl p-10 lg:py-14 border border-[#2D2A26]/20 flex flex-col h-full relative shadow-[0_20px_60px_rgba(45,42,38,0.15)] lg:-mx-4 z-10">
-                        <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#E8694A] text-white text-xs font-bold uppercase tracking-widest py-1.5 px-4 rounded-full shadow-md">
+                        <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-crayon-orange text-white text-xs font-bold uppercase tracking-widest py-1.5 px-4 rounded-full shadow-md">
                             Per Chapter
                         </div>
                         <h3 className="font-[family-name:var(--font-sans)] text-3xl font-bold text-[#FAF8F5] mb-2 tracking-tight">Premium</h3>
@@ -55,23 +55,23 @@ export default function PricingSection() {
                         </div>
                         <ul className="flex flex-col gap-5 mb-12 flex-1">
                             <li className="flex items-start gap-4 text-[#FAF8F5] font-light">
-                                <svg className="w-5 h-5 text-[#E8694A] shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                                <svg className="w-5 h-5 text-crayon-orange shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
                                 Everything in free
                             </li>
                             <li className="flex items-start gap-4 text-[#FAF8F5] font-light">
-                                <svg className="w-5 h-5 text-[#E8694A] shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                                <svg className="w-5 h-5 text-crayon-orange shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
                                 Full chapter content unlocked
                             </li>
                             <li className="flex items-start gap-4 text-[#FAF8F5] font-light">
-                                <svg className="w-5 h-5 text-[#E8694A] shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                                <svg className="w-5 h-5 text-crayon-orange shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
                                 Interactive practice tools
                             </li>
                             <li className="flex items-start gap-4 text-[#FAF8F5] font-light">
-                                <svg className="w-5 h-5 text-[#E8694A] shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                                <svg className="w-5 h-5 text-crayon-orange shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
                                 Lifetime permanent access
                             </li>
                         </ul>
-                        <Link href="/dashboard" className="w-full py-4 rounded-xl bg-[#E8694A] font-medium text-white hover:bg-[#D45E40] transition-colors text-center shadow-[0_8px_20px_rgba(232,105,74,0.3)]">
+                        <Link href="/dashboard" className="w-full py-4 rounded-xl bg-crayon-orange font-medium text-white hover:bg-crayon-orange/90 transition-colors text-center shadow-[0_8px_20px_rgba(236,139,49,0.3)]">
                             Browse All Chapters
                         </Link>
                     </div>
@@ -85,15 +85,15 @@ export default function PricingSection() {
                         </div>
                         <ul className="flex flex-col gap-5 mb-12 flex-1">
                             <li className="flex items-start gap-4 text-[#2D2A26] font-light">
-                                <svg className="w-5 h-5 text-[#E8694A] shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                                <svg className="w-5 h-5 text-crayon-blue shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
                                 All 40+ chapters unlocked instantly
                             </li>
                             <li className="flex items-start gap-4 text-[#2D2A26] font-light">
-                                <svg className="w-5 h-5 text-[#E8694A] shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                                <svg className="w-5 h-5 text-crayon-blue shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
                                 Huge discount vs per-chapter
                             </li>
                             <li className="flex items-start gap-4 text-[#2D2A26] font-light">
-                                <svg className="w-5 h-5 text-[#E8694A] shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                                <svg className="w-5 h-5 text-crayon-blue shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
                                 30-day money back guarantee
                             </li>
                         </ul>
