@@ -34,9 +34,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${lora.variable} ${dmSans.variable} ${dmMono.variable} antialiased`}
+        suppressHydrationWarning
       >
         {/* Warm paper atmosphere — fixed behind all content */}
         <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
