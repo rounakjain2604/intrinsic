@@ -22,15 +22,47 @@ export default function Process() {
                         </div>
                         <div className="w-full md:w-7/12 relative bg-[#F5F1EA] rounded-[2rem] overflow-hidden h-64 md:h-auto border border-[#2D2A26]/5 flex items-center justify-center">
                             <div className="absolute inset-0 bg-black/5 z-10 mix-blend-overlay" />
-                            <svg className="w-4/5 h-4/5 text-crayon-blue/80 opacity-60 z-0 mix-blend-multiply" viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                {/* Pension Accounting / Funded Status Visualization */}
-                                <path d="M50 250 L350 250" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeDasharray="10 10" />
-                                <path d="M100 250 L100 100 Q150 50 200 100 T300 150 L300 250" stroke="currentColor" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" />
-                                <path d="M120 250 L120 150 Q170 180 220 120 T280 200 L280 250" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeDasharray="5 5" opacity="0.6" />
-                                <text x="150" y="80" fill="currentColor" fontSize="16" fontFamily="var(--font-mono)" opacity="0.8">PBO Liability</text>
-                                <text x="230" y="220" fill="currentColor" fontSize="16" fontFamily="var(--font-mono)" opacity="0.8">Plan Assets</text>
-                                {/* Hand-drawn squiggles */}
-                                <path d="M70 270 Q80 280 90 270 T110 270" stroke="currentColor" strokeWidth="3" fill="none" strokeLinecap="round" />
+                            <svg className="w-[90%] h-[90%] text-crayon-blue/80 opacity-70 z-0 mix-blend-multiply" viewBox="0 0 500 350" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                {/* Forward vs Spot Rates */}
+                                {/* Timeline nodes */}
+                                <circle cx="50" cy="200" r="6" fill="currentColor" />
+                                <circle cx="180" cy="200" r="6" fill="currentColor" />
+                                <circle cx="310" cy="200" r="6" fill="currentColor" />
+                                <circle cx="440" cy="200" r="6" fill="currentColor" />
+
+                                <text x="50" y="230" textAnchor="middle" fill="currentColor" fontSize="14" fontFamily="var(--font-mono)">Yr 0</text>
+                                <text x="180" y="230" textAnchor="middle" fill="currentColor" fontSize="14" fontFamily="var(--font-mono)">Yr 1</text>
+                                <text x="310" y="230" textAnchor="middle" fill="currentColor" fontSize="14" fontFamily="var(--font-mono)">Yr 2</text>
+                                <text x="440" y="230" textAnchor="middle" fill="currentColor" fontSize="14" fontFamily="var(--font-mono)">Yr 3</text>
+
+                                {/* Base Timeline */}
+                                <path d="M50 200 L440 200" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeDasharray="5 5" />
+
+                                {/* Spot Rates (Long Arrows above) */}
+                                <path d="M50 160 L170 160" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                                <polygon points="175,160 165,155 165,165" fill="currentColor" />
+                                <text x="110" y="145" textAnchor="middle" fill="currentColor" fontSize="12" fontFamily="var(--font-mono)">S1</text>
+
+                                <path d="M50 120 L300 120" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                                <polygon points="305,120 295,115 295,125" fill="currentColor" />
+                                <text x="175" y="105" textAnchor="middle" fill="currentColor" fontSize="12" fontFamily="var(--font-mono)">S2</text>
+
+                                <path d="M50 80 L430 80" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                                <polygon points="435,80 425,75 425,85" fill="currentColor" />
+                                <text x="240" y="65" textAnchor="middle" fill="currentColor" fontSize="12" fontFamily="var(--font-mono)">S3</text>
+
+                                {/* Forward Rates (Short Arrows below) */}
+                                <path d="M185 245 L300 245" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                                <polygon points="305,245 295,240 295,250" fill="currentColor" />
+                                <text x="245" y="270" textAnchor="middle" fill="currentColor" fontSize="12" fontFamily="var(--font-mono)">f(1,1)</text>
+
+                                <path d="M315 245 L430 245" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                                <polygon points="435,245 425,240 425,250" fill="currentColor" />
+                                <text x="375" y="270" textAnchor="middle" fill="currentColor" fontSize="12" fontFamily="var(--font-mono)">f(2,1)</text>
+
+                                {/* Formula Box */}
+                                <rect x="50" y="290" width="400" height="40" rx="8" fill="transparent" stroke="currentColor" strokeWidth="2" strokeDasharray="4 4" />
+                                <text x="250" y="315" textAnchor="middle" fill="currentColor" fontSize="14" fontFamily="var(--font-mono)">(1 + S2)² = (1 + S1) × (1 + f(1,1))</text>
                             </svg>
                         </div>
                     </div>
@@ -52,22 +84,51 @@ export default function Process() {
                                 </pattern>
                                 <rect width="100%" height="100%" fill="url(#grid)" />
                             </svg>
-                            <svg className="w-4/5 h-4/5 text-crayon-red/70 z-0 mix-blend-multiply relative" viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                {/* Black-Scholes Merton Binomial Tree */}
-                                <circle cx="200" cy="50" r="15" stroke="currentColor" strokeWidth="3" />
-                                <circle cx="100" cy="150" r="15" stroke="currentColor" strokeWidth="3" />
-                                <circle cx="300" cy="150" r="15" stroke="currentColor" strokeWidth="3" />
-                                <circle cx="50" cy="250" r="15" stroke="currentColor" strokeWidth="3" />
-                                <circle cx="150" cy="250" r="15" stroke="currentColor" strokeWidth="3" />
-                                <circle cx="250" cy="250" r="15" stroke="currentColor" strokeWidth="3" />
-                                <circle cx="350" cy="250" r="15" stroke="currentColor" strokeWidth="3" />
+                            <svg className="w-[90%] h-[90%] text-crayon-red/80 z-0 mix-blend-multiply relative" viewBox="0 0 500 350" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                {/* Arbitrage-Free Binomial Tree */}
+                                {/* t=0 */}
+                                <circle cx="80" cy="175" r="20" fill="currentColor" opacity="0.1" stroke="currentColor" strokeWidth="2" />
+                                <text x="80" y="180" textAnchor="middle" fill="currentColor" fontSize="14" fontFamily="var(--font-mono)">r0</text>
 
-                                <path d="M185 65 L115 135 M215 65 L285 135" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                                <path d="M85 165 L65 235 M115 165 L135 235 M285 165 L265 235 M315 165 L335 235" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                                {/* t=1 */}
+                                <circle cx="250" cy="100" r="20" fill="currentColor" opacity="0.1" stroke="currentColor" strokeWidth="2" />
+                                <text x="250" y="105" textAnchor="middle" fill="currentColor" fontSize="14" fontFamily="var(--font-mono)">r_u</text>
 
-                                <text x="230" y="45" fill="currentColor" fontSize="14" fontFamily="var(--font-mono)">S0</text>
-                                <text x="60" y="145" fill="currentColor" fontSize="14" fontFamily="var(--font-mono)">Su</text>
-                                <text x="330" y="145" fill="currentColor" fontSize="14" fontFamily="var(--font-mono)">Sd</text>
+                                <circle cx="250" cy="250" r="20" fill="currentColor" opacity="0.1" stroke="currentColor" strokeWidth="2" />
+                                <text x="250" y="255" textAnchor="middle" fill="currentColor" fontSize="14" fontFamily="var(--font-mono)">r_d</text>
+
+                                {/* t=2 */}
+                                <circle cx="420" cy="50" r="20" fill="currentColor" opacity="0.1" stroke="currentColor" strokeWidth="2" />
+                                <text x="420" y="55" textAnchor="middle" fill="currentColor" fontSize="14" fontFamily="var(--font-mono)">r_uu</text>
+
+                                <circle cx="420" cy="175" r="20" fill="currentColor" opacity="0.1" stroke="currentColor" strokeWidth="2" />
+                                <text x="420" y="180" textAnchor="middle" fill="currentColor" fontSize="14" fontFamily="var(--font-mono)">r_ud</text>
+
+                                <circle cx="420" cy="300" r="20" fill="currentColor" opacity="0.1" stroke="currentColor" strokeWidth="2" />
+                                <text x="420" y="305" textAnchor="middle" fill="currentColor" fontSize="14" fontFamily="var(--font-mono)">r_dd</text>
+
+                                {/* Forward Paths (Rates) */}
+                                <path d="M100 165 L230 110" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                                <path d="M100 185 L230 240" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+
+                                <path d="M270 90 L400 60" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                                <path d="M270 110 L400 165" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+
+                                <path d="M270 240 L400 185" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                                <path d="M270 260 L400 290" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+
+                                {/* Volatility Label */}
+                                <rect x="200" y="155" width="100" height="24" fill="#EDE8DF" />
+                                <text x="250" y="172" textAnchor="middle" fill="currentColor" fontSize="12" fontFamily="var(--font-mono)">r_u = r_d × e^(2σ)</text>
+
+                                {/* Backward Induction Paths (Bond Prices) - Contrasting Color */}
+                                <path d="M400 50 L270 80" stroke="#6B6560" strokeWidth="2" strokeDasharray="4 4" />
+                                <polygon points="265,82 275,85 272,75" fill="#6B6560" />
+
+                                <path d="M400 175 L270 115" stroke="#6B6560" strokeWidth="2" strokeDasharray="4 4" />
+                                <polygon points="265,112 272,122 276,112" fill="#6B6560" />
+
+                                <text x="335" y="45" textAnchor="middle" fill="#6B6560" fontSize="12" fontFamily="var(--font-mono)">Discount</text>
                             </svg>
                         </div>
                     </div>
@@ -82,19 +143,46 @@ export default function Process() {
                             </p>
                         </div>
                         <div className="w-full md:w-7/12 relative bg-white/10 rounded-[2rem] overflow-hidden h-64 md:h-auto border border-white/20 flex items-center justify-center backdrop-blur-sm">
-                            <svg className="w-4/5 h-4/5 text-white/60 z-0 mix-blend-overlay" viewBox="0 0 400 300" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                {/* Swap Valuation Timeline */}
-                                <path d="M30 150 L370 150" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeDasharray="15 10" />
-                                <path d="M100 130 L100 170 M200 130 L200 170 M300 130 L300 170" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
+                            <svg className="w-[90%] h-[90%] text-white/80 z-0 mix-blend-overlay" viewBox="0 0 500 350" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                {/* Currency Swap Cash Flows */}
+                                {/* Party Boxes */}
+                                <rect x="50" y="40" width="120" height="270" rx="12" fill="transparent" stroke="currentColor" strokeWidth="2" />
+                                <text x="110" y="70" textAnchor="middle" fill="currentColor" fontSize="16" fontWeight="bold" fontFamily="var(--font-sans)">Party A</text>
+                                <text x="110" y="90" textAnchor="middle" fill="currentColor" fontSize="12" fontFamily="var(--font-mono)">(Pays USD)</text>
 
-                                <path d="M100 120 Q150 50 200 120" stroke="currentColor" strokeWidth="3" fill="none" strokeDasharray="5 5" />
-                                <path d="M200 120 Q250 50 300 120" stroke="currentColor" strokeWidth="3" fill="none" strokeDasharray="5 5" />
+                                <rect x="330" y="40" width="120" height="270" rx="12" fill="transparent" stroke="currentColor" strokeWidth="2" />
+                                <text x="390" y="70" textAnchor="middle" fill="currentColor" fontSize="16" fontWeight="bold" fontFamily="var(--font-sans)">Party B</text>
+                                <text x="390" y="90" textAnchor="middle" fill="currentColor" fontSize="12" fontFamily="var(--font-mono)">(Pays EUR)</text>
 
-                                <path d="M100 180 Q150 250 200 180" stroke="currentColor" strokeWidth="3" fill="none" />
-                                <path d="M200 180 Q250 250 300 180" stroke="currentColor" strokeWidth="3" fill="none" />
+                                {/* Initiation Phase */}
+                                <text x="250" y="130" textAnchor="middle" fill="currentColor" fontSize="12" opacity="0.6" fontFamily="var(--font-mono)">Initiation</text>
+                                <path d="M180 140 L320 140" stroke="currentColor" strokeWidth="3" />
+                                <polygon points="325,140 315,135 315,145" fill="currentColor" />
+                                <text x="250" y="135" textAnchor="middle" fill="currentColor" fontSize="10" fontFamily="var(--font-mono)">€ Principal</text>
 
-                                <text x="80" y="270" fill="currentColor" fontSize="16" fontFamily="var(--font-mono)">Fixed</text>
-                                <text x="280" y="270" fill="currentColor" fontSize="16" fontFamily="var(--font-mono)">Floating</text>
+                                <path d="M320 155 L180 155" stroke="currentColor" strokeWidth="3" />
+                                <polygon points="175,155 185,150 185,160" fill="currentColor" />
+                                <text x="250" y="165" textAnchor="middle" fill="currentColor" fontSize="10" fontFamily="var(--font-mono)">$ Principal</text>
+
+                                {/* Periodic Settlement Phase */}
+                                <text x="250" y="200" textAnchor="middle" fill="currentColor" fontSize="12" opacity="0.6" fontFamily="var(--font-mono)">Periodic Settlement</text>
+                                <path d="M180 210 L320 210" stroke="currentColor" strokeWidth="1.5" strokeDasharray="3 3" />
+                                <polygon points="325,210 315,207 315,213" fill="currentColor" />
+                                <text x="250" y="205" textAnchor="middle" fill="currentColor" fontSize="10" fontFamily="var(--font-mono)">$ Fixed</text>
+
+                                <path d="M320 220 L180 220" stroke="currentColor" strokeWidth="1.5" strokeDasharray="3 3" />
+                                <polygon points="175,220 185,217 185,223" fill="currentColor" />
+                                <text x="250" y="230" textAnchor="middle" fill="currentColor" fontSize="10" fontFamily="var(--font-mono)">€ Fixed</text>
+
+                                {/* Maturity Phase */}
+                                <text x="250" y="260" textAnchor="middle" fill="currentColor" fontSize="12" opacity="0.6" fontFamily="var(--font-mono)">Maturity Re-exchange</text>
+                                <path d="M180 270 L320 270" stroke="currentColor" strokeWidth="3" />
+                                <polygon points="325,270 315,265 315,275" fill="currentColor" />
+                                <text x="250" y="265" textAnchor="middle" fill="currentColor" fontSize="10" fontFamily="var(--font-mono)">$ Principal</text>
+
+                                <path d="M320 285 L180 285" stroke="currentColor" strokeWidth="3" />
+                                <polygon points="175,285 185,280 185,290" fill="currentColor" />
+                                <text x="250" y="295" textAnchor="middle" fill="currentColor" fontSize="10" fontFamily="var(--font-mono)">€ Principal</text>
                             </svg>
                         </div>
                     </div>

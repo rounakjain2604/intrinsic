@@ -4,9 +4,9 @@ export default function Hero() {
     return (
         <section className="relative min-h-[100vh] flex items-center pt-24 pb-16 px-6 overflow-hidden bg-[#1A1816]">
             <div
-                className="absolute inset-0 z-0 opacity-50 mix-blend-luminosity"
+                className="absolute inset-0 z-0 opacity-70 mix-blend-luminosity"
                 style={{
-                    backgroundImage: 'url("/forest-bg.png")',
+                    backgroundImage: 'url("/cfa_study_bg.png")',
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
                 }}
@@ -17,9 +17,10 @@ export default function Hero() {
 
             <div className="max-w-7xl mx-auto w-full relative z-10 flex flex-col items-center text-center">
 
-                <div className="inline-flex items-center gap-2 px-4 py-1.5 border border-[#FAF8F5]/20 mb-8 rounded-full backdrop-blur-md bg-black/10">
-                    <span className="font-[family-name:var(--font-sans)] text-[10px] md:text-xs text-[#FAF8F5]/80 font-medium uppercase tracking-[0.2em] leading-none pt-px">
-                        VISUAL NOTES FOR CFA LEVEL 2
+                <div className="inline-flex items-center gap-3 px-6 py-2 border border-crayon-orange/50 mb-8 rounded-full shadow-[0_0_30px_rgba(236,139,49,0.3)] backdrop-blur-md bg-black/40">
+                    <div className="w-2.5 h-2.5 rounded-full bg-crayon-orange animate-pulse" />
+                    <span className="font-[family-name:var(--font-sans)] text-sm md:text-base font-bold text-crayon-orange uppercase tracking-[0.25em] leading-none pt-px">
+                        CFA LEVEL 2 MASTERY
                     </span>
                 </div>
 

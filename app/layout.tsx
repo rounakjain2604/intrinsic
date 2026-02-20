@@ -27,6 +27,10 @@ const dmMono = DM_Mono({
 export const metadata: Metadata = {
   title: "Intrinsic — See the market clearly",
   description: "Visual CFA Level 2 study notes that make complex concepts click.",
+  icons: {
+    icon: "/logo.png",
+    apple: "/logo.png",
+  },
 };
 
 export default function RootLayout({

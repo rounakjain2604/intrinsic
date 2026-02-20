@@ -25,7 +25,8 @@ export function Navbar() {
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
         {/* Logo Area */}
         <div className="flex-shrink-0">
-          <Link href="/" className="flex items-center group">
+          <Link href="/" className="flex items-center gap-3 group">
+            <img src="/logo.png" alt="Intrinsic Logo" className="w-8 h-8 md:w-10 md:h-10 object-contain drop-shadow-sm transition-transform group-hover:scale-105" />
             <span className={`font-[family-name:var(--font-sans)] text-2xl font-bold tracking-tighter transition-colors ${scrolled ? "text-[#2D2A26]" : "text-[#FAF8F5]"}`}>
               INTRINSIC
             </span>
