@@ -35,7 +35,7 @@ The SESSION HEADER is pasted at the start of EVERY prompt. Every single one. It 
 
 ```
 PROJECT: Intrinsic — CFA Level 2 visual notes app at trinsic.space
-STACK: Next.js 16 App Router, TypeScript, React 19, Tailwind CSS v4, Shadcn/ui, Clerk, Supabase, Lemon Squeezy, Vercel
+STACK: Next.js 16 App Router, TypeScript, React 19, Tailwind CSS v4, Shadcn/ui, Framer Motion, Lenis, Clerk, Supabase, Lemon Squeezy, Vercel
 FONTS: Lora (serif headings) + DM Sans (body) + DM Mono (code) via next/font/google
 DESIGN: Warm cream aesthetic. Background #FAF8F5. Cards: bg-[#F5F1EA] border border-[#2D2A26]/10 rounded-2xl shadow-[0_2px_12px_rgba(45,42,38,0.06)]. Primary CTA color: coral #E8694A. Text: #2D2A26 primary, #6B6560 secondary. Hand-drawn SVG style with crayon colors for all diagrams.
 RULES:
@@ -60,7 +60,7 @@ CURRENT TASK:
 | Phase | Goal | Sessions | Status |
 |---|---|---|---|
 | **1** | Foundation + First Deploy | 1.1 – 1.2 | ✅ DONE |
-| **2** | Shared UI + Landing Page | 2.1 – 2.6 | 🔄 IN PROGRESS |
+| **2** | Shared UI + Landing Page | 2.1 – 2.6 | ✅ DONE |
 | **3** | Auth + Database + Progress | 3.1 – 3.5 | ⬜ |
 | **4** | Chapter Reader + Real Access | 4.1 – 4.6 | ⬜ |
 | **5** | Diagrams + Charts + Interactive | 5.1 – 5.4 | ⬜ |
@@ -82,8 +82,10 @@ CURRENT TASK:
 - Fonts loaded: Lora (serif), DM Sans (body), DM Mono (code) via next/font/google
 - Color tokens and animations added to globals.css with @theme block
 - Warm paper atmosphere (radial gradient + noise texture) added to layout.tsx
-- Navbar component built (sticky, Intrinsic logo, nav links, Sign In / Get Started buttons)
-- Footer component built (legal disclaimer, CFA Institute notice)
+- Framer Motion, Lenis (smooth scroll), clsx, tailwind-merge installed
+- SmoothScroll wrapper component built (Lenis)
+- Navbar component built (sticky, scroll-aware, Intrinsic logo, nav links, coral CTA)
+- Footer component built (brand, links, legal disclaimer, CFA Institute notice)
 - Code pushed to GitHub, linked to Vercel, hosting at trinsic.space
 
 ---
@@ -91,7 +93,20 @@ CURRENT TASK:
 ---
 
 # PHASE 2 — SHARED UI + LANDING PAGE
-## Goal: Full landing page deployed at trinsic.space, looking polished.
+## ✅ COMPLETED
+### What was done:
+- Badge component (free/premium/standard/locked variants)
+- Skeleton components (SkeletonCard, SkeletonText, SkeletonGrid)
+- Hero section (framer-motion staggered reveals, hand-drawn SVG underline)
+- Features section ("The Method" — 3 feature cards with illustrations) — *bonus, not in original sessions*
+- Process section ("How It Works" — 3 sticky stage cards with SVG diagrams) — *bonus, not in original sessions*
+- ChapterPreview (3 free chapter cards with bento grid layout)
+- Manifesto (philosophy quote block) — *bonus, not in original sessions*
+- PricingSection (Free vs Per-Chapter with coral-highlighted card)
+- EmailCapture (email form, console.log placeholder)
+- Full landing page assembled in app/page.tsx
+
+> **Note:** Sessions 2.1–2.6 below are the original prompts. The actual implementation added three bonus components (Features, Process, Manifesto) that weren't in the original plan but enhance the landing page. These are now part of the canonical codebase.
 
 ---
 
@@ -261,22 +276,24 @@ Update app/page.tsx to assemble the full landing page using the components we bu
 
 Import and render in this order:
 1. Hero
-2. ChapterPreview (add section padding py-24)
-3. PricingSection (add section padding py-24)
-4. EmailCapture (add section padding py-24 with bg-[#F5F1EA] full-width background)
-
-Add a subtle horizontal divider between sections: <hr className="border-t border-[#2D2A26]/6 max-w-5xl mx-auto" />
+2. Features ("The Method" section)
+3. Process ("How It Works" section)
+4. ChapterPreview (free chapter cards)
+5. Manifesto (philosophy quote)
+6. PricingSection (pricing cards)
+7. EmailCapture (email signup)
 
 The overall page should have no horizontal overflow. Everything should be contained.
+Add overflow-x-hidden and selection colors to the <main> wrapper.
 
 Also add a generateMetadata export at the top:
 - title: "Intrinsic — CFA Level 2 Visual Notes"
-- description: "Visual CFA Level 2 study notes with hand-drawn diagrams. 5 chapters free forever."
+- description: "Visual study notes that make complex CFA Level 2 concepts click. Hand-drawn diagrams, intuitive explanations, and a premium learning experience."
 
 Show me the complete updated app/page.tsx.
 ```
 
-**What success looks like:** Full landing page visible at trinsic.space with Hero, chapter previews, pricing, and email capture. Coral CTA buttons have warm shadows. Cards feel paper-like.
+**What success looks like:** Full landing page visible at trinsic.space with Hero, features, process stages, chapter previews, manifesto, pricing, and email capture. Coral CTA buttons have warm shadows. Cards feel paper-like. Smooth scroll via Lenis.
 
 **Commit message:** `phase-2: assemble full landing page`
 

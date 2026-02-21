@@ -1,11 +1,10 @@
 import { Metadata } from "next";
 import Hero from "@/components/landing/Hero";
+import ManifestoBand from "@/components/landing/ManifestoBand";
 import Features from "@/components/landing/Features";
-import Process from "@/components/landing/Process";
-import ChapterPreview from "@/components/landing/ChapterPreview";
-import Manifesto from "@/components/landing/Manifesto";
+import ChapterProtocol from "@/components/landing/ChapterProtocol";
 import PricingSection from "@/components/landing/PricingSection";
-import EmailCapture from "@/components/landing/EmailCapture";
+import ProofStrip from "@/components/landing/ProofStrip";
 
 export const metadata: Metadata = {
   title: "Intrinsic — CFA Level 2 Visual Notes",
@@ -15,14 +14,13 @@ export const metadata: Metadata = {
 
 export default function Home() {
   return (
-    <main className="overflow-x-hidden selection:bg-[#E8694A]/20 selection:text-[#2D2A26]">
+    <main className="overflow-clip selection:bg-[#E8694A]/20 selection:text-[#2D2A26]">
       <Hero />
+      <ManifestoBand />
       <Features />
-      <Process />
-      <ChapterPreview />
-      <Manifesto />
+      <ChapterProtocol />
       <PricingSection />
-      <EmailCapture />
+      <ProofStrip />
     </main>
   );
 }

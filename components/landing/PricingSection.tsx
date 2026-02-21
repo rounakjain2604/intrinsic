@@ -3,6 +3,12 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 
+const CheckIcon = ({ className = "" }: { className?: string }) => (
+  <svg className={`w-4 h-4 shrink-0 mt-0.5 ${className}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+  </svg>
+);
+
 const cardVariant = {
   hidden: { opacity: 0, y: 40 },
   visible: {
@@ -12,16 +18,65 @@ const cardVariant = {
   },
 };
 
-const CheckIcon = ({ className = "" }: { className?: string }) => (
-  <svg className={`w-5 h-5 shrink-0 mt-0.5 ${className}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-  </svg>
-);
+const TIERS = [
+  {
+    name: "Standard",
+    price: "$9.99",
+    priceSuffix: "per chapter",
+    description: "Unlock individual chapters with lifetime access.",
+    dark: false,
+    accentBorder: false,
+    badge: null,
+    features: [
+      "Everything in Free",
+      "Full chapter content unlocked",
+      "Interactive visual diagrams",
+      "Lifetime permanent access",
+    ],
+    cta: { label: "Browse Chapters", href: "/chapters" },
+    checkColor: "text-[#5B9E6F]",
+  },
+  {
+    name: "Full Access",
+    price: "$49",
+    priceSuffix: "all chapters",
+    description: "Every chapter, every diagram, every update. One price.",
+    dark: true,
+    accentBorder: false,
+    badge: "BEST VALUE",
+    features: [
+      "All current chapters included",
+      "All future chapters included",
+      "Priority access to new content",
+      "Interactive practice tools",
+      "Lifetime permanent access",
+    ],
+    cta: { label: "Get Full Access", href: "#" },
+    checkColor: "text-[#E8694A]",
+  },
+  {
+    name: "Premium",
+    price: "$14.99",
+    priceSuffix: "per chapter",
+    description: "Complex chapters with extended diagrams and deep dives.",
+    dark: false,
+    accentBorder: true,
+    badge: null,
+    features: [
+      "Everything in Standard",
+      "Extended visual breakdowns",
+      "Advanced formula walkthroughs",
+      "Derivatives, Portfolio Mgmt, Alt Investments",
+    ],
+    cta: { label: "View Premium Chapters", href: "/chapters" },
+    checkColor: "text-[#D4882A]",
+  },
+];
 
 export default function PricingSection() {
   return (
-    <section className="py-32 px-6 bg-[#F5F1EA] relative" id="pricing">
-      <div className="max-w-5xl mx-auto">
+    <section className="py-28 md:py-36 px-6 bg-[#F5F1EA] relative" id="pricing">
+      <div className="max-w-6xl mx-auto">
         {/* Header */}
         <motion.div
           className="text-center mb-20"
@@ -39,103 +94,98 @@ export default function PricingSection() {
             Nothing else.
           </h2>
           <p className="font-[family-name:var(--font-sans)] text-lg text-[#6B6560] max-w-xl mx-auto">
-            No subscriptions. Buy a chapter once, keep it forever.
+            No subscriptions. Buy once, keep forever.
           </p>
         </motion.div>
 
-        {/* Two cards */}
+        {/* Three pricing cards */}
         <motion.div
-          className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto"
+          className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto items-stretch"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
           transition={{ staggerChildren: 0.1 }}
         >
-          {/* Free tier */}
-          <motion.div
-            variants={cardVariant}
-            className="bg-[#FAF8F5] rounded-2xl p-10 border border-[#2D2A26]/10 flex flex-col h-full card-hover"
-          >
-            <h3 className="font-[family-name:var(--font-sans)] text-lg font-semibold text-[#2D2A26] mb-2">
-              Free
-            </h3>
-            <p className="font-[family-name:var(--font-sans)] text-[#6B6560] text-sm mb-8 leading-relaxed">
-              Start learning immediately. No credit card required.
-            </p>
-            <div className="mb-8 border-b border-[#2D2A26]/10 pb-8">
-              <span className="font-[family-name:var(--font-sans)] text-5xl font-bold text-[#2D2A26] tracking-tight">
-                $0
-              </span>
-            </div>
-            <ul className="flex flex-col gap-4 mb-10 flex-1">
-              <li className="flex items-start gap-3 text-[#2D2A26] font-[family-name:var(--font-sans)] text-sm">
-                <CheckIcon className="text-[#5B9E6F]" />
-                5 foundational chapters
-              </li>
-              <li className="flex items-start gap-3 text-[#2D2A26] font-[family-name:var(--font-sans)] text-sm">
-                <CheckIcon className="text-[#5B9E6F]" />
-                Instant reading access
-              </li>
-              <li className="flex items-start gap-3 text-[#2D2A26] font-[family-name:var(--font-sans)] text-sm">
-                <CheckIcon className="text-[#5B9E6F]" />
-                High-res visual diagrams
-              </li>
-            </ul>
-            <Link
-              href="/chapters"
-              className="w-full py-3.5 rounded-xl border border-[#2D2A26]/20 font-[family-name:var(--font-sans)] font-medium text-[#2D2A26] text-sm hover:bg-[#2D2A26] hover:text-[#FAF8F5] transition-colors duration-200 text-center block"
+          {TIERS.map((tier) => (
+            <motion.div
+              key={tier.name}
+              variants={cardVariant}
+              className={`rounded-2xl p-8 md:p-10 flex flex-col h-full relative ${tier.dark
+                  ? "bg-[#2D2A26] text-[#FAF8F5] shadow-[0_8px_32px_rgba(45,42,38,0.18)]"
+                  : tier.accentBorder
+                    ? "bg-[#FAF8F5] border border-[#D4882A]/30"
+                    : "bg-[#FAF8F5] border border-[#2D2A26]/10"
+                }`}
             >
-              Start Learning
-            </Link>
-          </motion.div>
+              {/* Badge */}
+              {tier.badge && (
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#E8694A] text-white text-[10px] font-[family-name:var(--font-sans)] font-semibold uppercase tracking-[0.15em] py-1 px-4 rounded-full">
+                  {tier.badge}
+                </div>
+              )}
 
-          {/* Per-Chapter tier — emphasized */}
-          <motion.div
-            variants={cardVariant}
-            className="bg-[#FAF8F5] rounded-2xl p-10 border-2 border-[#E8694A] flex flex-col h-full card-hover relative"
-          >
-            {/* Popular pill */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#E8694A] text-white text-[10px] font-[family-name:var(--font-sans)] font-semibold uppercase tracking-[0.15em] py-1 px-4 rounded-full">
-              Popular
-            </div>
+              <h3
+                className={`font-[family-name:var(--font-sans)] text-lg font-semibold mb-2 ${tier.dark ? "text-[#FAF8F5]" : "text-[#2D2A26]"
+                  }`}
+              >
+                {tier.name}
+              </h3>
+              <p
+                className={`font-[family-name:var(--font-sans)] text-sm mb-6 leading-relaxed ${tier.dark ? "text-[#FAF8F5]/60" : "text-[#6B6560]"
+                  }`}
+              >
+                {tier.description}
+              </p>
 
-            <h3 className="font-[family-name:var(--font-sans)] text-lg font-semibold text-[#2D2A26] mb-2">
-              Per Chapter
-            </h3>
-            <p className="font-[family-name:var(--font-sans)] text-[#6B6560] text-sm mb-8 leading-relaxed">
-              Unlock specific chapters with lifetime access.
-            </p>
-            <div className="mb-8 border-b border-[#2D2A26]/10 pb-8 flex items-baseline gap-2">
-              <span className="font-[family-name:var(--font-sans)] text-sm text-[#6B6560] font-medium">From</span>
-              <span className="font-[family-name:var(--font-sans)] text-5xl font-bold text-[#2D2A26] tracking-tight">
-                $9<span className="text-3xl">.99</span>
-              </span>
-            </div>
-            <ul className="flex flex-col gap-4 mb-10 flex-1">
-              <li className="flex items-start gap-3 text-[#2D2A26] font-[family-name:var(--font-sans)] text-sm">
-                <CheckIcon className="text-[#E8694A]" />
-                Everything in free
-              </li>
-              <li className="flex items-start gap-3 text-[#2D2A26] font-[family-name:var(--font-sans)] text-sm">
-                <CheckIcon className="text-[#E8694A]" />
-                Full chapter content unlocked
-              </li>
-              <li className="flex items-start gap-3 text-[#2D2A26] font-[family-name:var(--font-sans)] text-sm">
-                <CheckIcon className="text-[#E8694A]" />
-                Interactive practice tools
-              </li>
-              <li className="flex items-start gap-3 text-[#2D2A26] font-[family-name:var(--font-sans)] text-sm">
-                <CheckIcon className="text-[#E8694A]" />
-                Lifetime permanent access
-              </li>
-            </ul>
-            <Link
-              href="/chapters"
-              className="w-full py-3.5 rounded-xl bg-[#E8694A] font-[family-name:var(--font-sans)] font-medium text-white text-sm hover:bg-[#d45d40] transition-colors duration-200 text-center block shadow-[0_4px_12px_rgba(232,105,74,0.25)]"
-            >
-              Browse Chapters
-            </Link>
-          </motion.div>
+              {/* Price */}
+              <div
+                className={`mb-8 pb-6 flex items-baseline gap-2 ${tier.dark
+                    ? "border-b border-[#FAF8F5]/10"
+                    : "border-b border-[#2D2A26]/10"
+                  }`}
+              >
+                <span
+                  className={`font-[family-name:var(--font-sans)] text-4xl font-bold tracking-tight ${tier.dark ? "text-[#FAF8F5]" : "text-[#2D2A26]"
+                    }`}
+                >
+                  {tier.price}
+                </span>
+                <span
+                  className={`font-[family-name:var(--font-sans)] text-sm ${tier.dark ? "text-[#FAF8F5]/40" : "text-[#A09890]"
+                    }`}
+                >
+                  {tier.priceSuffix}
+                </span>
+              </div>
+
+              {/* Features */}
+              <ul className="flex flex-col gap-3 mb-8 flex-1">
+                {tier.features.map((feat) => (
+                  <li
+                    key={feat}
+                    className={`flex items-start gap-3 font-[family-name:var(--font-sans)] text-sm ${tier.dark ? "text-[#FAF8F5]/80" : "text-[#2D2A26]"
+                      }`}
+                  >
+                    <CheckIcon className={tier.checkColor} />
+                    {feat}
+                  </li>
+                ))}
+              </ul>
+
+              {/* CTA */}
+              <Link
+                href={tier.cta.href}
+                className={`w-full py-3.5 rounded-xl font-[family-name:var(--font-sans)] font-medium text-sm text-center block transition-colors duration-200 ${tier.dark
+                    ? "bg-[#E8694A] text-white hover:bg-[#d45d40] shadow-[0_4px_12px_rgba(232,105,74,0.25)]"
+                    : tier.accentBorder
+                      ? "border border-[#D4882A]/40 text-[#D4882A] hover:bg-[#D4882A]/5"
+                      : "border border-[#2D2A26]/20 text-[#2D2A26] hover:bg-[#2D2A26] hover:text-[#FAF8F5]"
+                  }`}
+              >
+                {tier.cta.label}
+              </Link>
+            </motion.div>
+          ))}
         </motion.div>
 
         {/* Bottom note */}
@@ -146,7 +196,7 @@ export default function PricingSection() {
           viewport={{ once: true }}
           transition={{ delay: 0.3, duration: 0.6 }}
         >
-          Secure checkout via Lemon Squeezy · One-time purchase, yours forever
+          One-time payment. No subscription. Instant access. Not affiliated with CFA Institute.
         </motion.p>
       </div>
     </section>

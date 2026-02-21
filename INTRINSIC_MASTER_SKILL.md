@@ -114,6 +114,9 @@ All other non-free chapters are Standard ($9.99).
 | Payments | Lemon Squeezy | Per-chapter checkout + webhook |
 | Hosting | Vercel (free tier) | Auto-deploys from GitHub. Free tier has limited serverless invocations — monitor usage. |
 | Fonts | Lora + DM Sans + DM Mono | Loaded via `next/font/google` — Lora for headings (serif warmth), DM Sans for body, DM Mono for code |
+| Animation | Framer Motion | Landing page scroll-triggered animations, staggered reveals. All animated landing components are `'use client'`. |
+| Smooth Scroll | Lenis | Premium scroll feel. Wraps entire layout in `SmoothScroll` component. |
+| Utilities | clsx + tailwind-merge | Classname merging utilities |
 | Content | MDX via next-mdx-remote | Chapter content lives in `/content/chapters/` |
 | Analytics | Vercel Analytics (free tier) | Track page views, chapter engagement, free→paid conversion |
 | Email | Loops or Resend (free tier) | Landing page email capture for visitors who don't buy |
@@ -506,10 +509,12 @@ intrinsic/
 │   ├── ui/                             ← Shadcn (never edit manually)
 │   ├── landing/
 │   │   ├── Hero.tsx                    ← Headline + CTA + atmosphere
+│   │   ├── Features.tsx                ← "The Method" — 3 feature cards
+│   │   ├── Process.tsx                 ← "How It Works" — 3 sticky stage cards with SVGs
 │   │   ├── ChapterPreview.tsx          ← 3 free chapter cards
+│   │   ├── Manifesto.tsx               ← Philosophy quote block
 │   │   ├── PricingSection.tsx          ← Free vs per-chapter pricing
-│   │   ├── EmailCapture.tsx            ← Email signup for non-buyers
-│   │   └── SocialProof.tsx
+│   │   └── EmailCapture.tsx            ← Email signup for non-buyers
 │   ├── dashboard/
 │   │   ├── ChapterGrid.tsx
 │   │   ├── ChapterCard.tsx             ← Shows free/locked/purchased state
@@ -529,6 +534,7 @@ intrinsic/
 │       ├── Navbar.tsx
 │       ├── Footer.tsx
 │       ├── Badge.tsx
+│       ├── SmoothScroll.tsx            ← Lenis smooth scroll wrapper
 │       ├── UpgradeModal.tsx
 │       └── Skeleton.tsx                ← Loading states for all components
 │
@@ -1029,87 +1035,85 @@ CREATE TABLE email_subscribers (
 
 ## 17. BUILD PHASES (FOLLOW IN ORDER — NEVER SKIP)
 
-### Phase 1 — Foundation
-**Goal:** App runs locally, warm cream background visible with correct fonts.
+> **Note:** These phases match the Prompt Guide's 8-phase structure exactly. When someone says "Phase 2 is done," both documents agree on what that means.
+
+### Phase 1 — Foundation + First Deploy ✅
+**Goal:** App runs locally and deployed to trinsic.space.
 - `npx create-next-app@latest intrinsic --typescript --tailwind --app`
 - Install Shadcn/ui (will auto-detect Tailwind v4)
 - Set up fonts via `next/font/google`: Lora (serif headings), DM Sans (body), DM Mono (code)
 - Create `globals.css` with all color token CSS variables from Section 4 inside `@theme { }` block
 - Add noise texture + warm radial gradient overlay to root layout
-- **Verify:** localhost:3000 shows warm cream `#FAF8F5` background, Lora headings, DM Sans body text, paper noise texture visible at 2% opacity
+- Install Framer Motion, Lenis, clsx, tailwind-merge
+- Build Navbar, Footer, SmoothScroll
+- Push to GitHub, link to Vercel, host at trinsic.space
+- **Verify:** trinsic.space shows warm cream background, correct fonts, Navbar + Footer visible
 
-### Phase 2 — Shared Components
-**Goal:** Navbar, Footer, Badge visible and styled.
-- `Navbar.tsx` — "Intrinsic" logo (Lora serif) left, nav links center, "Sign In" right
-- `Footer.tsx` — minimal, includes CFA Institute disclaimer
+### Phase 2 — Shared UI + Landing Page ✅
+**Goal:** Full landing page deployed at trinsic.space, looking polished.
 - `Badge.tsx` — free/premium/locked variants from Section 4
 - `Skeleton.tsx` — loading states matching card dimensions
-- **Verify:** Components render on a test page with correct warm cream colors and fonts
-
-### Phase 3 — Landing Page
-**Goal:** Full landing page, no auth needed yet.
-- `Hero.tsx` — headline (Lora), subheadline, "Start Learning Free" coral CTA, atmosphere effects
+- `Hero.tsx` — headline (Lora), subheadline, coral CTA, framer-motion staggered reveals
+- `Features.tsx` — "The Method" — 3 feature cards with illustrations
+- `Process.tsx` — "How It Works" — 3 sticky stage cards with SVG diagrams
 - `ChapterPreview.tsx` — 3 free chapter cards using Intrinsic Card pattern
+- `Manifesto.tsx` — Philosophy quote block
 - `PricingSection.tsx` — Free tier + per-chapter pricing
-- `EmailCapture.tsx` — email signup form
-- **Verify:** Looks polished on desktop. Coral CTA button has warm shadow. Cards feel paper-like.
+- `EmailCapture.tsx` — email signup form (console.log for now)
+- Assemble all in `app/page.tsx`
+- **Verify:** Full landing page at trinsic.space. Coral CTAs, warm shadows, paper-like cards.
 
-### Phase 4 — Auth + Dashboard
-**Goal:** Dashboard only visible when logged in.
+### Phase 3 — Auth + Database + Progress Tracking
+**Goal:** Login works. Database is live. Progress is tracked.
 - Install and configure Clerk
 - Create `proxy.ts` with Clerk route protection (see Section 9)
-- Build `ChapterGrid.tsx` with dummy chapter data
-- Build `ChapterCard.tsx` with free/locked/purchased states
-- **Verify:** Unauthenticated → redirected to sign-in. Authenticated → sees dashboard.
+- Set up Supabase: schema, server/browser clients, seed data
+- Create `syncUser.ts` (Section 13)
+- Build dashboard with `ChapterCard.tsx` using real Supabase data
+- Add progress tracking ("Mark as Mastered")
+- **Verify:** Sign in → dashboard shows 8 real chapter cards. Progress bar works.
 
-### Phase 5 — Chapter Reader
+### Phase 4 — Chapter Reader + Real Access
 **Goal:** Reading a chapter feels premium.
-- Set up MDX with `next-mdx-remote`
-- Build `ChapterReader.tsx` (sidebar TOC + main content + max-w-2xl reading column)
-- Build `TableOfContents.tsx`
+- Set up MDX with `next-mdx-remote` + Zod validation
+- Build `ChapterReader.tsx` (sidebar TOC + max-w-2xl reading column)
+- Build `TableOfContents.tsx`, `Callout.tsx`, `FormulaBlock.tsx`
 - Build `LockedSection.tsx` (blur overlay + "Unlock Chapter" CTA)
-- Create 2 MDX chapters: Ethics (free) + Derivatives (paid/locked)
+- Create `app/chapters/[slug]/page.tsx` with real Supabase access control
 - **Verify:** Free chapter fully readable. Paid chapter blurred at locked section.
 
-### Phase 6 — First Diagram + Chart
-**Goal:** One SVG diagram + one Recharts chart working beautifully.
+### Phase 5 — Diagrams + Charts + Interactive
+**Goal:** One SVG diagram + one Recharts chart + one interactive formula.
 - Build `DCFDiagram.tsx` with scroll-triggered animation and sketch filter
+- Build `PlayableFormula.tsx` + `BondPricePlayable.tsx`
 - Build `YieldCurveChart.tsx` in Recharts with warm cream theme
-- Embed both in the Derivatives chapter
-- **Verify:** Diagram animates on scroll. Chart loads without layout shift. Colors match crayon palette.
+- Embed all in ethics chapter
+- **Verify:** Diagram animates on scroll. Chart loads without layout shift. Sliders work.
 
-### Phase 7 — Supabase
-**Goal:** Real data, real access control.
-- Create Supabase project
-- Run SQL schema from Section 8 (including `updated_at` triggers)
-- Connect to Next.js (server + browser clients in `/lib/supabase/`)
-- Create `syncUser.ts` (Section 13)
-- Seed chapters table with full chapter list
-- Replace all dummy data with Supabase queries
-- **Verify:** Chapter cards show real data. `syncUser()` creates user on first visit. Access check returns correctly.
-
-### Phase 8 — Payments
-**Goal:** Test purchase works end to end.
-- Create Lemon Squeezy products for 3 test chapters
+### Phase 6 — Payments + Full Access Bundle
+**Goal:** Click Unlock → checkout → webhook → chapter unlocked.
+- Build `lib/lemon.ts` helpers
 - Build `UpgradeModal.tsx` with chapter info + price + purchase button
-- Implement Lemon Squeezy checkout URL construction
-- Build webhook route from Section 10 (with `upsert` for idempotency)
-- Test with Lemon Squeezy test mode
-- **Verify:** Click "Unlock" → redirect to Lemon Squeezy → pay → webhook fires → chapter unlocked. Retry webhook manually → no duplicate error.
+- Add Full Access Bundle ($49)
+- Build webhook route (with `upsert` for idempotency)
+- Wire unlock flow end-to-end
+- **Verify:** Click "Unlock" → Lemon Squeezy → pay → webhook fires → chapter unlocked.
 
-### Phase 9 — Deploy + SEO + Analytics
-**Goal:** Live at trinsic.space with working SEO and analytics.
-- Push to GitHub
-- Connect Vercel to GitHub repo
-- Add all environment variables to Vercel (Section 17)
-- Connect `trinsic.space` domain in Vercel
-- Add Lemon Squeezy webhook URL pointing to production
-- Implement `sitemap.ts`, `robots.ts`, `generateMetadata` (Section 15)
-- Add Vercel Analytics
-- Submit sitemap to Google Search Console
-- **Verify:** Full user flow works on production. Lighthouse performance > 90. Sitemap accessible. Free chapters appear in page source HTML.
+### Phase 7 — Content Sprint
+**Goal:** All 5 free chapters written with diagrams. This is the product.
+- Write Derivatives (paid sample), Quantitative Methods, Economics, Equity Basics, Fixed Income
+- Each chapter: 3,000–5,000 words, 1–3 diagrams, callouts, formulas
+- **Verify:** All 5 free chapters accessible. Derivatives shows paywall.
 
-### Deployment Checklist (Phase 9)
+### Phase 8 — SEO + Analytics + Responsive Polish
+**Goal:** Lighthouse 90+. Mobile-friendly. Google-indexable.
+- Add `sitemap.ts`, `robots.ts`, per-chapter metadata
+- Add loading and error states
+- Add mobile responsive navbar
+- Add Vercel Analytics, email capture backend, skip-to-content
+- **Verify:** Mobile works. Email saves. Lighthouse > 90.
+
+### Deployment Checklist (Phase 8)
 ```
 [ ] All env vars set in Vercel dashboard
 [ ] Lemon Squeezy webhook URL updated to production

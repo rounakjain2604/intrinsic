@@ -21,9 +21,19 @@ export default function EmailCapture() {
   };
 
   return (
-    <section className="py-32 px-6 bg-[#FAF8F5]" id="subscribe">
+    <section className="py-28 md:py-36 px-6 bg-[#FAF8F5] relative" id="subscribe">
+      {/* Decorative SVG flourishes — margin doodles */}
+      <svg className="absolute top-8 left-8 w-20 h-20 opacity-100 pointer-events-none" viewBox="0 0 80 80" fill="none">
+        <path d="M 10 70 Q 15 30, 40 20 Q 55 14, 70 18" stroke="#E8694A" strokeOpacity="0.12" strokeWidth="1.5" strokeLinecap="round" fill="none" />
+        <path d="M 5 55 Q 12 40, 25 35" stroke="#E8694A" strokeOpacity="0.08" strokeWidth="1" strokeLinecap="round" fill="none" />
+      </svg>
+      <svg className="absolute bottom-8 right-8 w-20 h-20 opacity-100 pointer-events-none" viewBox="0 0 80 80" fill="none">
+        <path d="M 70 10 Q 65 50, 40 60 Q 25 66, 10 62" stroke="#E8694A" strokeOpacity="0.12" strokeWidth="1.5" strokeLinecap="round" fill="none" />
+        <path d="M 75 25 Q 68 40, 55 45" stroke="#E8694A" strokeOpacity="0.08" strokeWidth="1" strokeLinecap="round" fill="none" />
+      </svg>
+
       <motion.div
-        className="max-w-xl mx-auto"
+        className="max-w-xl mx-auto relative z-10"
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-100px" }}
@@ -31,7 +41,7 @@ export default function EmailCapture() {
       >
         <div className="bg-[#F5F1EA] rounded-2xl border border-[#2D2A26]/10 p-10 md:p-14 text-center">
           <h2 className="font-[family-name:var(--font-serif)] text-2xl md:text-3xl font-normal text-[#2D2A26] mb-3">
-            Not ready to start?
+            Get notified when new chapters drop.
           </h2>
           <p className="font-[family-name:var(--font-sans)] text-[#6B6560] text-base mb-10">
             One email per week. CFA insights, not spam.
