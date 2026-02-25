@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { SignInButton, SignUpButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -62,18 +63,25 @@ export default function Navbar() {
 
           {/* Right side — desktop */}
           <div className="hidden md:flex items-center gap-4">
-            <a
-              href="#"
-              className="font-[family-name:var(--font-sans)] text-sm font-medium text-[#6B6560] hover:text-[#2D2A26] transition-colors"
-            >
-              Sign In
-            </a>
-            <a
-              href="#chapters"
-              className="font-[family-name:var(--font-sans)] text-sm font-medium px-5 py-2 rounded-xl bg-[#E8694A] text-white hover:bg-[#d45d40] transition-colors shadow-[0_2px_8px_rgba(232,105,74,0.2)]"
-            >
-              Start Free
-            </a>
+            <SignedOut>
+              <SignInButton mode="modal">
+                <button
+                  className="font-[family-name:var(--font-sans)] text-sm font-medium text-[#6B6560] hover:text-[#2D2A26] transition-colors"
+                >
+                  Sign In
+                </button>
+              </SignInButton>
+              <SignUpButton mode="modal">
+                <button
+                  className="font-[family-name:var(--font-sans)] text-sm font-medium px-5 py-2 rounded-xl bg-[#E8694A] text-white hover:bg-[#d45d40] transition-colors shadow-[0_2px_8px_rgba(232,105,74,0.2)]"
+                >
+                  Start Free
+                </button>
+              </SignUpButton>
+            </SignedOut>
+            <SignedIn>
+              <UserButton />
+            </SignedIn>
           </div>
 
           {/* Mobile hamburger */}
@@ -124,19 +132,26 @@ export default function Navbar() {
                 transition={{ delay: 0.25, duration: 0.4 }}
                 className="flex flex-col items-center gap-4 mt-4"
               >
-                <a
-                  href="#"
-                  className="font-[family-name:var(--font-sans)] text-base text-[#6B6560]"
-                >
-                  Sign In
-                </a>
-                <a
-                  href="#chapters"
-                  onClick={() => setMobileOpen(false)}
-                  className="font-[family-name:var(--font-sans)] font-medium px-8 py-3 rounded-xl bg-[#E8694A] text-white hover:bg-[#d45d40] transition-colors shadow-[0_2px_8px_rgba(232,105,74,0.2)]"
-                >
-                  Start Free
-                </a>
+                <SignedOut>
+                  <SignInButton mode="modal">
+                    <button
+                      className="font-[family-name:var(--font-sans)] text-base text-[#6B6560]"
+                    >
+                      Sign In
+                    </button>
+                  </SignInButton>
+                  <SignUpButton mode="modal">
+                    <button
+                      onClick={() => setMobileOpen(false)}
+                      className="font-[family-name:var(--font-sans)] font-medium px-8 py-3 rounded-xl bg-[#E8694A] text-white hover:bg-[#d45d40] transition-colors shadow-[0_2px_8px_rgba(232,105,74,0.2)]"
+                    >
+                      Start Free
+                    </button>
+                  </SignUpButton>
+                </SignedOut>
+                <SignedIn>
+                  <UserButton />
+                </SignedIn>
               </motion.div>
             </div>
           </motion.div>
