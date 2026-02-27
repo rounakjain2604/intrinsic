@@ -3,6 +3,9 @@ import path from "path";
 import { compileMDX } from "next-mdx-remote/rsc";
 import Callout from "@/components/chapter/Callout";
 import FormulaBlock from "@/components/chapter/FormulaBlock";
+import DCFDiagram from "@/components/chapter/diagrams/DCFDiagram";
+import BondPricePlayable from "@/components/chapter/BondPricePlayable";
+import YieldCurveChart from "@/components/charts/YieldCurveChart";
 import type { TOCHeading } from "@/components/chapter/TableOfContents";
 
 // ── Types ──────────────────────────────────────────────────
@@ -25,6 +28,9 @@ interface ChapterMDXResult {
 const mdxComponents = {
     Callout,
     FormulaBlock,
+    DCFDiagram,
+    BondPricePlayable,
+    YieldCurveChart,
     // Map standard markdown elements to styled versions
     h2: (props: React.HTMLAttributes<HTMLHeadingElement>) => (
         <h2
