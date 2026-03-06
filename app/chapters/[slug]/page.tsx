@@ -51,12 +51,16 @@ export default async function ChapterPage({
         notFound();
     }
 
+    const isLocalChapter = chapter.id.startsWith("local:");
+
     // 3. Check access
-    const access = await hasChapterAccess(userId, chapter.id);
+    const access = isLocalChapter
+        ? true
+        : await hasChapterAccess(userId, chapter.id);
 
     // 4. Check completion status
     let isCompleted = false;
-    if (userId) {
+    if (userId && !isLocalChapter) {
         const progress = await getUserProgress(userId);
         isCompleted = progress.some((p) => p.chapterId === chapter.id);
     }
@@ -94,7 +98,7 @@ export default async function ChapterPage({
             chapter={chapter}
             content={access ? mdxResult.content : mdxResult.previewContent}
             hasAccess={access}
-            userId={userId}
+            userId={isLocalChapter ? null : userId}
             isCompleted={isCompleted}
             headings={access ? mdxResult.headings : mdxResult.previewHeadings}
         />

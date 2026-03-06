@@ -1,5 +1,31 @@
 import { createServerClient } from "@/lib/supabase/server";
+import { getAllLocalChapterFrontmatters, getLocalChapterFrontmatter } from "@/lib/mdx";
 import type { Chapter, ChapterProgress } from "@/lib/types";
+
+function toLocalChapter(frontmatter: {
+    slug: string;
+    title: string;
+    description?: string;
+    order?: number;
+    is_free: boolean;
+    price_tier: Chapter["price_tier"];
+    price_usd?: number;
+}): Chapter {
+    return {
+        id: `local:${frontmatter.slug}`,
+        slug: frontmatter.slug,
+        title: frontmatter.title,
+        description: frontmatter.description ?? null,
+        order_index: frontmatter.order ?? 999,
+        is_free: frontmatter.is_free,
+        price_tier: frontmatter.price_tier,
+        price_usd: frontmatter.price_usd ?? 0,
+        lemon_product_id: null,
+        published: true,
+        created_at: "",
+        updated_at: "",
+    };
+}
 
 // ── Chapter Queries ────────────────────────────────────────
 
@@ -9,18 +35,34 @@ import type { Chapter, ChapterProgress } from "@/lib/types";
 export async function getAllChapters(): Promise<Chapter[]> {
     const supabase = createServerClient();
 
-    const { data, error } = await supabase
+    const [{ data, error }, localFrontmatters] = await Promise.all([
+        supabase
         .from("chapters")
         .select("*")
         .eq("published", true)
-        .order("order_index", { ascending: true });
+        .order("order_index", { ascending: true }),
+        getAllLocalChapterFrontmatters(),
+    ]);
 
     if (error) {
         console.error("[chapters] Failed to fetch chapters:", error);
-        return [];
+        return localFrontmatters.map(toLocalChapter);
     }
 
-    return (data as Chapter[]) ?? [];
+    const databaseChapters = (data as Chapter[]) ?? [];
+    const chaptersBySlug = new Map(
+        databaseChapters.map((chapter) => [chapter.slug, chapter])
+    );
+
+    for (const frontmatter of localFrontmatters) {
+        if (!chaptersBySlug.has(frontmatter.slug)) {
+            chaptersBySlug.set(frontmatter.slug, toLocalChapter(frontmatter));
+        }
+    }
+
+    return [...chaptersBySlug.values()].sort(
+        (left, right) => left.order_index - right.order_index
+    );
 }
 
 /**
@@ -40,10 +82,16 @@ export async function getChapterBySlug(
 
     if (error) {
         console.error("[chapters] Failed to fetch chapter by slug:", error);
-        return null;
+        const localFrontmatter = await getLocalChapterFrontmatter(slug);
+        return localFrontmatter ? toLocalChapter(localFrontmatter) : null;
     }
 
-    return (data as Chapter) ?? null;
+    if (data) {
+        return data as Chapter;
+    }
+
+    const localFrontmatter = await getLocalChapterFrontmatter(slug);
+    return localFrontmatter ? toLocalChapter(localFrontmatter) : null;
 }
 
 // ── Access Control ─────────────────────────────────────────
@@ -57,6 +105,10 @@ export async function hasChapterAccess(
     userId: string | null,
     chapterId: string
 ): Promise<boolean> {
+    if (chapterId.startsWith("local:")) {
+        return true;
+    }
+
     const supabase = createServerClient();
 
     // First check if the chapter is free

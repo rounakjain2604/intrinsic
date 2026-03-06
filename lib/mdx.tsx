@@ -106,9 +106,68 @@ async function compileChapterSource(source: string) {
     });
 }
 
+async function parseChapterFrontmatter(
+    source: string,
+    slug: string
+): Promise<ChapterFrontmatter> {
+    const { frontmatter } = await compileMDX<ChapterFrontmatter>({
+        source,
+        options: { parseFrontmatter: true },
+    });
+    const parsedFrontmatter = chapterFrontmatterSchema.safeParse(frontmatter);
+
+    if (!parsedFrontmatter.success) {
+        throw new Error(
+            `Invalid frontmatter in content/chapters/${slug}.mdx: ${parsedFrontmatter.error.message}`
+        );
+    }
+
+    return parsedFrontmatter.data;
+}
+
 // ── Main Export ────────────────────────────────────────────
 
 const CONTENT_DIR = path.join(process.cwd(), "content", "chapters");
+
+export async function getAllLocalChapterFrontmatters(): Promise<
+    ChapterFrontmatter[]
+> {
+    const entries = fs.readdirSync(CONTENT_DIR, { withFileTypes: true });
+    const chapterFiles = entries.filter(
+        (entry) =>
+            entry.isFile() &&
+            entry.name.endsWith(".mdx") &&
+            !entry.name.startsWith("_")
+    );
+
+    const frontmatters = await Promise.all(
+        chapterFiles.map(async (entry) => {
+            const slug = entry.name.replace(/\.mdx$/, "");
+            const filePath = path.join(CONTENT_DIR, entry.name);
+            const source = fs.readFileSync(filePath, "utf-8");
+            return parseChapterFrontmatter(source, slug);
+        })
+    );
+
+    return frontmatters.sort((left, right) => {
+        const leftOrder = left.order ?? Number.MAX_SAFE_INTEGER;
+        const rightOrder = right.order ?? Number.MAX_SAFE_INTEGER;
+        return leftOrder - rightOrder;
+    });
+}
+
+export async function getLocalChapterFrontmatter(
+    slug: string
+): Promise<ChapterFrontmatter | null> {
+    const filePath = path.join(CONTENT_DIR, `${slug}.mdx`);
+
+    if (!fs.existsSync(filePath)) {
+        return null;
+    }
+
+    const source = fs.readFileSync(filePath, "utf-8");
+    return parseChapterFrontmatter(source, slug);
+}
 
 /**
  * Load and compile an MDX chapter file from content/chapters/[slug].mdx
@@ -129,14 +188,8 @@ export async function getChapterContent(
         ? source.split(PAYWALL_MARKER)[0]
         : source;
 
-    const { content, frontmatter } = await compileChapterSource(source);
-    const parsedFrontmatter = chapterFrontmatterSchema.safeParse(frontmatter);
-
-    if (!parsedFrontmatter.success) {
-        throw new Error(
-            `Invalid frontmatter in content/chapters/${slug}.mdx: ${parsedFrontmatter.error.message}`
-        );
-    }
+    const { content } = await compileChapterSource(source);
+    const parsedFrontmatter = await parseChapterFrontmatter(source, slug);
 
     const previewContent = hasPaywallMarker
         ? (await compileChapterSource(previewSource)).content
@@ -149,7 +202,7 @@ export async function getChapterContent(
     return {
         content,
         previewContent,
-        frontmatter: parsedFrontmatter.data,
+        frontmatter: parsedFrontmatter,
         headings,
         previewHeadings,
         hasPaywallMarker,
