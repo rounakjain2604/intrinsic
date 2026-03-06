@@ -1,5 +1,5 @@
 import { currentUser } from "@clerk/nextjs/server";
-import { createServerClient } from "@/lib/supabase/server";
+import { createServerClient, hasServerSupabaseEnv } from "@/lib/supabase/server";
 
 /**
  * Just-in-Time (JIT) User Sync
@@ -13,6 +13,7 @@ export async function syncUser(): Promise<string | null> {
     try {
         const clerkUser = await currentUser();
         if (!clerkUser) return null;
+        if (!hasServerSupabaseEnv()) return null;
 
         const supabase = createServerClient();
 

@@ -1,5 +1,12 @@
 import { createClient } from "@supabase/supabase-js";
 
+export function hasServerSupabaseEnv() {
+    return Boolean(
+        process.env.NEXT_PUBLIC_SUPABASE_URL &&
+            process.env.SUPABASE_SERVICE_ROLE_KEY
+    );
+}
+
 export function createServerClient() {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
     const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;

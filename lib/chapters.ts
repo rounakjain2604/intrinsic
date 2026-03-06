@@ -1,4 +1,4 @@
-import { createServerClient } from "@/lib/supabase/server";
+import { createServerClient, hasServerSupabaseEnv } from "@/lib/supabase/server";
 import { getAllLocalChapterFrontmatters, getLocalChapterFrontmatter } from "@/lib/mdx";
 import type { Chapter, ChapterProgress } from "@/lib/types";
 
@@ -33,6 +33,11 @@ function toLocalChapter(frontmatter: {
  * Fetch all published chapters, ordered by order_index.
  */
 export async function getAllChapters(): Promise<Chapter[]> {
+    if (!hasServerSupabaseEnv()) {
+        const localFrontmatters = await getAllLocalChapterFrontmatters();
+        return localFrontmatters.map(toLocalChapter);
+    }
+
     const supabase = createServerClient();
 
     const [{ data, error }, localFrontmatters] = await Promise.all([
@@ -71,6 +76,11 @@ export async function getAllChapters(): Promise<Chapter[]> {
 export async function getChapterBySlug(
     slug: string
 ): Promise<Chapter | null> {
+    if (!hasServerSupabaseEnv()) {
+        const localFrontmatter = await getLocalChapterFrontmatter(slug);
+        return localFrontmatter ? toLocalChapter(localFrontmatter) : null;
+    }
+
     const supabase = createServerClient();
 
     const { data, error } = await supabase
@@ -109,6 +119,10 @@ export async function hasChapterAccess(
         return true;
     }
 
+    if (!hasServerSupabaseEnv()) {
+        return false;
+    }
+
     const supabase = createServerClient();
 
     // First check if the chapter is free
@@ -140,6 +154,10 @@ export async function hasChapterAccess(
 export async function getUserPurchasedChapterIds(
     userId: string
 ): Promise<string[]> {
+    if (!hasServerSupabaseEnv()) {
+        return [];
+    }
+
     const supabase = createServerClient();
 
     const { data, error } = await supabase
@@ -166,6 +184,10 @@ export async function toggleChapterComplete(
     userId: string,
     chapterId: string
 ): Promise<boolean> {
+    if (!hasServerSupabaseEnv() || chapterId.startsWith("local:")) {
+        return false;
+    }
+
     const supabase = createServerClient();
 
     // Check if already completed
@@ -205,6 +227,10 @@ export async function toggleChapterComplete(
 export async function getUserProgress(
     userId: string
 ): Promise<ChapterProgress[]> {
+    if (!hasServerSupabaseEnv()) {
+        return [];
+    }
+
     const supabase = createServerClient();
 
     const { data, error } = await supabase
