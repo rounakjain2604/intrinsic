@@ -129,6 +129,14 @@ async function parseChapterFrontmatter(
 
 const CONTENT_DIR = path.join(process.cwd(), "content", "chapters");
 
+function getChapterFilePath(slug: string) {
+    return path.join(CONTENT_DIR, `${slug}.mdx`);
+}
+
+function stripFrontmatter(source: string) {
+    return source.replace(/^---\n[\s\S]*?\n---\n?/, "");
+}
+
 export async function getAllLocalChapterFrontmatters(): Promise<
     ChapterFrontmatter[]
 > {
@@ -159,7 +167,7 @@ export async function getAllLocalChapterFrontmatters(): Promise<
 export async function getLocalChapterFrontmatter(
     slug: string
 ): Promise<ChapterFrontmatter | null> {
-    const filePath = path.join(CONTENT_DIR, `${slug}.mdx`);
+    const filePath = getChapterFilePath(slug);
 
     if (!fs.existsSync(filePath)) {
         return null;
@@ -169,6 +177,35 @@ export async function getLocalChapterFrontmatter(
     return parseChapterFrontmatter(source, slug);
 }
 
+export function getChapterRawContent(slug: string): {
+    fullSource: string;
+    previewSource: string | null;
+    headings: TOCHeading[];
+    previewHeadings: TOCHeading[];
+    hasPaywallMarker: boolean;
+} | null {
+    const filePath = getChapterFilePath(slug);
+
+    if (!fs.existsSync(filePath)) {
+        return null;
+    }
+
+    const source = fs.readFileSync(filePath, "utf-8");
+    const contentSource = stripFrontmatter(source);
+    const hasPaywallMarker = contentSource.includes(PAYWALL_MARKER);
+    const previewSource = hasPaywallMarker
+        ? contentSource.split(PAYWALL_MARKER)[0]
+        : null;
+
+    return {
+        fullSource: contentSource.replace(PAYWALL_MARKER, ""),
+        previewSource,
+        headings: extractHeadings(contentSource.replace(PAYWALL_MARKER, "")),
+        previewHeadings: previewSource ? extractHeadings(previewSource) : [],
+        hasPaywallMarker,
+    };
+}
+
 /**
  * Load and compile an MDX chapter file from content/chapters/[slug].mdx
  * Returns the rendered content, parsed frontmatter, and extracted headings.
@@ -176,7 +213,7 @@ export async function getLocalChapterFrontmatter(
 export async function getChapterContent(
     slug: string
 ): Promise<ChapterMDXResult | null> {
-    const filePath = path.join(CONTENT_DIR, `${slug}.mdx`);
+    const filePath = getChapterFilePath(slug);
 
     if (!fs.existsSync(filePath)) {
         return null;

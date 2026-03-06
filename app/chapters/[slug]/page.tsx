@@ -5,7 +5,7 @@ import {
     hasChapterAccess,
     getUserProgress,
 } from "@/lib/chapters";
-import { getChapterContent } from "@/lib/mdx";
+import { getChapterContent, getChapterRawContent } from "@/lib/mdx";
 import ChapterReader from "@/components/chapter/ChapterReader";
 
 // ── Dynamic Metadata ──────────────────────────────────────
@@ -66,10 +66,17 @@ export default async function ChapterPage({
     }
 
     // 5. Load MDX content
-    const mdxResult = await getChapterContent(slug);
+    let mdxResult = null;
+    try {
+        mdxResult = await getChapterContent(slug);
+    } catch (error) {
+        console.error("[chapters] Failed to compile MDX chapter:", error);
+    }
+
+    const rawResult = mdxResult ? null : getChapterRawContent(slug);
 
     // If MDX file doesn't exist yet, show a coming soon state
-    if (!mdxResult) {
+    if (!mdxResult && !rawResult) {
         return (
             <section className="min-h-screen pt-28 pb-20 px-6">
                 <div className="max-w-2xl mx-auto text-center">
@@ -90,6 +97,34 @@ export default async function ChapterPage({
                     </div>
                 </div>
             </section>
+        );
+    }
+
+    if (!mdxResult && rawResult) {
+        return (
+            <ChapterReader
+                chapter={chapter}
+                content={
+                    <div className="rounded-2xl border border-[#2D2A26]/10 bg-[#F5F1EA] p-6 shadow-[0_2px_12px_rgba(45,42,38,0.06)]">
+                        <p className="mb-4 text-sm text-[#A09890]">
+                            Visual rendering is temporarily unavailable for this chapter, so the source text is shown instead.
+                        </p>
+                        <pre className="whitespace-pre-wrap break-words font-[family-name:var(--font-sans)] text-sm leading-7 text-[#2D2A26]">
+                            {access || !rawResult.previewSource
+                                ? rawResult.fullSource
+                                : rawResult.previewSource}
+                        </pre>
+                    </div>
+                }
+                hasAccess={access}
+                userId={isLocalChapter ? null : userId}
+                isCompleted={isCompleted}
+                headings={
+                    access || !rawResult.previewSource
+                        ? rawResult.headings
+                        : rawResult.previewHeadings
+                }
+            />
         );
     }
 
