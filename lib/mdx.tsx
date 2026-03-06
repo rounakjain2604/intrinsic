@@ -6,23 +6,14 @@ import FormulaBlock from "@/components/chapter/FormulaBlock";
 import DCFDiagram from "@/components/chapter/diagrams/DCFDiagram";
 import BondPricePlayable from "@/components/chapter/BondPricePlayable";
 import YieldCurveChart from "@/components/charts/YieldCurveChart";
-import type { TOCHeading } from "@/components/chapter/TableOfContents";
+import { chapterFrontmatterSchema } from "@/lib/schemas";
+import type {
+    ChapterFrontmatter,
+    ChapterMDXResult,
+    TOCHeading,
+} from "@/lib/types";
 
-// ── Types ──────────────────────────────────────────────────
-interface ChapterFrontmatter {
-    title: string;
-    slug: string;
-    description: string;
-    order: number;
-    is_free: boolean;
-    price_tier: "free" | "standard" | "premium";
-}
-
-interface ChapterMDXResult {
-    content: React.ReactElement;
-    frontmatter: ChapterFrontmatter;
-    headings: TOCHeading[];
-}
+const PAYWALL_MARKER = "<!-- paid-content -->";
 
 // ── Custom MDX Components ──────────────────────────────────
 const mdxComponents = {
@@ -31,48 +22,46 @@ const mdxComponents = {
     DCFDiagram,
     BondPricePlayable,
     YieldCurveChart,
-    // Map standard markdown elements to styled versions
     h2: (props: React.HTMLAttributes<HTMLHeadingElement>) => (
         <h2
-            id= { slugify(String(props.children))
-}
-className = "font-[family-name:var(--font-serif)] text-2xl font-semibold text-[#2D2A26] mt-12 mb-4"
-{...props }
+            id={slugify(String(props.children))}
+            className="font-[family-name:var(--font-serif)] text-2xl font-semibold text-[#2D2A26] mt-12 mb-4"
+            {...props}
         />
     ),
 h3: (props: React.HTMLAttributes<HTMLHeadingElement>) => (
-    <h3
-            id= { slugify(String(props.children))}
-className = "font-[family-name:var(--font-sans)] text-lg font-semibold text-[#2D2A26] mt-8 mb-3"
-{...props }
+        <h3
+            id={slugify(String(props.children))}
+            className="font-[family-name:var(--font-sans)] text-lg font-semibold text-[#2D2A26] mt-8 mb-3"
+            {...props}
         />
     ),
 p: (props: React.HTMLAttributes<HTMLParagraphElement>) => (
-    <p
-            className= "font-[family-name:var(--font-sans)] text-base text-[#6B6560] leading-8"
-{...props }
+        <p
+            className="font-[family-name:var(--font-sans)] text-base text-[#6B6560] leading-8"
+            {...props}
         />
     ),
 strong: (props: React.HTMLAttributes<HTMLElement>) => (
-    <strong className= "font-semibold text-[#2D2A26]" {...props } />
+        <strong className="font-semibold text-[#2D2A26]" {...props} />
     ),
 ul: (props: React.HTMLAttributes<HTMLUListElement>) => (
-    <ul className= "list-disc list-inside space-y-2 text-[#6B6560]" {...props } />
+        <ul className="list-disc list-inside space-y-2 text-[#6B6560]" {...props} />
     ),
 ol: (props: React.HTMLAttributes<HTMLOListElement>) => (
-    <ol className= "list-decimal list-inside space-y-2 text-[#6B6560]" {...props } />
+        <ol className="list-decimal list-inside space-y-2 text-[#6B6560]" {...props} />
     ),
-hr: () => <hr className="border-t border-[#2D2A26]/[0.08] my-12" />,
+    hr: () => <hr className="border-t border-[#2D2A26]/[0.08] my-12" />,
     code: (props: React.HTMLAttributes<HTMLElement>) => (
         <code
-            className= "font-[family-name:var(--font-mono)] text-[#E8694A] bg-[#EDE8DF] rounded px-2 py-1 text-sm"
-{...props }
+            className="font-[family-name:var(--font-mono)] text-[#E8694A] bg-[#EDE8DF] rounded px-2 py-1 text-sm"
+            {...props}
         />
     ),
 blockquote: (props: React.HTMLAttributes<HTMLQuoteElement>) => (
-    <blockquote
-            className= "border-l-4 border-[#2D2A26]/10 pl-5 italic text-[#6B6560] my-6"
-{...props }
+        <blockquote
+            className="border-l-4 border-[#2D2A26]/10 pl-5 italic text-[#6B6560] my-6"
+            {...props}
         />
     ),
 };
@@ -109,6 +98,14 @@ function extractHeadings(source: string): TOCHeading[] {
     return headings;
 }
 
+async function compileChapterSource(source: string) {
+    return compileMDX<ChapterFrontmatter>({
+        source,
+        components: mdxComponents,
+        options: { parseFrontmatter: true },
+    });
+}
+
 // ── Main Export ────────────────────────────────────────────
 
 const CONTENT_DIR = path.join(process.cwd(), "content", "chapters");
@@ -127,14 +124,34 @@ export async function getChapterContent(
     }
 
     const source = fs.readFileSync(filePath, "utf-8");
+    const hasPaywallMarker = source.includes(PAYWALL_MARKER);
+    const previewSource = hasPaywallMarker
+        ? source.split(PAYWALL_MARKER)[0]
+        : source;
 
-    const { content, frontmatter } = await compileMDX<ChapterFrontmatter>({
-        source,
-        components: mdxComponents,
-        options: { parseFrontmatter: true },
-    });
+    const { content, frontmatter } = await compileChapterSource(source);
+    const parsedFrontmatter = chapterFrontmatterSchema.safeParse(frontmatter);
 
-    const headings = extractHeadings(source);
+    if (!parsedFrontmatter.success) {
+        throw new Error(
+            `Invalid frontmatter in content/chapters/${slug}.mdx: ${parsedFrontmatter.error.message}`
+        );
+    }
 
-    return { content, frontmatter, headings };
+    const previewContent = hasPaywallMarker
+        ? (await compileChapterSource(previewSource)).content
+        : null;
+    const headings = extractHeadings(source.replace(PAYWALL_MARKER, ""));
+    const previewHeadings = hasPaywallMarker
+        ? extractHeadings(previewSource)
+        : [];
+
+    return {
+        content,
+        previewContent,
+        frontmatter: parsedFrontmatter.data,
+        headings,
+        previewHeadings,
+        hasPaywallMarker,
+    };
 }

@@ -1,12 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-
-export interface TOCHeading {
-    id: string;
-    text: string;
-    level: number;
-}
+import type { TOCHeading } from "@/lib/types";
 
 interface TableOfContentsProps {
     headings: TOCHeading[];

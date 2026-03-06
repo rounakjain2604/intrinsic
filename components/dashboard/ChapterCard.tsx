@@ -1,12 +1,13 @@
 import Link from "next/link";
 import Badge from "@/components/shared/Badge";
+import type { PriceTier } from "@/lib/types";
 
 interface ChapterCardProps {
     title: string;
     description: string;
     slug: string;
     accessState: "free" | "purchased" | "locked";
-    priceTier: "free" | "standard" | "premium";
+    priceTier: PriceTier;
     priceUsd: number;
     isCompleted?: boolean;
 }
@@ -115,9 +116,12 @@ export default function ChapterCard({
                         <span className="font-[family-name:var(--font-mono)] text-sm font-semibold text-[#2D2A26]">
                             ${priceUsd.toFixed(2)}
                         </span>
-                        <button className="font-[family-name:var(--font-sans)] text-sm font-medium px-5 py-2.5 rounded-xl border border-[#2D2A26]/15 text-[#6B6560] hover:border-[#2D2A26]/30 hover:text-[#2D2A26] transition-all">
+                        <Link
+                            href={`/api/checkout?slug=${encodeURIComponent(slug)}`}
+                            className="font-[family-name:var(--font-sans)] text-sm font-medium px-5 py-2.5 rounded-xl border border-[#2D2A26]/15 text-[#6B6560] hover:border-[#2D2A26]/30 hover:text-[#2D2A26] transition-all"
+                        >
                             Unlock Chapter
-                        </button>
+                        </Link>
                     </div>
                 )}
             </div>

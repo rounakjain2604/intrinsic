@@ -1,7 +1,7 @@
-import TableOfContents, { TOCHeading } from "./TableOfContents";
+import TableOfContents from "./TableOfContents";
 import LockedSection from "./LockedSection";
 import MarkAsMastered from "./MarkAsMastered";
-import type { Chapter } from "@/lib/chapters";
+import type { Chapter, TOCHeading } from "@/lib/types";
 
 interface ChapterReaderProps {
     chapter: Chapter;
@@ -54,20 +54,28 @@ export default function ChapterReader({
                         </header>
 
                         {/* Chapter content */}
-                        <div className="prose-intrinsic space-y-6 font-[family-name:var(--font-sans)] text-[#6B6560] leading-8">
-                            {content}
-                        </div>
+                        {content ? (
+                            <div className="prose-intrinsic space-y-6 font-[family-name:var(--font-sans)] text-[#6B6560] leading-8">
+                                {content}
+                            </div>
+                        ) : !hasAccess ? (
+                            <div className="bg-[#F5F1EA] border border-[#2D2A26]/10 rounded-2xl p-6 text-sm text-[#6B6560] shadow-[0_2px_12px_rgba(45,42,38,0.06)]">
+                                This chapter is ready for paywalled content, but no public preview has been authored yet.
+                            </div>
+                        ) : null}
 
                         {/* Locked section (if not accessible) */}
                         {!hasAccess && (
                             <LockedSection
                                 chapterTitle={chapter.title}
+                                chapterSlug={chapter.slug}
                                 priceTier={
                                     chapter.price_tier as
                                     | "standard"
                                     | "premium"
                                 }
                                 priceUsd={chapter.price_usd}
+                                userId={userId}
                             />
                         )}
 

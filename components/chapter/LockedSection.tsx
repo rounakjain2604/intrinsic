@@ -1,14 +1,24 @@
+import Link from "next/link";
+
 interface LockedSectionProps {
     chapterTitle: string;
+    chapterSlug: string;
     priceTier: "standard" | "premium";
     priceUsd: number;
+    userId: string | null;
 }
 
 export default function LockedSection({
     chapterTitle,
+    chapterSlug,
     priceTier,
     priceUsd,
+    userId,
 }: LockedSectionProps) {
+    const ctaHref = userId
+        ? `/api/checkout?slug=${encodeURIComponent(chapterSlug)}`
+        : `/sign-in?redirect_url=${encodeURIComponent(`/chapters/${chapterSlug}`)}`;
+
     return (
         <div className="relative mt-12">
             {/* Gradient fade from content into blur */}
@@ -57,6 +67,12 @@ export default function LockedSection({
                     questions.
                 </p>
 
+                <p className="font-[family-name:var(--font-sans)] text-xs text-[#A09890] mb-6">
+                    {userId
+                        ? "Checkout opens in Lemon Squeezy with your chapter purchase attached to this account."
+                        : "Sign in first so the purchase can be linked to your library automatically."}
+                </p>
+
                 {/* Price badge */}
                 <div className="inline-flex items-center gap-2 mb-6">
                     <span className="font-[family-name:var(--font-mono)] text-2xl font-bold text-[#2D2A26]">
@@ -74,9 +90,12 @@ export default function LockedSection({
 
                 {/* CTA */}
                 <div>
-                    <button className="font-[family-name:var(--font-sans)] font-semibold bg-[#E8694A] text-[#FAF8F5] px-8 py-3 rounded-xl shadow-[0_2px_8px_rgba(232,105,74,0.25)] hover:bg-[#D45E40] hover:shadow-[0_4px_16px_rgba(232,105,74,0.35)] transition-all duration-200">
-                        Unlock Chapter
-                    </button>
+                    <Link
+                        href={ctaHref}
+                        className="inline-flex font-[family-name:var(--font-sans)] font-semibold bg-[#E8694A] text-[#FAF8F5] px-8 py-3 rounded-xl shadow-[0_2px_8px_rgba(232,105,74,0.25)] hover:bg-[#D45E40] hover:shadow-[0_4px_16px_rgba(232,105,74,0.35)] transition-all duration-200"
+                    >
+                        {userId ? "Unlock Chapter" : "Sign In to Unlock"}
+                    </Link>
                 </div>
 
                 <p className="font-[family-name:var(--font-sans)] text-xs text-[#A09890] mt-4">

@@ -5,19 +5,43 @@ import { motion, AnimatePresence } from "framer-motion";
 
 export default function EmailCapture() {
   const [email, setEmail] = useState("");
-  const [status, setStatus] = useState<"idle" | "submitting" | "success">("idle");
+  const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
+  const [message, setMessage] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) return;
 
     setStatus("submitting");
-    setTimeout(() => {
-      console.log("Subscribed email:", email);
+    setMessage(null);
+
+    try {
+      const response = await fetch("/api/subscribe", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      const payload = (await response.json()) as { message?: string };
+
+      if (!response.ok) {
+        throw new Error(payload.message ?? "Something went wrong. Please try again.");
+      }
+
       setEmail("");
       setStatus("success");
+      setMessage(payload.message ?? "You’re in. Check your inbox.");
       setTimeout(() => setStatus("idle"), 4000);
-    }, 800);
+    } catch (error) {
+      setStatus("error");
+      setMessage(
+        error instanceof Error
+          ? error.message
+          : "Something went wrong. Please try again."
+      );
+    }
   };
 
   return (
@@ -60,7 +84,7 @@ export default function EmailCapture() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                 </svg>
                 <span className="font-[family-name:var(--font-sans)] text-[#2D2A26] font-medium text-sm">
-                  You&apos;re in. Check your inbox.
+                  {message ?? "You&apos;re in. Check your inbox."}
                 </span>
               </motion.div>
             ) : (
@@ -84,7 +108,7 @@ export default function EmailCapture() {
                   />
                 </div>
                 <button
-                  disabled={status !== "idle"}
+                  disabled={status === "submitting"}
                   type="submit"
                   className="font-[family-name:var(--font-sans)] font-medium text-white text-sm bg-[#E8694A] hover:bg-[#d45d40] rounded-xl px-6 py-3.5 transition-colors duration-200 disabled:opacity-50 whitespace-nowrap shadow-[0_4px_12px_rgba(232,105,74,0.25)]"
                 >
@@ -100,6 +124,12 @@ export default function EmailCapture() {
               </motion.form>
             )}
           </AnimatePresence>
+
+          {status === "error" && message && (
+            <p className="mt-4 font-[family-name:var(--font-sans)] text-sm text-[#C94F3A]">
+              {message}
+            </p>
+          )}
         </div>
       </motion.div>
     </section>

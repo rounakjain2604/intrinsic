@@ -92,11 +92,11 @@ export default async function ChapterPage({
     return (
         <ChapterReader
             chapter={chapter}
-            content={mdxResult.content}
+            content={access ? mdxResult.content : mdxResult.previewContent}
             hasAccess={access}
             userId={userId}
             isCompleted={isCompleted}
-            headings={mdxResult.headings}
+            headings={access ? mdxResult.headings : mdxResult.previewHeadings}
         />
     );
 }

@@ -3,6 +3,7 @@ import Hero from "@/components/landing/Hero";
 import ManifestoBand from "@/components/landing/ManifestoBand";
 import Features from "@/components/landing/Features";
 import ChapterProtocol from "@/components/landing/ChapterProtocol";
+import EmailCapture from "@/components/landing/EmailCapture";
 import PricingSection from "@/components/landing/PricingSection";
 import ProofStrip from "@/components/landing/ProofStrip";
 
@@ -20,6 +21,7 @@ export default function Home() {
       <Features />
       <ChapterProtocol />
       <PricingSection />
+      <EmailCapture />
       <ProofStrip />
     </main>
   );

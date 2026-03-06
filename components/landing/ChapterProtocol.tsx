@@ -238,7 +238,7 @@ const PROTOCOLS = [
         description:
             "DCF, multiples, and how to think about what a company is actually worth. See the formula breakdown drawn out step-by-step.",
         badge: "free" as const,
-        cta: { label: "Read Chapter →", href: "/chapters/equity-valuation", coral: false },
+        cta: { label: "Read Chapter →", href: "/chapters/equity-basics", coral: false },
         svg: <EquityDCFSVG />,
         dark: false,
     },

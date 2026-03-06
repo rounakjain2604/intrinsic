@@ -1,36 +1,47 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Intrinsic
 
-## Getting Started
+Intrinsic is a visual-first CFA Level 2 study notes app built with Next.js, Clerk, Supabase, and MDX. The product direction is warm, editorial, and diagram-heavy rather than quiz-first or dashboard-first.
 
-First, run the development server:
+## Current State
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- Overall completion is roughly 70–75%.
+- The core app loop exists: auth, chapter access, MDX rendering, dashboard aggregation, progress tracking, email capture persistence, and checkout/webhook scaffolding.
+- The main missing work is chapter content volume, production polish, and deployment configuration with real Lemon variant IDs.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Key Paths
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- [app](./app) for routes, layouts, and API handlers
+- [components](./components) for feature-grouped UI
+- [content/chapters](./content/chapters) for MDX chapter sources
+- [lib](./lib) for data access, MDX loading, shared types, constants, and validation
+- [docs](./docs) for internal project documentation
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Local Setup
 
-## Learn More
+1. Install dependencies with `npm install`.
+2. Copy [.env.example](./.env.example) to `.env.local` and fill in the required values.
+3. Apply [supabase-schema.sql](./supabase-schema.sql) to your Supabase project.
+4. Start the app with `npm run dev`.
 
-To learn more about Next.js, take a look at the following resources:
+## Required Services
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Clerk for authentication
+- Supabase for users, chapters, purchases, and progress
+- Vercel for deployment
+- Lemon Squeezy for per-chapter checkout
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Documentation
 
-## Deploy on Vercel
+- [docs/INDEX.md](./docs/INDEX.md)
+- [docs/PRODUCT_RULES.md](./docs/PRODUCT_RULES.md)
+- [docs/TECH_STACK.md](./docs/TECH_STACK.md)
+- [docs/STRUCTURE.md](./docs/STRUCTURE.md)
+- [docs/CONTENT_GUIDE.md](./docs/CONTENT_GUIDE.md)
+- [docs/BUILD_STATUS.md](./docs/BUILD_STATUS.md)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Known Gaps
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Only [content/chapters/ethics.mdx](./content/chapters/ethics.mdx) exists today.
+- Checkout and webhook flows now exist, but they require Lemon Squeezy environment variables and real variant IDs in the `chapters.lemon_product_id` column.
+- Paid chapter previews only show teaser content when the MDX file includes the `<!-- paid-content -->` marker.
+- Content volume is still the main missing deliverable.

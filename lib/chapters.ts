@@ -1,20 +1,5 @@
 import { createServerClient } from "@/lib/supabase/server";
-
-// ── Types ──────────────────────────────────────────────────
-export interface Chapter {
-    id: string;
-    slug: string;
-    title: string;
-    description: string | null;
-    order_index: number;
-    is_free: boolean;
-    price_tier: "free" | "standard" | "premium";
-    price_usd: number;
-    lemon_product_id: string | null;
-    published: boolean;
-    created_at: string;
-    updated_at: string;
-}
+import type { Chapter, ChapterProgress } from "@/lib/types";
 
 // ── Chapter Queries ────────────────────────────────────────
 
@@ -50,6 +35,7 @@ export async function getChapterBySlug(
         .from("chapters")
         .select("*")
         .eq("slug", slug)
+        .eq("published", true)
         .single();
 
     if (error) {
@@ -166,7 +152,7 @@ export async function toggleChapterComplete(
  */
 export async function getUserProgress(
     userId: string
-): Promise<{ chapterId: string; completedAt: string }[]> {
+): Promise<ChapterProgress[]> {
     const supabase = createServerClient();
 
     const { data, error } = await supabase
