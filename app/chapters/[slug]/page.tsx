@@ -131,11 +131,11 @@ export default async function ChapterPage({
     return (
         <ChapterReader
             chapter={chapter}
-            content={access ? mdxResult.content : mdxResult.previewContent}
+            content={access ? mdxResult!.content : mdxResult!.previewContent}
             hasAccess={access}
             userId={isLocalChapter ? null : userId}
             isCompleted={isCompleted}
-            headings={access ? mdxResult.headings : mdxResult.previewHeadings}
+            headings={access ? mdxResult!.headings : mdxResult!.previewHeadings}
         />
     );
 }
