@@ -79,6 +79,6 @@ INSERT INTO chapters (slug, title, description, order_index, is_free, price_tier
   ('economics', 'Economics: Macro and Monetary Policy', 'Interest rates, currency effects, and what central banks actually do to markets.', 3, true, 'free', 0.00, true),
   ('equity-basics', 'Equity Valuation: Concepts and Basic Tools', 'DCF, multiples, and how to think about what a company is actually worth.', 4, true, 'free', 0.00, true),
   ('fixed-income-overview', 'Fixed Income: Overview and Bond Markets', 'Bond pricing, yield measures, and the mechanics of fixed income markets.', 5, true, 'free', 0.00, true),
-  ('financial-statement-analysis', 'Financial Statement Analysis', 'Reading between the lines of income statements, balance sheets, and cash flow statements.', 6, false, 'standard', 9.99, true),
-  ('derivatives', 'Derivatives: Options, Futures, Swaps', 'How derivatives are priced, used for hedging, and tested on the CFA exam.', 7, false, 'premium', 14.99, true),
-  ('alternative-investments', 'Alternative Investments', 'Real estate, hedge funds, private equity, and commodities — the alternative universe.', 8, false, 'premium', 14.99, true);
+  ('financial-statement-analysis', 'Financial Statement Analysis', 'Reading between the lines of income statements, balance sheets, and cash flow statements.', 6, true, 'free', 0.00, true),
+  ('derivatives', 'Derivatives: Options, Futures, Swaps', 'How derivatives are priced, used for hedging, and tested on the CFA exam.', 7, true, 'free', 0.00, true),
+  ('alternative-investments', 'Alternative Investments', 'Real estate, hedge funds, private equity, and commodities — the alternative universe.', 8, true, 'free', 0.00, true);

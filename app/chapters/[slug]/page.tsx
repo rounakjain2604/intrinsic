@@ -2,7 +2,6 @@ import { notFound } from "next/navigation";
 import { syncUser } from "@/lib/supabase/syncUser";
 import {
     getChapterBySlug,
-    hasChapterAccess,
     getUserProgress,
 } from "@/lib/chapters";
 import { getChapterContent, getChapterRawContent } from "@/lib/mdx";
@@ -53,12 +52,7 @@ export default async function ChapterPage({
 
     const isLocalChapter = chapter.id.startsWith("local:");
 
-    // 3. Check access
-    const access = isLocalChapter
-        ? true
-        : await hasChapterAccess(userId, chapter.id);
-
-    // 4. Check completion status
+    // 3. Check completion status
     let isCompleted = false;
     if (userId && !isLocalChapter) {
         const progress = await getUserProgress(userId);
@@ -110,20 +104,13 @@ export default async function ChapterPage({
                             Visual rendering is temporarily unavailable for this chapter, so the source text is shown instead.
                         </p>
                         <pre className="whitespace-pre-wrap break-words font-[family-name:var(--font-sans)] text-sm leading-7 text-[#2D2A26]">
-                            {access || !rawResult.previewSource
-                                ? rawResult.fullSource
-                                : rawResult.previewSource}
+                            {rawResult.fullSource}
                         </pre>
                     </div>
                 }
-                hasAccess={access}
                 userId={isLocalChapter ? null : userId}
                 isCompleted={isCompleted}
-                headings={
-                    access || !rawResult.previewSource
-                        ? rawResult.headings
-                        : rawResult.previewHeadings
-                }
+                headings={rawResult.headings}
             />
         );
     }
@@ -131,11 +118,10 @@ export default async function ChapterPage({
     return (
         <ChapterReader
             chapter={chapter}
-            content={access ? mdxResult!.content : mdxResult!.previewContent}
-            hasAccess={access}
+            content={mdxResult!.content}
             userId={isLocalChapter ? null : userId}
             isCompleted={isCompleted}
-            headings={access ? mdxResult!.headings : mdxResult!.previewHeadings}
+            headings={mdxResult!.headings}
         />
     );
 }

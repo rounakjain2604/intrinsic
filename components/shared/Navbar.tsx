@@ -29,7 +29,6 @@ export default function Navbar() {
 
   const navLinks = [
     { href: "#chapters", label: "Chapters" },
-    { href: "#pricing", label: "Pricing" },
   ];
 
   return (

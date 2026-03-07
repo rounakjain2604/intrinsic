@@ -7,10 +7,12 @@ import {
 } from "@/lib/chapters";
 import ChapterCard from "@/components/dashboard/ChapterCard";
 
+export const dynamic = "force-dynamic";
+
 export const metadata = {
     title: "Your Chapters — Intrinsic",
     description:
-        "Your CFA Level 2 chapter library. Track progress and unlock new chapters.",
+        "Your CFA Level 2 chapter library. Track your progress across chapters.",
 };
 
 export default async function DashboardPage() {
@@ -32,14 +34,7 @@ export default async function DashboardPage() {
 
     // 3. Derive access state for each chapter
     const chaptersWithAccess = chapters.map((chapter) => {
-        let accessState: "free" | "purchased" | "locked";
-        if (chapter.is_free) {
-            accessState = "free";
-        } else if (purchasedIds.includes(chapter.id)) {
-            accessState = "purchased";
-        } else {
-            accessState = "locked";
-        }
+        const accessState: "free" | "purchased" = chapter.is_free ? "free" : "purchased";
         return {
             ...chapter,
             accessState,
@@ -61,7 +56,7 @@ export default async function DashboardPage() {
                         Your Chapters
                     </h1>
                     <p className="font-[family-name:var(--font-sans)] text-base text-[#6B6560]">
-                        5 chapters free forever. Unlock more as you go.
+                        Your CFA Level 2 chapter library.
                     </p>
                 </div>
 
