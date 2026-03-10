@@ -1,0 +1,567 @@
+---
+title: "Free Cash Flow Valuation"
+slug: "equity-valuation-fcf"
+description: "Learning Module 3: FCFF vs FCFE valuation, calculating free cash flows from financial statements, forecasting, multi-stage models, and sensitivity analysis."
+order: 12
+is_free: true
+price_tier: "free"
+price_usd: 0
+---
+
+## Overview
+
+Learning Module 3 is about one fundamental question: how much cash does a business generate, and for whom? Free cash flow valuation sits at the intersection of financial statement analysis and equity pricing. The full logic runs from understanding who has a claim on the cash, through the mechanics of extracting free cash flow from reported financials, to building multi-stage models that capture growth transitions.
+
+If you miss this logic, you will either mismatch cash flows with discount rates, double-count debt effects, or overstate value by treating accounting proxies like EBITDA as if they were true free cash flow.
+
+<Callout type="exam-tip">
+Start by asking: am I valuing the whole firm or just the equity? If FCFF, discount at WACC. If FCFE, discount at cost of equity. Mismatching these is the single most common exam trap in this module.
+</Callout>
+
+## Core Framework
+
+Two approaches lead to the same destination when applied correctly.
+
+<FormulaBlock label="FCFF Approach — Value The Whole Firm">
+Step 1: Calculate FCFF — cash available to ALL capital providers (debt + equity).
+
+Step 2: Discount at WACC → total firm value.
+
+Step 3: Subtract market value of debt → equity value.
+
+Step 4: Divide by shares → value per share.
+</FormulaBlock>
+
+<FormulaBlock label="FCFE Approach — Value Equity Directly">
+Step 1: Calculate FCFE — cash available to COMMON EQUITY HOLDERS after all obligations.
+
+Step 2: Discount at cost of equity (r) → equity value directly.
+
+Step 3: Divide by shares → value per share.
+</FormulaBlock>
+
+### Key Valuation Formulas
+
+<FormulaBlock label="Core Valuation Formulas">
+Firm value = Sum of all future FCFF discounted at WACC
+
+Equity value = Firm value MINUS Market value of debt
+
+WACC = (Debt weight)(Cost of debt)(1 - Tax rate) + (Equity weight)(Cost of equity)
+
+Constant-Growth FCFF: Firm value = FCFF(next year) / (WACC - g)
+
+Constant-Growth FCFE: Equity value = FCFE(next year) / (r - g)
+
+The growth rate of FCFF and FCFE need not be the same.
+</FormulaBlock>
+
+### When To Use Which Approach
+
+| Situation | Preferred | Why |
+|---|---|---|
+| Stable capital structure | FCFE | More direct |
+| Negative FCFE | FCFF | FCFF may still be positive |
+| Changing capital structure | FCFF | WACC more stable than cost of equity |
+| No dividends | FCF over DDM | Dividends differ from payment capacity |
+| Control perspective | FCF over DDM | Free cash flows measure capacity |
+
+<Callout type="key-concept">
+FCFE embeds the perspective of the equity residual claimant. After operating costs, reinvestment, and debt obligations are met, whatever remains is FCFE — what the company CAN AFFORD to pay as dividends. Actual dividends may differ substantially.
+</Callout>
+
+---
+
+## Worked Example: Cagiati Enterprises
+
+FCFF = CHF 700M. Cost of debt = 5.7%. Cost of equity = 11.8%. Capital structure: 20% debt, 80% equity. Tax = 33.33%. FCFF growth = 5.0%. Market value of debt = CHF 2.2B. Shares = 200M.
+
+<FormulaBlock label="Cagiati Valuation">
+WACC = 0.20 × 5.7% × (1 - 0.3333) + 0.80 × 11.8% = 0.76% + 9.44% = 10.2%
+
+Firm value = 700 × 1.05 / (0.102 - 0.05) = 735 / 0.052 = CHF 14,134.6M
+
+Equity value = 14,134.6 - 2,200 = CHF 11,934.6M
+
+Value per share = 11,934.6 / 200 = CHF 59.67
+</FormulaBlock>
+
+---
+
+## Calculating FCFF and FCFE From Financial Statements
+
+Financial statements do not report FCFF or FCFE directly. You must derive them. Each starting point requires a slightly different set of adjustments.
+
+### FCFF From Net Income
+
+<FormulaBlock label="FCFF from NI (Eq. 7)">
+FCFF = NI + NCC + Int(1-T) - FCInv - WCInv
+
+NI = Net Income
+NCC = Noncash Charges (depreciation, amortization, impairments)
+Int(1-T) = After-tax interest expense
+FCInv = Capital expenditures minus proceeds from asset sales
+WCInv = Change in non-cash current assets minus change in non-debt current liabilities
+</FormulaBlock>
+
+### FCFF From CFO
+
+<FormulaBlock label="FCFF from CFO (Eq. 8)">
+FCFF = CFO + Int(1-T) - FCInv
+
+CFO already includes NCC and working capital adjustments.
+</FormulaBlock>
+
+### FCFE From Net Income
+
+<FormulaBlock label="FCFE from NI (Eq. 10)">
+FCFE = NI + NCC - FCInv - WCInv + Net Borrowing
+
+NO interest add-back. FCFE is for equity holders, so interest stays deducted.
+</FormulaBlock>
+
+### FCFE From CFO
+
+<FormulaBlock label="FCFE from CFO (Eq. 11)">
+FCFE = CFO - FCInv + Net Borrowing
+</FormulaBlock>
+
+### FCFF From EBIT
+
+<FormulaBlock label="FCFF from EBIT (Eq. 12)">
+FCFF = EBIT(1-T) + Dep - FCInv - WCInv
+
+Add back FULL depreciation because EBIT already subtracted it.
+</FormulaBlock>
+
+### FCFF From EBITDA
+
+<FormulaBlock label="FCFF from EBITDA (Eq. 13)">
+FCFF = EBITDA(1-T) + Dep × T - FCInv - WCInv
+
+Add back only Dep × Tax Rate (the tax shield). EBITDA never subtracted depreciation, so you only recover the tax benefit.
+</FormulaBlock>
+
+<Callout type="warning">
+From EBIT: add Dep in full. From EBITDA: add Dep × T only. Confusing these is a high-frequency exam error.
+</Callout>
+
+### Working Capital Investment Rules
+
+<FormulaBlock label="WCInv Calculation">
+WCInv = Change in (AR + Inventory + Other Current Assets) MINUS Change in (AP + Accrued Expenses + Other Current Liabilities)
+
+EXCLUDE cash from current assets (it is what we are solving for).
+EXCLUDE notes payable and current portion of long-term debt from current liabilities (they are financing, not operating).
+</FormulaBlock>
+
+### IFRS vs US GAAP Interest Classification
+
+Under **US GAAP**: Interest paid is always classified as operating. It IS inside CFO, so you MUST add it back (after-tax) for FCFF from CFO.
+
+Under **IFRS**: Interest paid can be classified as operating OR financing.
+
+- If classified as operating → same as US GAAP, add back after-tax
+- If classified as financing → it is NOT inside CFO, so NO add-back needed
+
+---
+
+## Worked Example: Pitts Corporation
+
+NI = 240, Dep = 300, Int = 100, Tax = 40%, CFO = 495, FCInv = 400, WCInv = 45, Net borrowing = 75, EBIT = 500, EBITDA = 800.
+
+<FormulaBlock label="Pitts — Multiple Paths to FCFF">
+FCFF from NI: 240 + 300 + 100(0.60) - 400 - 45 = 155
+
+FCFF from CFO: 495 + 60 - 400 = 155
+
+FCFF from EBIT: 500(0.60) + 300 - 400 - 45 = 155
+
+FCFF from EBITDA: 800(0.60) + 300(0.40) - 400 - 45 = 155
+
+FCFE from NI: 240 + 300 - 400 - 45 + 75 = 170
+
+FCFE from CFO: 495 - 400 + 75 = 170
+
+All paths converge: FCFF = $155M, FCFE = $170M.
+</FormulaBlock>
+
+---
+
+## Forecasting FCFF and FCFE
+
+### Sales-Based Component Forecasting
+
+<FormulaBlock label="Sales-Based FCFF Forecast">
+After-tax EBIT = EBIT margin × Sales × (1 - Tax rate)
+
+Incremental FCInv = [(Capex - Dep) / Sales increase] × Forecasted Sales increase
+
+Incremental WCInv = [WC change / Sales increase] × Forecasted Sales increase
+
+FCFF = After-tax EBIT - Incremental FCInv - Incremental WCInv
+</FormulaBlock>
+
+Only GROWTH capex (Capex minus Depreciation) scales with sales. Depreciation approximates maintenance capex.
+
+### FCFE With Target Debt Ratio
+
+<FormulaBlock label="FCFE with Target Debt Ratio">
+FCFE = NI - (1 - DR)(FCInv - Dep) - (1 - DR)(WCInv)
+
+FCFE = NI minus the EQUITY-FINANCED portion of net new investment.
+
+If DR = 40%, company finances 40% of investment with debt. Equity funds the remaining 60%.
+</FormulaBlock>
+
+<Callout type="exam-tip">
+When a vignette provides a "target debt ratio," use the simplified FCFE formula. Do not calculate net borrowing separately — the (1-DR) factor handles it automatically.
+</Callout>
+
+---
+
+## What Does NOT Affect Free Cash Flow
+
+### Dividends and Share Repurchases
+
+**No effect on FCFF or FCFE.** Dividends do not appear in either formula. FCFF and FCFE measure CAPACITY to pay. Dividends are a USE of that capacity, not a component.
+
+### Leverage Changes
+
+**No effect on FCFF.** FCFF represents cash from assets, independent of financing.
+
+**Yes affects FCFE:**
+
+- Year of new debt: cash inflow from borrowing increases net borrowing → FCFE INCREASES
+- Subsequent years: higher after-tax interest reduces NI → FCFE DECREASES
+
+<Callout type="warning">
+Using NI as an FCFE proxy is almost certainly wrong — NI equals FCFE only when noncash charges equal capital expenditures, working capital investment is zero, and net borrowing is zero. This almost never happens.
+
+Using EBITDA as an FCFF proxy grossly overstates firm value because EBITDA ignores taxes, the depreciation tax shield, capital expenditures, and working capital investment.
+</Callout>
+
+---
+
+## Preferred Stock Adjustments
+
+When preferred stock exists, three modifications apply:
+
+<FormulaBlock label="Preferred Stock Adjustments">
+WACC adds a third term: (Preferred weight)(r_ps)
+
+FCFF from NI must add back preferred dividends (NI already subtracted them, but FCFF is for ALL providers).
+
+Equity value = Firm value - MV(Debt) - MV(Preferred Stock)
+</FormulaBlock>
+
+---
+
+## Multi-Stage FCF Models
+
+Most companies do not grow at one constant rate forever. Multi-stage models capture the transition from high to stable growth.
+
+### Two-Stage Model
+
+<FormulaBlock label="Two-Stage Model">
+Equity value = PV of Stage 1 FCFE + PV of Terminal Value
+
+Terminal value at end of year n: TV(n) = FCFE(n+1) / (r - g)
+
+Then discount TV back to today: PV of TV = TV(n) / (1+r)^n
+
+CRITICAL: Use FCFE at time n+1 (not n) in the terminal value numerator.
+</FormulaBlock>
+
+| Company Type | Model |
+|---|---|
+| Stable, mature, constant growth | Single-stage |
+| High growth transitioning to stable | Two-stage |
+| High growth, gradual decline, then stable | Three-stage |
+
+<Callout type="key-concept">
+Terminal value typically dominates — the PV of terminal value is often 80-95% of total stock value. A 1% change in terminal growth can change value by 20-30%. The terminal growth rate MUST be at or below long-run nominal GDP growth.
+</Callout>
+
+### Worked Example: TechnoSchaft — Two-Stage FCFE
+
+Sales(0) = 25/share. Sales growth 20% for 3 years, then 6% forever. Net margin = 10%. FCInv = 50% of sales increase. WCInv = 20% of sales increase. Debt = 40% of investment. r = 12.4%.
+
+<FormulaBlock label="TechnoSchaft Valuation">
+Year 1: Sales = 30.00, EPS = 3.00, FCFE = 0.90
+Year 2: Sales = 36.00, EPS = 3.60, FCFE = 1.08
+Year 3: Sales = 43.20, EPS = 4.32, FCFE = 1.30
+Year 4: Sales = 45.79, EPS = 4.58, FCFE = 3.49
+
+FCFE jumps 169% from Year 3 to Year 4 because investment drops massively when growth slows.
+
+Terminal value at Year 3: TV = 3.49 / (0.124 - 0.06) = 54.55
+
+Stock value = 0.90/1.124 + 1.08/1.124^2 + 1.30/1.124^3 + 54.55/1.124^3 = 40.98 per share
+
+Terminal value = 93.8% of total value.
+</FormulaBlock>
+
+### Worked Example: Reliant Home — Three-Stage FCFF
+
+FCFF(0) = 745M. 309.39M shares. Debt = 1,518M. WACC = 8.93%.
+
+Stage 1 (Years 1-4): g = 8.8%. Stage 2 (Years 5-7): g declines from 7.4% to 4.6%. Stage 3 (Year 8+): g = 3.2%.
+
+<FormulaBlock label="Reliant Home Valuation">
+PV of Years 1-7 FCFF = $5,097M
+
+Terminal value at Year 7 = 1,283 / (0.0893 - 0.032) = $22,391M
+
+PV of TV = 22,391 / (1.0893)^7 = $12,304M
+
+Firm value = 5,097 + 12,304 = $17,401M
+
+Equity value = 17,401 - 1,518 = $15,883M
+
+Value per share = 15,883 / 309.39 = $51.34
+
+Terminal value = 70.7% of firm value.
+</FormulaBlock>
+
+---
+
+## Non-Operating Assets
+
+FCF models value OPERATING assets only. If the company holds assets not contributing to operations, they must be valued separately and ADDED.
+
+<FormulaBlock label="Non-Operating Asset Adjustment">
+Total Firm Value = Value of Operating Assets + Value of Non-Operating Assets
+
+Common types: excess cash, excess marketable securities, land held for investment, noncurrent investment securities, nonperforming assets.
+
+Value at MARKET VALUE, not book value.
+</FormulaBlock>
+
+---
+
+## Sensitivity Analysis
+
+When each input varies independently, identify the variable with the **largest output spread** — that is the most sensitive variable.
+
+<FormulaBlock label="Sensitivity Analysis Example — Petrobras">
+Base case: FCFE(0) = BRL 2.59, g = 7%, r = 16.32%. Value = BRL 29.73.
+
+Beta (1.2-1.6): spread = 6.85
+Risk-free rate (7.9%-9.9%): spread = 6.46
+Equity risk premium (4.3%-6.3%): spread = 9.14
+FCFE growth (5.0%-9.0%): spread = 14.55
+
+Most sensitive variable = FCFE growth rate (largest spread).
+</FormulaBlock>
+
+---
+
+## Exam Lens
+
+The highest-probability testing areas in this module:
+
+1. Mismatching cash flow and discount rate — the single most common trap
+2. FCFF from NI — the most tested calculation
+3. When to use FCFF vs FCFE — "changing capital structure" or "negative FCFE" signals FCFF
+4. WCInv — exclude cash, exclude notes payable
+5. After-tax interest — add for FCFF, do NOT add for FCFE
+6. From EBIT: add Dep in full. From EBITDA: add Dep × T only
+7. Two-stage FCFE valuation with terminal value
+8. Terminal value discounting back to t=0
+9. Non-operating asset add-back
+10. Sensitivity analysis — identify largest output spread
+
+Common candidate mistakes:
+
+1. Discounting FCFE at WACC (WACC is for FCFF)
+2. Including notes payable in WCInv
+3. Adding gross interest instead of after-tax
+4. Adding back interest for FCFE from NI
+5. Forgetting to discount terminal value back to t=0
+6. Using Year n FCFE instead of Year n+1 in terminal formula
+7. Forgetting to subtract debt from firm value
+8. Including all cash as excess (only cash BEYOND operating needs is excess)
+9. Using book value of debt instead of market value
+
+---
+
+## Practice Questions
+
+### Vignette 1: Takara Capital Partners
+
+Analyst Tanaka evaluates Kanto Industries. Kanto completed a debt-funded acquisition, significantly increasing leverage. Capital structure expected to keep shifting.
+
+Given: FCFF = 4,200M. FCFE = -800M. WACC = 9.5%. r = 13.0%. FCFF growth = 4.0%. MV(Debt) = 18,000M. Shares = 500M.
+
+Junior analyst Sato proposes using the FCFE approach because "it gives equity value directly."
+
+**Q1.** Best reason to reject Sato's proposal:
+
+A. FCFE requires WACC, which is complex.
+
+B. FCFE is inappropriate when FCFE is negative and capital structure is changing.
+
+C. FCFE always produces lower valuations.
+
+**Q2.** Using FCFF approach, value per share is closest to:
+
+A. 61.07 | B. 79.42 | C. 122.84
+
+**Q3.** A peer with stable structure and positive FCFE should be valued with:
+
+A. FCFF | B. FCFE | C. FCFF always
+
+---
+
+### Vignette 2: Sterling Electronics (US GAAP)
+
+NI = 320. Dep = 85. Amortization = 15. Int = 50. Tax = 25%. AR increase = 30. Inventory increase = 25. AP increase = 18. Accrued expense increase = 7. Notes payable increase = 40. LT debt increase = 60. Capex = 200. Equipment sale proceeds = 10. CFO = 385.
+
+**Q4.** FCFF from NI is closest to:
+
+A. 160.0 | B. 237.5 | C. 277.5
+
+**Q5.** FCFE from NI is closest to:
+
+A. 237.5 | B. 300.0 | C. 337.5
+
+**Q6.** If Sterling used IFRS and classified interest as financing, computing FCFF from CFO would:
+
+A. require adding back after-tax interest.
+
+B. NOT require interest add-back because it is already excluded from CFO.
+
+C. require adding back full pre-tax interest.
+
+---
+
+### Vignette 3: Summit Partners
+
+Vega values NovaTech. FCFE per share = $1.50. Growth = 25% for 3 years, then 5% forever. r = 14%.
+
+**Q7.** Terminal value at Year 3 is closest to:
+
+A. 27.08 | B. 34.18 | C. 38.09
+
+**Q8.** Value per share is closest to:
+
+A. 24.20 | B. 28.50 | C. 32.15
+
+**Q9.** PV of terminal value as percentage of total is closest to:
+
+A. 65% | B. 81% | C. 95%
+
+---
+
+### Vignette 4: Granite Capital
+
+Kim valued Cornerstone using two-stage FCFF model. PV of operating assets = $8,500M. Total debt: Book 2,000M, Market 2,100M. Cash: 600M (operating needs = 150M). Investment property: Book 300M, Market 425M. Minority investments: Book 200M, Market 280M. Shares: 500M. Stock price = $16.50.
+
+**Q10.** Non-operating assets total:
+
+A. 1,100 | B. 1,155 | C. 1,305
+
+**Q11.** Intrinsic value per share:
+
+A. 15.11 | B. 15.31 | C. 16.41
+
+**Q12.** Cornerstone shares are most likely:
+
+A. Undervalued | B. Fairly valued | C. Overvalued
+
+---
+
+## Worked Answers
+
+### Answer 1
+
+The correct answer is **B**. FCFF is preferred when FCFE is negative AND capital structure is changing. A is wrong because FCFE uses cost of equity, not WACC. C is wrong because FCFE does not always produce lower valuations.
+
+### Answer 2
+
+<FormulaBlock label="Q2 Walkthrough">
+FCFF(1) = 4,200 × 1.04 = 4,368
+Firm value = 4,368 / (0.095 - 0.04) = 4,368 / 0.055 = 79,418
+Equity value = 79,418 - 18,000 = 61,418
+Value per share = 61,418 / 500 = 122.84
+</FormulaBlock>
+
+The correct answer is **C**. A is wrong (uses r = 13% instead of WACC). B is wrong (forgets to subtract debt).
+
+### Answer 3
+
+The correct answer is **B**. Stable structure + positive FCFE = FCFE is simpler and more direct.
+
+### Answer 4
+
+<FormulaBlock label="Q4 Walkthrough">
+NCC = 85 + 15 = 100
+After-tax interest = 50 × 0.75 = 37.5
+FCInv = 200 - 10 = 190
+WCInv = (30 + 25) - (18 + 7) = 30 (notes payable excluded)
+FCFF = 320 + 100 + 37.5 - 190 - 30 = 237.5
+</FormulaBlock>
+
+The correct answer is **B**.
+
+### Answer 5
+
+<FormulaBlock label="Q5 Walkthrough">
+Net borrowing = 40 + 60 = 100
+FCFE = 320 + 100 - 190 - 30 + 100 = 300.0
+</FormulaBlock>
+
+The correct answer is **B**.
+
+### Answer 6
+
+The correct answer is **B**. Under IFRS, if interest is classified as financing, it is NOT in CFO. Nothing to add back.
+
+### Answer 7
+
+<FormulaBlock label="Q7 Walkthrough">
+FCFE(1) = 1.875, FCFE(2) = 2.344, FCFE(3) = 2.930
+FCFE(4) = 2.930 × 1.05 = 3.076
+TV(3) = 3.076 / (0.14 - 0.05) = 3.076 / 0.09 = 34.18
+</FormulaBlock>
+
+The correct answer is **B**.
+
+### Answer 8
+
+<FormulaBlock label="Q8 Walkthrough">
+V = 1.875/1.14 + 2.344/1.14^2 + 2.930/1.14^3 + 34.18/1.14^3
+V = 1.645 + 1.803 + 1.978 + 23.074 = 28.50
+</FormulaBlock>
+
+The correct answer is **B**.
+
+### Answer 9
+
+PV of TV = 23.07. Total = 28.50. Percentage = 23.07 / 28.50 = **80.9%**. The correct answer is **B**.
+
+### Answer 10
+
+<FormulaBlock label="Q10 Walkthrough">
+Excess cash = 600 - 150 = 450 (at market value)
+Investment property = 425 (market, not 300 book)
+Minority investments = 280 (market, not 200 book)
+Total = 450 + 425 + 280 = 1,155
+</FormulaBlock>
+
+The correct answer is **B**. A uses book values. C uses total cash instead of excess.
+
+### Answer 11
+
+<FormulaBlock label="Q11 Walkthrough">
+Firm value = 8,500 + 1,155 = 9,655
+Equity value = 9,655 - 2,100 (MARKET value of debt) = 7,555
+Value per share = 7,555 / 500 = 15.11
+</FormulaBlock>
+
+The correct answer is **A**. B uses book value of debt. C uses total cash.
+
+### Answer 12
+
+Intrinsic ($15.11) < Market ($16.50) → **OVERVALUED**. The correct answer is **C**.

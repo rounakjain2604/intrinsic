@@ -1,14 +1,9 @@
 import Link from "next/link";
-import Badge from "@/components/shared/Badge";
-import type { PriceTier } from "@/lib/types";
 
 interface ChapterCardProps {
     title: string;
     description: string;
     slug: string;
-    accessState: "free" | "purchased";
-    priceTier: PriceTier;
-    priceUsd: number;
     isCompleted?: boolean;
 }
 
@@ -16,18 +11,11 @@ export default function ChapterCard({
     title,
     description,
     slug,
-    accessState,
     isCompleted = false,
 }: ChapterCardProps) {
-    const badgeVariant = accessState === "free" ? "free" : "standard";
-
     return (
         <div
-            className={`relative bg-[#F5F1EA] border rounded-2xl p-6 shadow-[0_2px_12px_rgba(45,42,38,0.06)] hover:shadow-[0_4px_20px_rgba(45,42,38,0.10)] transition-all duration-200 flex flex-col ${
-                accessState === "free"
-                    ? "border-[#E8694A]/30"
-                    : "border-[#2D2A26]/10"
-            }`}
+            className="relative bg-[#F5F1EA] border border-[#E8694A]/30 rounded-2xl p-6 shadow-[0_2px_12px_rgba(45,42,38,0.06)] hover:shadow-[0_4px_20px_rgba(45,42,38,0.10)] transition-all duration-200 flex flex-col"
         >
             {/* Top row: completed indicator + badge */}
             <div className="flex items-start justify-between mb-3">
@@ -42,7 +30,9 @@ export default function ChapterCard({
                         </span>
                     )}
                 </div>
-                <Badge variant={badgeVariant} />
+                <span className="font-[family-name:var(--font-mono)] text-[10px] font-medium px-2 py-0.5 rounded-md bg-[#5B9E6F]/10 text-[#5B9E6F]">
+                    Free
+                </span>
             </div>
 
             {/* Title */}

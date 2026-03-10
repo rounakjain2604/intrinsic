@@ -10,7 +10,7 @@ interface ModuleStatus {
     slug: string;
     hasContent: boolean;
     isCompleted: boolean;
-    accessState: "free" | "purchased" | "locked";
+    accessState: "free" | "coming-soon";
 }
 
 interface SubjectNavigatorProps {
@@ -156,7 +156,6 @@ function SubjectPanel({
                         const status = moduleStatuses[mod.slug];
                         const hasContent = status?.hasContent ?? false;
                         const isCompleted = status?.isCompleted ?? false;
-                        const accessState = status?.accessState ?? "locked";
 
                         return (
                             <motion.div
@@ -182,7 +181,9 @@ function SubjectPanel({
                                                 {mod.title}
                                             </span>
                                         </div>
-                                        <ModuleBadge accessState={accessState} />
+                                        <span className="font-[family-name:var(--font-mono)] text-[10px] font-medium px-2 py-0.5 rounded-md bg-[#5B9E6F]/10 text-[#5B9E6F] flex-shrink-0">
+                                            Free
+                                        </span>
                                         <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="text-[#A09890] group-hover:text-[#2D2A26] transition-colors flex-shrink-0">
                                             <path d="M5 3L9 7L5 11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                                         </svg>
@@ -248,27 +249,5 @@ function ModuleIndicator({
                 {index}
             </span>
         </div>
-    );
-}
-
-/* ─── Small badge showing free / standard / premium / locked ─── */
-function ModuleBadge({ accessState }: { accessState: "free" | "purchased" | "locked" }) {
-    const styles = {
-        free: "bg-[#5B9E6F]/10 text-[#5B9E6F]",
-        purchased: "bg-[#4A7FC1]/10 text-[#4A7FC1]",
-        locked: "bg-[#2D2A26]/5 text-[#A09890]",
-    };
-    const labels = {
-        free: "Free",
-        purchased: "Owned",
-        locked: "Locked",
-    };
-
-    return (
-        <span
-            className={`font-[family-name:var(--font-mono)] text-[10px] font-medium px-2 py-0.5 rounded-md flex-shrink-0 ${styles[accessState]}`}
-        >
-            {labels[accessState]}
-        </span>
     );
 }

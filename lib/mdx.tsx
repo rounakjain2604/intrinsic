@@ -240,28 +240,19 @@ export async function getChapterContent(
     }
 
     const source = fs.readFileSync(filePath, "utf-8");
-    const hasPaywallMarker = source.includes(PAYWALL_MARKER);
-    const previewSource = hasPaywallMarker
-        ? source.split(PAYWALL_MARKER)[0]
-        : source;
+    // Strip paywall marker — everything is free during beta
+    const cleanSource = source.replace(PAYWALL_MARKER, "");
 
-    const { content } = await compileChapterSource(source);
+    const { content } = await compileChapterSource(cleanSource);
     const parsedFrontmatter = await parseChapterFrontmatter(source, slug);
-
-    const previewContent = hasPaywallMarker
-        ? (await compileChapterSource(previewSource)).content
-        : null;
-    const headings = extractHeadings(source.replace(PAYWALL_MARKER, ""));
-    const previewHeadings = hasPaywallMarker
-        ? extractHeadings(previewSource)
-        : [];
+    const headings = extractHeadings(cleanSource);
 
     return {
         content,
-        previewContent,
+        previewContent: null,
         frontmatter: parsedFrontmatter,
         headings,
-        previewHeadings,
-        hasPaywallMarker,
+        previewHeadings: [],
+        hasPaywallMarker: false,
     };
 }

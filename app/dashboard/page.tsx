@@ -1,8 +1,6 @@
-import { redirect } from "next/navigation";
 import { syncUser } from "@/lib/supabase/syncUser";
 import {
     getAllChapters,
-    getUserPurchasedChapterIds,
     getUserProgress,
 } from "@/lib/chapters";
 import { SUBJECTS } from "@/lib/subjects";
@@ -18,43 +16,47 @@ export const metadata = {
 };
 
 export default async function DashboardPage() {
-    // 1. Sync user (JIT) — redirects to sign-in if not authenticated
-    const userId = await syncUser();
-    if (!userId) {
-        redirect("/sign-in");
+    // 1. Try to sync user — don't crash if not authenticated
+    let userId: string | null = null;
+    try {
+        userId = await syncUser();
+    } catch {
+        // Auth not configured or user not signed in — continue as guest
     }
 
-    // 2. Fetch real data from Supabase
-    const [chapters, purchasedIds, progress] = await Promise.all([
-        getAllChapters(),
-        getUserPurchasedChapterIds(userId),
-        getUserProgress(userId),
-    ]);
+    // 2. Fetch chapters (works from local MDX even without Supabase)
+    const chapters = await getAllChapters();
 
-    const completedChapterIds = new Set(progress.map((p) => p.chapterId));
+    // 3. Fetch progress if authenticated
+    let completedChapterIds = new Set<string>();
+    if (userId) {
+        try {
+            const progress = await getUserProgress(userId);
+            completedChapterIds = new Set(progress.map((p) => p.chapterId));
+        } catch {
+            // Progress fetch failed — show 0% progress
+        }
+    }
+
     const completedCount = completedChapterIds.size;
 
-    // 3. Derive access state for each chapter
-    // getAllChapters() already merges DB + local MDX, so we can derive slugs from it
+    // 4. Everything is free — derive simple chapter list
     const chaptersBySlug = new Map(
         chapters.map((ch) => [ch.slug, ch])
     );
 
-    const chaptersWithAccess = chapters.map((chapter) => {
-        const accessState: "free" | "purchased" = chapter.is_free ? "free" : "purchased";
-        return {
-            ...chapter,
-            accessState,
-            isCompleted: completedChapterIds.has(chapter.id),
-        };
-    });
+    const chaptersWithAccess = chapters.map((chapter) => ({
+        ...chapter,
+        accessState: "free" as const,
+        isCompleted: completedChapterIds.has(chapter.id),
+    }));
 
-    // 4. Build module status map for the subject navigator
+    // 5. Build module status map for the subject navigator
     const moduleStatuses: Record<string, {
         slug: string;
         hasContent: boolean;
         isCompleted: boolean;
-        accessState: "free" | "purchased" | "locked";
+        accessState: "free" | "coming-soon";
     }> = {};
 
     for (const subject of SUBJECTS) {
@@ -65,13 +67,7 @@ export default async function DashboardPage() {
                 slug: mod.slug,
                 hasContent,
                 isCompleted: chapter ? completedChapterIds.has(chapter.id) : false,
-                accessState: chapter
-                    ? chapter.is_free
-                        ? "free"
-                        : purchasedIds.includes(chapter.id)
-                            ? "purchased"
-                            : "locked"
-                    : "locked",
+                accessState: hasContent ? "free" : "coming-soon",
             };
         }
     }
@@ -93,6 +89,11 @@ export default async function DashboardPage() {
                     <p className="font-[family-name:var(--font-sans)] text-base text-[#6B6560]">
                         10 subjects. {totalModules} learning modules. Your CFA Level 2 library.
                     </p>
+                    {!userId && (
+                        <p className="font-[family-name:var(--font-sans)] text-sm text-[#E8694A] mt-2">
+                            All chapters are free during the beta. Sign in to track your progress.
+                        </p>
+                    )}
                 </div>
 
                 {/* Progress bar */}
@@ -134,9 +135,6 @@ export default async function DashboardPage() {
                             title={chapter.title}
                             description={chapter.description ?? ""}
                             slug={chapter.slug}
-                            accessState={chapter.accessState}
-                            priceTier={chapter.price_tier}
-                            priceUsd={chapter.price_usd}
                             isCompleted={chapter.isCompleted}
                         />
                     ))}

@@ -112,40 +112,11 @@ export async function getChapterBySlug(
  * - Paid chapters: requires a purchase row in the database
  */
 export async function hasChapterAccess(
-    userId: string | null,
-    chapterId: string
+    _userId: string | null,
+    _chapterId: string
 ): Promise<boolean> {
-    if (chapterId.startsWith("local:")) {
-        return true;
-    }
-
-    if (!hasServerSupabaseEnv()) {
-        return false;
-    }
-
-    const supabase = createServerClient();
-
-    // First check if the chapter is free
-    const { data: chapter } = await supabase
-        .from("chapters")
-        .select("is_free")
-        .eq("id", chapterId)
-        .single();
-
-    if (!chapter) return false;
-    if (chapter.is_free) return true;
-
-    // Paid chapter — need a userId and a purchase row
-    if (!userId) return false;
-
-    const { data: purchase } = await supabase
-        .from("purchases")
-        .select("id")
-        .eq("user_id", userId)
-        .eq("chapter_id", chapterId)
-        .single();
-
-    return !!purchase;
+    // Everything is free during beta — all chapters accessible
+    return true;
 }
 
 /**
