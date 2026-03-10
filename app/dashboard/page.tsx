@@ -6,7 +6,6 @@ import {
     getUserProgress,
 } from "@/lib/chapters";
 import { SUBJECTS } from "@/lib/subjects";
-import { getAllLocalChapterFrontmatters } from "@/lib/mdx";
 import ChapterCard from "@/components/dashboard/ChapterCard";
 import SubjectNavigator from "@/components/dashboard/SubjectNavigator";
 
@@ -26,21 +25,20 @@ export default async function DashboardPage() {
     }
 
     // 2. Fetch real data from Supabase
-    const [chapters, purchasedIds, progress, localFrontmatters] = await Promise.all([
+    const [chapters, purchasedIds, progress] = await Promise.all([
         getAllChapters(),
         getUserPurchasedChapterIds(userId),
         getUserProgress(userId),
-        getAllLocalChapterFrontmatters(),
     ]);
 
     const completedChapterIds = new Set(progress.map((p) => p.chapterId));
     const completedCount = completedChapterIds.size;
 
     // 3. Derive access state for each chapter
+    // getAllChapters() already merges DB + local MDX, so we can derive slugs from it
     const chaptersBySlug = new Map(
         chapters.map((ch) => [ch.slug, ch])
     );
-    const localSlugs = new Set(localFrontmatters.map((f) => f.slug));
 
     const chaptersWithAccess = chapters.map((chapter) => {
         const accessState: "free" | "purchased" = chapter.is_free ? "free" : "purchased";
@@ -62,7 +60,7 @@ export default async function DashboardPage() {
     for (const subject of SUBJECTS) {
         for (const mod of subject.modules) {
             const chapter = chaptersBySlug.get(mod.slug);
-            const hasContent = localSlugs.has(mod.slug);
+            const hasContent = !!chapter;
             moduleStatuses[mod.slug] = {
                 slug: mod.slug,
                 hasContent,
@@ -73,9 +71,7 @@ export default async function DashboardPage() {
                         : purchasedIds.includes(chapter.id)
                             ? "purchased"
                             : "locked"
-                    : hasContent
-                        ? "free"
-                        : "locked",
+                    : "locked",
             };
         }
     }
