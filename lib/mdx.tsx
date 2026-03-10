@@ -1,8 +1,13 @@
 import fs from "fs";
 import path from "path";
 import { compileMDX } from "next-mdx-remote/rsc";
+import remarkMath from "remark-math";
+import rehypeKatex from "rehype-katex";
 import Callout from "@/components/chapter/Callout";
 import FormulaBlock from "@/components/chapter/FormulaBlock";
+import WorkedExample from "@/components/chapter/WorkedExample";
+import ComparisonTable, { ComparisonColumn } from "@/components/chapter/ComparisonTable";
+import QuizCard from "@/components/chapter/QuizCard";
 import DCFDiagram from "@/components/chapter/diagrams/DCFDiagram";
 import BondPricePlayable from "@/components/chapter/BondPricePlayable";
 import YieldCurveChart from "@/components/charts/YieldCurveChart";
@@ -19,37 +24,44 @@ const PAYWALL_MARKER = "<!-- paid-content -->";
 const mdxComponents = {
     Callout,
     FormulaBlock,
+    WorkedExample,
+    ComparisonTable,
+    ComparisonColumn,
+    QuizCard,
     DCFDiagram,
     BondPricePlayable,
     YieldCurveChart,
     h2: (props: React.HTMLAttributes<HTMLHeadingElement>) => (
         <h2
             id={slugify(String(props.children))}
-            className="font-[family-name:var(--font-serif)] text-2xl font-semibold text-[#2D2A26] mt-12 mb-4"
+            className="font-['Candara','Calibri','Georgia',serif] text-2xl font-semibold text-[#1e1e1e] mt-12 mb-4"
             {...props}
         />
     ),
     h3: (props: React.HTMLAttributes<HTMLHeadingElement>) => (
         <h3
             id={slugify(String(props.children))}
-            className="font-[family-name:var(--font-sans)] text-lg font-semibold text-[#2D2A26] mt-8 mb-3"
+            className="font-['Candara','Calibri','Georgia',serif] text-lg font-semibold text-[#1e1e1e] mt-8 mb-3"
             {...props}
         />
     ),
     p: (props: React.HTMLAttributes<HTMLParagraphElement>) => (
         <p
-            className="font-[family-name:var(--font-sans)] text-base text-[#6B6560] leading-8"
+            className="font-['Candara','Calibri','Georgia',serif] text-base text-[#1e1e1e] leading-[1.75]"
             {...props}
         />
     ),
     strong: (props: React.HTMLAttributes<HTMLElement>) => (
-        <strong className="font-semibold text-[#2D2A26]" {...props} />
+        <strong className="font-semibold text-[#1e1e1e]" {...props} />
     ),
     ul: (props: React.HTMLAttributes<HTMLUListElement>) => (
-        <ul className="list-disc list-inside space-y-2 text-[#6B6560]" {...props} />
+        <ul className="list-disc list-inside space-y-2 text-[#1e1e1e]" {...props} />
     ),
     ol: (props: React.HTMLAttributes<HTMLOListElement>) => (
-        <ol className="list-decimal list-inside space-y-2 text-[#6B6560]" {...props} />
+        <ol className="list-decimal list-inside space-y-2 text-[#1e1e1e]" {...props} />
+    ),
+    li: (props: React.HTMLAttributes<HTMLLIElement>) => (
+        <li className="font-['Candara','Calibri','Georgia',serif] text-base leading-[1.75]" {...props} />
     ),
     hr: () => <hr className="border-t border-[#2D2A26]/[0.08] my-12" />,
     code: (props: React.HTMLAttributes<HTMLElement>) => (
@@ -60,7 +72,30 @@ const mdxComponents = {
     ),
     blockquote: (props: React.HTMLAttributes<HTMLQuoteElement>) => (
         <blockquote
-            className="border-l-4 border-[#2D2A26]/10 pl-5 italic text-[#6B6560] my-6"
+            className="border-l-4 border-[#c8a96e]/30 pl-5 italic text-[#6B6560] my-6"
+            {...props}
+        />
+    ),
+    table: (props: React.HTMLAttributes<HTMLTableElement>) => (
+        <div className="table-wrapper overflow-x-auto my-6 rounded-xl border border-[#2D2A26]/[0.08]">
+            <table className="w-full border-collapse font-['Candara','Calibri','Georgia',serif] text-[0.9rem]" {...props} />
+        </div>
+    ),
+    thead: (props: React.HTMLAttributes<HTMLTableSectionElement>) => (
+        <thead {...props} />
+    ),
+    th: (props: React.HTMLAttributes<HTMLTableCellElement>) => (
+        <th
+            className="bg-[#c8a96e] text-white font-semibold text-left px-4 py-2.5 text-xs uppercase tracking-wide"
+            {...props}
+        />
+    ),
+    tr: (props: React.HTMLAttributes<HTMLTableRowElement>) => (
+        <tr className="even:bg-[#c8a96e]/[0.06]" {...props} />
+    ),
+    td: (props: React.HTMLAttributes<HTMLTableCellElement>) => (
+        <td
+            className="px-4 py-2.5 border-b border-[#2D2A26]/[0.08] text-[#1e1e1e]"
             {...props}
         />
     ),
@@ -107,7 +142,13 @@ async function compileChapterSource(source: string) {
     return compileMDX<ChapterFrontmatter>({
         source,
         components: mdxComponents,
-        options: { parseFrontmatter: true },
+        options: {
+            parseFrontmatter: true,
+            mdxOptions: {
+                remarkPlugins: [remarkMath],
+                rehypePlugins: [rehypeKatex as never],
+            },
+        },
     });
 }
 

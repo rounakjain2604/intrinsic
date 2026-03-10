@@ -49,16 +49,61 @@
   /* Muted → text-muted */
   --color-muted: #A09890;
 
-  /* Font families → font-serif, font-sans, font-mono */
+  /* Font families → font-serif, font-sans, font-mono, font-candara */
   --font-sans: var(--font-sans);
   --font-serif: var(--font-serif);
   --font-mono: var(--font-mono);
+  --font-candara: 'Candara', 'Calibri', 'Georgia', serif;
 }
 
 body {
-  background: #FAF8F5;
-  color: var(--text-primary);
-  font-family: var(--font-sans), system-ui, sans-serif;
+  background: #faf8f4;
+  color: #1e1e1e;
+  font-family: 'Candara', 'Calibri', Georgia, serif;
+  line-height: 1.75;
+}
+
+/* === Styled Tables === */
+.prose-intrinsic table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: 'Candara', 'Calibri', Georgia, serif;
+  font-size: 0.9rem;
+  margin: 1.5rem 0;
+}
+
+.prose-intrinsic thead th {
+  background: #c8a96e;
+  color: #fff;
+  font-weight: 600;
+  text-align: left;
+  padding: 0.65rem 1rem;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.prose-intrinsic tbody tr:nth-child(even) {
+  background: rgba(200, 169, 110, 0.06);
+}
+
+.prose-intrinsic tbody td {
+  padding: 0.6rem 1rem;
+  border-bottom: 1px solid rgba(45, 42, 38, 0.08);
+  color: #1e1e1e;
+}
+
+.prose-intrinsic .table-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin: 1.5rem 0;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(45, 42, 38, 0.08);
+}
+
+/* KaTeX font override for consistency */
+.katex {
+  font-size: 1.05em;
 }
 
 /* === Premium Motion System === */

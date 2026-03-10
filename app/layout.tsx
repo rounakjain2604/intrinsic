@@ -4,6 +4,7 @@ import SmoothScroll from "@/components/shared/SmoothScroll";
 import Navbar from "@/components/shared/Navbar";
 import Footer from "@/components/shared/Footer";
 import { ClerkProvider } from "@clerk/nextjs";
+import "katex/dist/katex.min.css";
 import "./globals.css";
 
 const lora = Lora({
