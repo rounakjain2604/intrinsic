@@ -6,9 +6,11 @@
  * 
  * Usage:
  *   npx tsx scripts/md-to-mdx.ts <source-dir> [--slug-prefix=<prefix>]
+ *   npx tsx scripts/md-to-mdx.ts --combine --slug=<slug> --title="<title>" --description="<desc>" --order=<n> <file1.md> <file2.md> ...
  * 
  * Example:
  *   npx tsx scripts/md-to-mdx.ts ./raw-chapters --slug-prefix=equity-valuation
+ *   npx tsx scripts/md-to-mdx.ts --combine --slug=fsa-financial-institutions --title="Analysis of Financial Institutions" --description="Learning Module 4: banks, regulation, CAMELS, and insurance company analysis." --order=6.4 ./los1.md ./los2.md
  * 
  * The script will:
  *   1. Read each .md file in the source directory
@@ -26,6 +28,17 @@ import fs from "fs";
 import path from "path";
 
 const CONTENT_DIR = path.join(process.cwd(), "content", "chapters");
+
+interface CliOptions {
+    combine: boolean;
+    slugPrefix: string | null;
+    orderStart: number;
+    slug: string | null;
+    title: string | null;
+    description: string | null;
+    order: number | null;
+    positional: string[];
+}
 
 function slugify(text: string): string {
     return text
@@ -156,18 +169,129 @@ function processFile(
     console.log(`✓ ${filename} → ${slug}.mdx`);
 }
 
+function parseCliOptions(args: string[]): CliOptions {
+    const positional: string[] = [];
+    const options: CliOptions = {
+        combine: false,
+        slugPrefix: null,
+        orderStart: 100,
+        slug: null,
+        title: null,
+        description: null,
+        order: null,
+        positional,
+    };
+
+    for (const arg of args) {
+        if (arg === "--combine") {
+            options.combine = true;
+            continue;
+        }
+
+        if (arg.startsWith("--slug-prefix=")) {
+            options.slugPrefix = arg.split("=")[1] ?? null;
+            continue;
+        }
+
+        if (arg.startsWith("--order-start=")) {
+            const value = Number(arg.split("=")[1]);
+            if (!Number.isNaN(value)) {
+                options.orderStart = value;
+            }
+            continue;
+        }
+
+        if (arg.startsWith("--slug=")) {
+            options.slug = arg.slice("--slug=".length);
+            continue;
+        }
+
+        if (arg.startsWith("--title=")) {
+            options.title = arg.slice("--title=".length);
+            continue;
+        }
+
+        if (arg.startsWith("--description=")) {
+            options.description = arg.slice("--description=".length);
+            continue;
+        }
+
+        if (arg.startsWith("--order=")) {
+            const value = Number(arg.slice("--order=".length));
+            options.order = Number.isNaN(value) ? null : value;
+            continue;
+        }
+
+        positional.push(arg);
+    }
+
+    return options;
+}
+
+function combineFilesIntoChapter(options: CliOptions): void {
+    if (!options.slug || !options.title || !options.description || options.order === null) {
+        console.error("Combine mode requires --slug, --title, --description, and --order.");
+        process.exit(1);
+    }
+
+    if (options.positional.length === 0) {
+        console.error("Combine mode requires at least one markdown file path.");
+        process.exit(1);
+    }
+
+    const resolvedFiles = options.positional.map((filePath) => path.resolve(filePath));
+
+    for (const filePath of resolvedFiles) {
+        if (!fs.existsSync(filePath)) {
+            console.error(`Source file not found: ${filePath}`);
+            process.exit(1);
+        }
+    }
+
+    const combinedSource = resolvedFiles
+        .map((filePath) => fs.readFileSync(filePath, "utf-8").trim())
+        .join("\n\n---\n\n");
+
+    const frontmatter = [
+        "---",
+        `title: \"${options.title.replace(/\"/g, '\\\"')}\"`,
+        `slug: \"${options.slug}\"`,
+        `description: \"${options.description.replace(/\"/g, '\\\"')}\"`,
+        `order: ${options.order}`,
+        "is_free: true",
+        'price_tier: "free"',
+        "price_usd: 0",
+        "---",
+        "",
+    ].join("\n");
+
+    const outputPath = path.join(CONTENT_DIR, `${options.slug}.mdx`);
+    fs.writeFileSync(outputPath, frontmatter + combinedSource + "\n", "utf-8");
+    console.log(`✓ Combined ${resolvedFiles.length} files → ${options.slug}.mdx`);
+}
+
 // ── CLI Entry Point ────────────────────────────────────────
 
 const args = process.argv.slice(2);
-const sourceDir = args.find((a) => !a.startsWith("--"));
-const slugPrefixArg = args.find((a) => a.startsWith("--slug-prefix="));
-const slugPrefix = slugPrefixArg ? slugPrefixArg.split("=")[1] : null;
-const orderStartArg = args.find((a) => a.startsWith("--order-start="));
-const orderStart = orderStartArg ? parseInt(orderStartArg.split("=")[1]) : 100;
+const options = parseCliOptions(args);
+
+// Ensure output dir exists
+if (!fs.existsSync(CONTENT_DIR)) {
+    fs.mkdirSync(CONTENT_DIR, { recursive: true });
+}
+
+if (options.combine) {
+    combineFilesIntoChapter(options);
+    console.log("\n✅ Done! Combined chapter written to content/chapters/\n");
+    process.exit(0);
+}
+
+const sourceDir = options.positional[0];
 
 if (!sourceDir) {
     console.error("Usage: npx tsx scripts/md-to-mdx.ts <source-dir> [--slug-prefix=<prefix>] [--order-start=<n>]");
     console.error("Example: npx tsx scripts/md-to-mdx.ts ./raw-chapters --slug-prefix=equity-valuation");
+    console.error("Combine: npx tsx scripts/md-to-mdx.ts --combine --slug=<slug> --title=\"<title>\" --description=\"<desc>\" --order=<n> <file1.md> <file2.md> ...");
     process.exit(1);
 }
 
@@ -175,11 +299,6 @@ const resolvedDir = path.resolve(sourceDir);
 if (!fs.existsSync(resolvedDir)) {
     console.error(`Source directory not found: ${resolvedDir}`);
     process.exit(1);
-}
-
-// Ensure output dir exists
-if (!fs.existsSync(CONTENT_DIR)) {
-    fs.mkdirSync(CONTENT_DIR, { recursive: true });
 }
 
 const mdFiles = fs.readdirSync(resolvedDir).filter((f) => f.endsWith(".md") && f !== "README.md");
@@ -192,7 +311,7 @@ if (mdFiles.length === 0) {
 console.log(`\n📖 Converting ${mdFiles.length} chapters from ${resolvedDir}\n`);
 
 mdFiles.forEach((file, idx) => {
-    processFile(path.join(resolvedDir, file), slugPrefix, orderStart + idx);
+    processFile(path.join(resolvedDir, file), options.slugPrefix, options.orderStart + idx);
 });
 
 console.log(`\n✅ Done! ${mdFiles.length} files written to content/chapters/\n`);
