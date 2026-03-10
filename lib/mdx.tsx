@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import matter from "gray-matter";
 import { compileMDX } from "next-mdx-remote/rsc";
 import rehypeKatex from "rehype-katex";
 import remarkGfm from "remark-gfm";
@@ -197,23 +198,11 @@ async function parseChapterFrontmatter(
     source: string,
     slug: string
 ): Promise<ChapterFrontmatter> {
-    // Lightweight frontmatter extraction — avoids full compileMDX cost
-    const fmMatch = source.match(/^---\n([\s\S]*?)\n---/);
-    if (fmMatch) {
-        const yamlBlock = fmMatch[1];
-        const raw: Record<string, unknown> = {};
-        for (const line of yamlBlock.split("\n")) {
-            const m = line.match(/^(\w[\w_]*):\s*(.*)/);
-            if (!m) continue;
-            const [, key, val] = m;
-            const trimmed = val.trim().replace(/^["']|["']$/g, "");
-            if (trimmed === "true") raw[key] = true;
-            else if (trimmed === "false") raw[key] = false;
-            else if (/^-?\d+(\.\d+)?$/.test(trimmed)) raw[key] = Number(trimmed);
-            else raw[key] = trimmed;
-        }
-        const parsed = chapterFrontmatterSchema.safeParse(raw);
-        if (parsed.success) return parsed.data;
+    const { data } = matter(source);
+    const parsed = chapterFrontmatterSchema.safeParse(data);
+
+    if (parsed.success) {
+        return parsed.data;
     }
 
     // Fallback: full compileMDX (slower but handles complex YAML)
@@ -247,7 +236,7 @@ function getChapterFilePath(slug: string) {
 }
 
 function stripFrontmatter(source: string) {
-    return source.replace(/^---\n[\s\S]*?\n---\n?/, "");
+    return matter(source).content;
 }
 
 export async function getAllLocalChapterFrontmatters(): Promise<
