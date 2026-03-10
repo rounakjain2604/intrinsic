@@ -5,7 +5,10 @@ import {
     getUserPurchasedChapterIds,
     getUserProgress,
 } from "@/lib/chapters";
+import { SUBJECTS } from "@/lib/subjects";
+import { getAllLocalChapterFrontmatters } from "@/lib/mdx";
 import ChapterCard from "@/components/dashboard/ChapterCard";
+import SubjectNavigator from "@/components/dashboard/SubjectNavigator";
 
 export const dynamic = "force-dynamic";
 
@@ -23,16 +26,22 @@ export default async function DashboardPage() {
     }
 
     // 2. Fetch real data from Supabase
-    const [chapters, purchasedIds, progress] = await Promise.all([
+    const [chapters, purchasedIds, progress, localFrontmatters] = await Promise.all([
         getAllChapters(),
         getUserPurchasedChapterIds(userId),
         getUserProgress(userId),
+        getAllLocalChapterFrontmatters(),
     ]);
 
     const completedChapterIds = new Set(progress.map((p) => p.chapterId));
     const completedCount = completedChapterIds.size;
 
     // 3. Derive access state for each chapter
+    const chaptersBySlug = new Map(
+        chapters.map((ch) => [ch.slug, ch])
+    );
+    const localSlugs = new Set(localFrontmatters.map((f) => f.slug));
+
     const chaptersWithAccess = chapters.map((chapter) => {
         const accessState: "free" | "purchased" = chapter.is_free ? "free" : "purchased";
         return {
@@ -42,9 +51,39 @@ export default async function DashboardPage() {
         };
     });
 
+    // 4. Build module status map for the subject navigator
+    const moduleStatuses: Record<string, {
+        slug: string;
+        hasContent: boolean;
+        isCompleted: boolean;
+        accessState: "free" | "purchased" | "locked";
+    }> = {};
+
+    for (const subject of SUBJECTS) {
+        for (const mod of subject.modules) {
+            const chapter = chaptersBySlug.get(mod.slug);
+            const hasContent = localSlugs.has(mod.slug);
+            moduleStatuses[mod.slug] = {
+                slug: mod.slug,
+                hasContent,
+                isCompleted: chapter ? completedChapterIds.has(chapter.id) : false,
+                accessState: chapter
+                    ? chapter.is_free
+                        ? "free"
+                        : purchasedIds.includes(chapter.id)
+                            ? "purchased"
+                            : "locked"
+                    : hasContent
+                        ? "free"
+                        : "locked",
+            };
+        }
+    }
+
+    const totalModules = SUBJECTS.reduce((sum, s) => sum + s.modules.length, 0);
     const progressPercent =
-        chapters.length > 0
-            ? Math.round((completedCount / chapters.length) * 100)
+        totalModules > 0
+            ? Math.round((completedCount / totalModules) * 100)
             : 0;
 
     return (
@@ -56,15 +95,15 @@ export default async function DashboardPage() {
                         Your Chapters
                     </h1>
                     <p className="font-[family-name:var(--font-sans)] text-base text-[#6B6560]">
-                        Your CFA Level 2 chapter library.
+                        10 subjects. {totalModules} learning modules. Your CFA Level 2 library.
                     </p>
                 </div>
 
                 {/* Progress bar */}
-                <div className="mb-8">
+                <div className="mb-10">
                     <div className="flex items-center justify-between mb-2">
                         <span className="font-[family-name:var(--font-sans)] text-sm text-[#6B6560]">
-                            {completedCount} / {chapters.length} Chapters Mastered
+                            {completedCount} / {totalModules} Modules Mastered
                         </span>
                         <span className="font-[family-name:var(--font-mono)] text-xs text-[#A09890]">
                             {progressPercent}%
@@ -78,7 +117,20 @@ export default async function DashboardPage() {
                     </div>
                 </div>
 
-                {/* Chapter grid */}
+                {/* Subject Navigator */}
+                <div className="mb-12">
+                    <h2 className="font-[family-name:var(--font-serif)] text-xl font-semibold text-[#2D2A26] mb-4">
+                        Browse by Subject
+                    </h2>
+                    <SubjectNavigator moduleStatuses={moduleStatuses} />
+                </div>
+
+                {/* Chapter grid — all chapters with content */}
+                <div className="mb-6">
+                    <h2 className="font-[family-name:var(--font-serif)] text-xl font-semibold text-[#2D2A26] mb-4">
+                        All Chapters
+                    </h2>
+                </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     {chaptersWithAccess.map((chapter) => (
                         <ChapterCard
