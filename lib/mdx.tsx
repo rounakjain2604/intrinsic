@@ -1,13 +1,17 @@
 import fs from "fs";
 import path from "path";
 import { compileMDX } from "next-mdx-remote/rsc";
-import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
+import remarkGfm from "remark-gfm";
+import remarkMath from "remark-math";
 import Callout from "@/components/chapter/Callout";
 import FormulaBlock from "@/components/chapter/FormulaBlock";
+import ComparisonTable, {
+    ComparisonColumn,
+} from "@/components/chapter/ComparisonTable";
 import WorkedExample from "@/components/chapter/WorkedExample";
-import ComparisonTable, { ComparisonColumn } from "@/components/chapter/ComparisonTable";
 import QuizCard from "@/components/chapter/QuizCard";
+import PlayableFormula from "@/components/chapter/PlayableFormula";
 import DCFDiagram from "@/components/chapter/diagrams/DCFDiagram";
 import BondPricePlayable from "@/components/chapter/BondPricePlayable";
 import YieldCurveChart from "@/components/charts/YieldCurveChart";
@@ -19,49 +23,70 @@ import type {
 } from "@/lib/types";
 
 const PAYWALL_MARKER = "<!-- paid-content -->";
+const SUPPORTED_MDX_COMPONENTS = new Set([
+    "Callout",
+    "FormulaBlock",
+    "ComparisonTable",
+    "ComparisonColumn",
+    "WorkedExample",
+    "QuizCard",
+    "PlayableFormula",
+    "DCFDiagram",
+    "BondPricePlayable",
+    "YieldCurveChart",
+]);
 
 // ── Custom MDX Components ──────────────────────────────────
 const mdxComponents = {
     Callout,
     FormulaBlock,
-    WorkedExample,
     ComparisonTable,
     ComparisonColumn,
+    WorkedExample,
     QuizCard,
+    PlayableFormula,
     DCFDiagram,
     BondPricePlayable,
     YieldCurveChart,
     h2: (props: React.HTMLAttributes<HTMLHeadingElement>) => (
         <h2
             id={slugify(String(props.children))}
-            className="font-['Candara','Calibri','Georgia',serif] text-2xl font-semibold text-[#1e1e1e] mt-12 mb-4"
+            className="font-[family-name:var(--font-serif)] text-2xl font-semibold text-[#2D2A26] mt-12 mb-4"
             {...props}
         />
     ),
     h3: (props: React.HTMLAttributes<HTMLHeadingElement>) => (
         <h3
             id={slugify(String(props.children))}
-            className="font-['Candara','Calibri','Georgia',serif] text-lg font-semibold text-[#1e1e1e] mt-8 mb-3"
+            className="font-[family-name:var(--font-sans)] text-lg font-semibold text-[#2D2A26] mt-8 mb-3"
             {...props}
         />
     ),
     p: (props: React.HTMLAttributes<HTMLParagraphElement>) => (
         <p
-            className="font-['Candara','Calibri','Georgia',serif] text-base text-[#1e1e1e] leading-[1.75]"
+            className="font-[family-name:var(--font-sans)] text-base text-[#6B6560] leading-8"
+            {...props}
+        />
+    ),
+    a: (props: React.AnchorHTMLAttributes<HTMLAnchorElement>) => (
+        <a
+            className="font-[family-name:var(--font-sans)] text-[#E8694A] underline decoration-[#E8694A]/35 underline-offset-4 transition-colors hover:text-[#D45E40]"
+            target={props.href?.startsWith("http") ? "_blank" : undefined}
+            rel={props.href?.startsWith("http") ? "noreferrer" : undefined}
             {...props}
         />
     ),
     strong: (props: React.HTMLAttributes<HTMLElement>) => (
-        <strong className="font-semibold text-[#1e1e1e]" {...props} />
+        <strong className="font-semibold text-[#2D2A26]" {...props} />
     ),
     ul: (props: React.HTMLAttributes<HTMLUListElement>) => (
-        <ul className="list-disc list-inside space-y-2 text-[#1e1e1e]" {...props} />
+        <ul className="list-disc list-inside space-y-2 text-[#6B6560]" {...props} />
     ),
     ol: (props: React.HTMLAttributes<HTMLOListElement>) => (
-        <ol className="list-decimal list-inside space-y-2 text-[#1e1e1e]" {...props} />
+        <ol className="list-decimal list-inside space-y-2 text-[#6B6560]" {...props} />
     ),
     li: (props: React.HTMLAttributes<HTMLLIElement>) => (
-        <li className="font-['Candara','Calibri','Georgia',serif] text-base leading-[1.75]" {...props} />
+        <li className="font-[family-name:var(--font-sans)] text-base leading-8" {...props} />
     ),
     hr: () => <hr className="border-t border-[#2D2A26]/[0.08] my-12" />,
     code: (props: React.HTMLAttributes<HTMLElement>) => (
@@ -72,30 +97,33 @@ const mdxComponents = {
     ),
     blockquote: (props: React.HTMLAttributes<HTMLQuoteElement>) => (
         <blockquote
-            className="border-l-4 border-[#c8a96e]/30 pl-5 italic text-[#6B6560] my-6"
+            className="border-l-4 border-[#2D2A26]/10 pl-5 italic text-[#6B6560] my-6"
             {...props}
         />
     ),
     table: (props: React.HTMLAttributes<HTMLTableElement>) => (
-        <div className="table-wrapper overflow-x-auto my-6 rounded-xl border border-[#2D2A26]/[0.08]">
-            <table className="w-full border-collapse font-['Candara','Calibri','Georgia',serif] text-[0.9rem]" {...props} />
+        <div className="table-wrapper overflow-x-auto my-8 rounded-2xl border border-[#2D2A26]/10 bg-[#FFFDF9] shadow-[0_2px_12px_rgba(45,42,38,0.04)]">
+            <table className="w-full border-collapse font-[family-name:var(--font-sans)] text-sm" {...props} />
         </div>
     ),
     thead: (props: React.HTMLAttributes<HTMLTableSectionElement>) => (
         <thead {...props} />
     ),
+    tbody: (props: React.HTMLAttributes<HTMLTableSectionElement>) => (
+        <tbody {...props} />
+    ),
+    tr: (props: React.HTMLAttributes<HTMLTableRowElement>) => (
+        <tr className="even:bg-[#F5F1EA]/80" {...props} />
+    ),
     th: (props: React.HTMLAttributes<HTMLTableCellElement>) => (
         <th
-            className="bg-[#c8a96e] text-white font-semibold text-left px-4 py-2.5 text-xs uppercase tracking-wide"
+            className="bg-[#2D2A26] px-4 py-3 text-left font-[family-name:var(--font-mono)] text-[11px] font-medium uppercase tracking-[0.18em] text-[#FAF8F5]"
             {...props}
         />
     ),
-    tr: (props: React.HTMLAttributes<HTMLTableRowElement>) => (
-        <tr className="even:bg-[#c8a96e]/[0.06]" {...props} />
-    ),
     td: (props: React.HTMLAttributes<HTMLTableCellElement>) => (
         <td
-            className="px-4 py-2.5 border-b border-[#2D2A26]/[0.08] text-[#1e1e1e]"
+            className="border-b border-[#2D2A26]/8 px-4 py-3 align-top text-[#2D2A26]"
             {...props}
         />
     ),
@@ -103,16 +131,29 @@ const mdxComponents = {
 
 // ── Helpers ────────────────────────────────────────────────
 
-/** Strip UTF-8 BOM and normalise Windows (\r\n) line endings to \n. */
-function normalizeSource(raw: string): string {
-    return raw.replace(/^\uFEFF/, "").replace(/\r\n/g, "\n");
-}
-
 function slugify(text: string): string {
     return text
         .toLowerCase()
         .replace(/[^a-z0-9]+/g, "-")
         .replace(/(^-|-$)/g, "");
+}
+
+function validateSupportedMdxComponents(source: string, slug: string) {
+    const matches = source.matchAll(/<([A-Z][A-Za-z0-9]*)\b/g);
+    const unsupported = new Set<string>();
+
+    for (const match of matches) {
+        const componentName = match[1];
+        if (!SUPPORTED_MDX_COMPONENTS.has(componentName)) {
+            unsupported.add(componentName);
+        }
+    }
+
+    if (unsupported.size > 0) {
+        throw new Error(
+            `Unsupported MDX component(s) in content/chapters/${slug}.mdx: ${[...unsupported].join(", ")}`
+        );
+    }
 }
 
 /**
@@ -145,8 +186,8 @@ async function compileChapterSource(source: string) {
         options: {
             parseFrontmatter: true,
             mdxOptions: {
-                remarkPlugins: [remarkMath],
-                rehypePlugins: [rehypeKatex as never],
+                remarkPlugins: [remarkGfm, remarkMath],
+                rehypePlugins: [rehypeKatex],
             },
         },
     });
@@ -178,7 +219,13 @@ async function parseChapterFrontmatter(
     // Fallback: full compileMDX (slower but handles complex YAML)
     const { frontmatter } = await compileMDX<ChapterFrontmatter>({
         source,
-        options: { parseFrontmatter: true },
+        options: {
+            parseFrontmatter: true,
+            mdxOptions: {
+                remarkPlugins: [remarkGfm, remarkMath],
+                rehypePlugins: [rehypeKatex],
+            },
+        },
     });
     const parsedFrontmatter = chapterFrontmatterSchema.safeParse(frontmatter);
 
@@ -218,7 +265,7 @@ export async function getAllLocalChapterFrontmatters(): Promise<
         chapterFiles.map(async (entry) => {
             const slug = entry.name.replace(/\.mdx$/, "");
             const filePath = path.join(CONTENT_DIR, entry.name);
-            const source = normalizeSource(fs.readFileSync(filePath, "utf-8"));
+            const source = fs.readFileSync(filePath, "utf-8");
             return parseChapterFrontmatter(source, slug);
         })
     );
@@ -239,7 +286,7 @@ export async function getLocalChapterFrontmatter(
         return null;
     }
 
-    const source = normalizeSource(fs.readFileSync(filePath, "utf-8"));
+    const source = fs.readFileSync(filePath, "utf-8");
     return parseChapterFrontmatter(source, slug);
 }
 
@@ -256,7 +303,7 @@ export function getChapterRawContent(slug: string): {
         return null;
     }
 
-    const source = normalizeSource(fs.readFileSync(filePath, "utf-8"));
+    const source = fs.readFileSync(filePath, "utf-8");
     const contentSource = stripFrontmatter(source);
     const hasPaywallMarker = contentSource.includes(PAYWALL_MARKER);
     const previewSource = hasPaywallMarker
@@ -285,20 +332,31 @@ export async function getChapterContent(
         return null;
     }
 
-    const source = normalizeSource(fs.readFileSync(filePath, "utf-8"));
-    // Strip paywall marker — everything is free during beta
-    const cleanSource = source.replace(PAYWALL_MARKER, "");
+    const source = fs.readFileSync(filePath, "utf-8");
+    const hasPaywallMarker = source.includes(PAYWALL_MARKER);
+    const previewSource = hasPaywallMarker
+        ? source.split(PAYWALL_MARKER)[0]
+        : source;
 
-    const { content } = await compileChapterSource(cleanSource);
+    validateSupportedMdxComponents(source, slug);
+
+    const { content } = await compileChapterSource(source);
     const parsedFrontmatter = await parseChapterFrontmatter(source, slug);
-    const headings = extractHeadings(cleanSource);
+
+    const previewContent = hasPaywallMarker
+        ? (await compileChapterSource(previewSource)).content
+        : null;
+    const headings = extractHeadings(source.replace(PAYWALL_MARKER, ""));
+    const previewHeadings = hasPaywallMarker
+        ? extractHeadings(previewSource)
+        : [];
 
     return {
         content,
-        previewContent: null,
+        previewContent,
         frontmatter: parsedFrontmatter,
         headings,
-        previewHeadings: [],
-        hasPaywallMarker: false,
+        previewHeadings,
+        hasPaywallMarker,
     };
 }

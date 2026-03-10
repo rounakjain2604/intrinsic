@@ -19,8 +19,8 @@ interface OutputValue {
 
 interface PlayableFormulaProps {
     formulaName: string;
-    inputs: InputConfig[];
-    calculateOutput: (values: Record<string, number>) => OutputValue[];
+    inputs?: InputConfig[];
+    calculateOutput: (values: Record<string, number>) => OutputValue[] | undefined;
     className?: string;
 }
 
@@ -30,10 +30,11 @@ export default function PlayableFormula({
     calculateOutput,
     className = "",
 }: PlayableFormulaProps) {
+    const formulaInputs = inputs ?? [];
     // Initialize values from defaults
     const [values, setValues] = useState<Record<string, number>>(() => {
         const initial: Record<string, number> = {};
-        inputs.forEach((input) => {
+        formulaInputs.forEach((input) => {
             initial[input.label] = input.defaultValue;
         });
         return initial;
@@ -46,7 +47,7 @@ export default function PlayableFormula({
         []
     );
 
-    const outputs = calculateOutput(values);
+    const outputs = calculateOutput(values) ?? [];
 
     return (
         <div
@@ -60,7 +61,7 @@ export default function PlayableFormula({
             <div className="flex flex-col lg:flex-row gap-8">
                 {/* Slider Controls */}
                 <div className="flex-1 space-y-5">
-                    {inputs.map((input) => (
+                    {formulaInputs.map((input) => (
                         <div key={input.label}>
                             <div className="flex items-center justify-between mb-2">
                                 <label className="font-[family-name:var(--font-sans)] text-xs text-[#6B6560]">

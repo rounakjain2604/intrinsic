@@ -8,6 +8,7 @@ import { SignInButton, SignUpButton, SignedIn, SignedOut, UserButton } from "@cl
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [authReady, setAuthReady] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -15,6 +16,10 @@ export default function Navbar() {
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    setAuthReady(true);
   }, []);
 
   // Lock body scroll when mobile menu is open
@@ -31,6 +36,67 @@ export default function Navbar() {
     { href: "#chapters", label: "Chapters" },
     { href: "/dashboard", label: "Dashboard" },
   ];
+
+  function renderDesktopAuth() {
+    if (!authReady) {
+      return <div className="h-10 w-40 rounded-xl bg-[#2D2A26]/5" aria-hidden="true" />;
+    }
+
+    return (
+      <>
+        <SignedOut>
+          <SignInButton mode="modal">
+            <button
+              className="font-[family-name:var(--font-sans)] text-sm font-medium text-[#6B6560] hover:text-[#2D2A26] transition-colors"
+            >
+              Sign In
+            </button>
+          </SignInButton>
+          <SignUpButton mode="modal">
+            <button
+              className="font-[family-name:var(--font-sans)] text-sm font-medium px-5 py-2 rounded-xl bg-[#E8694A] text-white hover:bg-[#d45d40] transition-colors shadow-[0_2px_8px_rgba(232,105,74,0.2)]"
+            >
+              Start Free
+            </button>
+          </SignUpButton>
+        </SignedOut>
+        <SignedIn>
+          <UserButton />
+        </SignedIn>
+      </>
+    );
+  }
+
+  function renderMobileAuth() {
+    if (!authReady) {
+      return <div className="h-20 w-40 rounded-2xl bg-[#2D2A26]/5" aria-hidden="true" />;
+    }
+
+    return (
+      <>
+        <SignedOut>
+          <SignInButton mode="modal">
+            <button
+              className="font-[family-name:var(--font-sans)] text-base text-[#6B6560]"
+            >
+              Sign In
+            </button>
+          </SignInButton>
+          <SignUpButton mode="modal">
+            <button
+              onClick={() => setMobileOpen(false)}
+              className="font-[family-name:var(--font-sans)] font-medium px-8 py-3 rounded-xl bg-[#E8694A] text-white hover:bg-[#d45d40] transition-colors shadow-[0_2px_8px_rgba(232,105,74,0.2)]"
+            >
+              Start Free
+            </button>
+          </SignUpButton>
+        </SignedOut>
+        <SignedIn>
+          <UserButton />
+        </SignedIn>
+      </>
+    );
+  }
 
   return (
     <>
@@ -73,25 +139,7 @@ export default function Navbar() {
 
           {/* Right side — desktop */}
           <div className="hidden md:flex items-center gap-4">
-            <SignedOut>
-              <SignInButton mode="modal">
-                <button
-                  className="font-[family-name:var(--font-sans)] text-sm font-medium text-[#6B6560] hover:text-[#2D2A26] transition-colors"
-                >
-                  Sign In
-                </button>
-              </SignInButton>
-              <SignUpButton mode="modal">
-                <button
-                  className="font-[family-name:var(--font-sans)] text-sm font-medium px-5 py-2 rounded-xl bg-[#E8694A] text-white hover:bg-[#d45d40] transition-colors shadow-[0_2px_8px_rgba(232,105,74,0.2)]"
-                >
-                  Start Free
-                </button>
-              </SignUpButton>
-            </SignedOut>
-            <SignedIn>
-              <UserButton />
-            </SignedIn>
+            {renderDesktopAuth()}
           </div>
 
           {/* Mobile hamburger */}
@@ -159,26 +207,7 @@ export default function Navbar() {
                 transition={{ delay: 0.25, duration: 0.4 }}
                 className="flex flex-col items-center gap-4 mt-4"
               >
-                <SignedOut>
-                  <SignInButton mode="modal">
-                    <button
-                      className="font-[family-name:var(--font-sans)] text-base text-[#6B6560]"
-                    >
-                      Sign In
-                    </button>
-                  </SignInButton>
-                  <SignUpButton mode="modal">
-                    <button
-                      onClick={() => setMobileOpen(false)}
-                      className="font-[family-name:var(--font-sans)] font-medium px-8 py-3 rounded-xl bg-[#E8694A] text-white hover:bg-[#d45d40] transition-colors shadow-[0_2px_8px_rgba(232,105,74,0.2)]"
-                    >
-                      Start Free
-                    </button>
-                  </SignUpButton>
-                </SignedOut>
-                <SignedIn>
-                  <UserButton />
-                </SignedIn>
+                {renderMobileAuth()}
               </motion.div>
             </div>
           </motion.div>

@@ -4,11 +4,12 @@ import { useState, useEffect } from "react";
 import type { TOCHeading } from "@/lib/types";
 
 interface TableOfContentsProps {
-    headings: TOCHeading[];
+    headings?: TOCHeading[];
 }
 
 export default function TableOfContents({ headings }: TableOfContentsProps) {
     const [activeId, setActiveId] = useState<string>("");
+    const items = headings ?? [];
 
     useEffect(() => {
         const observer = new IntersectionObserver(
@@ -21,13 +22,13 @@ export default function TableOfContents({ headings }: TableOfContentsProps) {
             { rootMargin: "-80px 0px -60% 0px", threshold: 0.1 }
         );
 
-        headings.forEach(({ id }) => {
+        items.forEach(({ id }) => {
             const el = document.getElementById(id);
             if (el) observer.observe(el);
         });
 
         return () => observer.disconnect();
-    }, [headings]);
+    }, [items]);
 
     function handleClick(id: string) {
         const el = document.getElementById(id);
@@ -36,7 +37,7 @@ export default function TableOfContents({ headings }: TableOfContentsProps) {
         }
     }
 
-    if (headings.length === 0) return null;
+    if (items.length === 0) return null;
 
     return (
         <nav
@@ -47,7 +48,7 @@ export default function TableOfContents({ headings }: TableOfContentsProps) {
                 In This Chapter
             </p>
             <ul className="space-y-2">
-                {headings.map(({ id, text, level }) => (
+                {items.map(({ id, text, level }) => (
                     <li key={id}>
                         <button
                             onClick={() => handleClick(id)}

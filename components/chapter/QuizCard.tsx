@@ -4,13 +4,14 @@ import { useState } from "react";
 
 interface QuizCardProps {
     question: string;
-    options: string[];
+    options?: string[];
     answer: string;
     explanation?: string;
 }
 
 export default function QuizCard({ question, options, answer, explanation }: QuizCardProps) {
     const [showAnswer, setShowAnswer] = useState(false);
+    const answerOptions = options ?? [];
 
     return (
         <div className="my-6 rounded-2xl border border-[#2D2A26]/10 bg-[#faf8f4] overflow-hidden shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
@@ -23,7 +24,7 @@ export default function QuizCard({ question, options, answer, explanation }: Qui
 
             {/* Options */}
             <div className="px-6 py-3 space-y-2">
-                {options.map((opt, i) => (
+                {answerOptions.map((opt, i) => (
                     <div
                         key={i}
                         className="font-['Candara','Calibri','Georgia',serif] text-[15px] text-[#1e1e1e] leading-relaxed pl-2"

@@ -10,7 +10,7 @@ interface ModuleStatus {
     slug: string;
     hasContent: boolean;
     isCompleted: boolean;
-    accessState: "free" | "coming-soon";
+    accessState: "free" | "purchased" | "locked" | "coming-soon";
 }
 
 interface SubjectNavigatorProps {
