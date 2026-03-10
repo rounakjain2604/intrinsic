@@ -42,10 +42,10 @@ export async function getAllChapters(): Promise<Chapter[]> {
 
     const [{ data, error }, localFrontmatters] = await Promise.all([
         supabase
-        .from("chapters")
-        .select("*")
-        .eq("published", true)
-        .order("order_index", { ascending: true }),
+            .from("chapters")
+            .select("*")
+            .eq("published", true)
+            .order("order_index", { ascending: true }),
         getAllLocalChapterFrontmatters(),
     ]);
 
@@ -88,7 +88,7 @@ export async function getChapterBySlug(
         .select("*")
         .eq("slug", slug)
         .eq("published", true)
-        .single();
+        .maybeSingle();
 
     if (error) {
         console.error("[chapters] Failed to fetch chapter by slug:", error);
@@ -167,7 +167,7 @@ export async function toggleChapterComplete(
         .select("id")
         .eq("user_id", userId)
         .eq("chapter_id", chapterId)
-        .single();
+        .maybeSingle();
 
     if (existing) {
         // Already completed — remove it
