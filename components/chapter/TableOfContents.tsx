@@ -44,7 +44,7 @@ export default function TableOfContents({ headings }: TableOfContentsProps) {
             aria-label="Table of contents"
             className="sticky top-28 max-h-[calc(100vh-8rem)] overflow-y-auto pr-4"
         >
-            <p className="font-['Candara','Calibri','Georgia',serif] text-xs font-semibold text-[#A09890] uppercase tracking-widest mb-4">
+            <p className="font-[family-name:var(--font-sans)] text-xs font-semibold text-[#A09890] uppercase tracking-widest mb-4">
                 In This Chapter
             </p>
             <ul className="space-y-2">
@@ -54,7 +54,7 @@ export default function TableOfContents({ headings }: TableOfContentsProps) {
                             onClick={() => handleClick(id)}
                             className={`
                                 block w-full text-left py-2 text-sm transition-all duration-200
-                                font-['Candara','Calibri','Georgia',serif]
+                                font-[family-name:var(--font-sans)]
                                 ${level === 3 ? "pl-5" : "pl-3"}
                                 ${activeId === id
                                     ? "border-l-4 border-[#c8a96e] text-[#1e1e1e] font-bold bg-[#c8a96e]/[0.05] -ml-px"

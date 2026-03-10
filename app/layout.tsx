@@ -1,30 +1,10 @@
 import type { Metadata } from "next";
-import { Lora, DM_Sans, DM_Mono } from "next/font/google";
 import SmoothScroll from "@/components/shared/SmoothScroll";
 import Navbar from "@/components/shared/Navbar";
 import Footer from "@/components/shared/Footer";
 import { ClerkProvider } from "@clerk/nextjs";
 import "katex/dist/katex.min.css";
 import "./globals.css";
-
-const lora = Lora({
-  variable: "--font-serif",
-  subsets: ["latin"],
-  display: "swap",
-});
-
-const dmSans = DM_Sans({
-  variable: "--font-sans",
-  subsets: ["latin"],
-  display: "swap",
-});
-
-const dmMono = DM_Mono({
-  variable: "--font-mono",
-  subsets: ["latin"],
-  weight: ["400", "500"],
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   title: "Intrinsic — See the market clearly",
@@ -43,10 +23,7 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
-        <body
-          className={`${lora.variable} ${dmSans.variable} ${dmMono.variable} antialiased`}
-          suppressHydrationWarning
-        >
+        <body className="antialiased" suppressHydrationWarning>
           <SmoothScroll>
             {/* Warm paper atmosphere — fixed behind all content */}
             <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">

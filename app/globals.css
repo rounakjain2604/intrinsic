@@ -1,6 +1,11 @@
 @import "tailwindcss";
 
 :root {
+  --font-sans: Verdana, Geneva, Tahoma, sans-serif;
+  --font-serif: Verdana, Geneva, Tahoma, sans-serif;
+  --font-mono: Verdana, Geneva, Tahoma, sans-serif;
+  --font-candara: Verdana, Geneva, Tahoma, sans-serif;
+
   /* Backgrounds — warm, layered, paper-like */
   --bg-base: #FAF8F5;
   --bg-surface: #F5F1EA;
@@ -49,17 +54,17 @@
   /* Muted → text-muted */
   --color-muted: #A09890;
 
-  /* Font families → font-serif, font-sans, font-mono, font-candara */
+  /* Font families → all mapped to Verdana per reading preference */
   --font-sans: var(--font-sans);
   --font-serif: var(--font-serif);
   --font-mono: var(--font-mono);
-  --font-candara: 'Candara', 'Calibri', 'Georgia', serif;
+  --font-candara: var(--font-candara);
 }
 
 body {
   background: #faf8f4;
   color: #1e1e1e;
-  font-family: 'Candara', 'Calibri', Georgia, serif;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
   line-height: 1.75;
 }
 
@@ -67,7 +72,7 @@ body {
 .prose-intrinsic table {
   width: 100%;
   border-collapse: collapse;
-  font-family: 'Candara', 'Calibri', Georgia, serif;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
   font-size: 0.9rem;
   margin: 1.5rem 0;
 }

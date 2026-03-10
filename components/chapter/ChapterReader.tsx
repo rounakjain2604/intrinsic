@@ -23,17 +23,17 @@ export default function ChapterReader({
     const tocHeadings = headings ?? [];
 
     return (
-        <section className="min-h-screen pt-28 pb-20 px-6">
-            <div className="max-w-6xl mx-auto">
+        <section className="min-h-screen pt-28 pb-20 px-4 lg:px-8">
+            <div className="w-full max-w-none mx-auto">
                 {/* Two-column layout */}
-                <div className="flex gap-12">
+                <div className="flex gap-8 xl:gap-12 items-start">
                     {/* Sidebar — Table of Contents (desktop only) */}
-                    <aside className="hidden lg:block w-56 flex-shrink-0">
+                    <aside className="hidden lg:block w-64 xl:w-72 flex-shrink-0">
                         <TableOfContents headings={tocHeadings} />
                     </aside>
 
                     {/* Main reading column */}
-                    <article className="flex-1 max-w-2xl mx-auto">
+                    <article className="flex-1 min-w-0 max-w-none">
                         {/* Chapter header */}
                         <header className="mb-10">
                             {/* Eyebrow */}
@@ -57,7 +57,7 @@ export default function ChapterReader({
 
                         {/* Chapter content */}
                         {content ? (
-                            <div className="prose-intrinsic space-y-6 font-[family-name:var(--font-sans)] text-[#6B6560] leading-8">
+                            <div className="prose-intrinsic w-full space-y-6 font-[family-name:var(--font-sans)] text-[#6B6560] leading-8">
                                 {content}
                             </div>
                         ) : !hasAccess ? (
