@@ -29,26 +29,26 @@ const mdxComponents = {
             {...props}
         />
     ),
-h3: (props: React.HTMLAttributes<HTMLHeadingElement>) => (
+    h3: (props: React.HTMLAttributes<HTMLHeadingElement>) => (
         <h3
             id={slugify(String(props.children))}
             className="font-[family-name:var(--font-sans)] text-lg font-semibold text-[#2D2A26] mt-8 mb-3"
             {...props}
         />
     ),
-p: (props: React.HTMLAttributes<HTMLParagraphElement>) => (
+    p: (props: React.HTMLAttributes<HTMLParagraphElement>) => (
         <p
             className="font-[family-name:var(--font-sans)] text-base text-[#6B6560] leading-8"
             {...props}
         />
     ),
-strong: (props: React.HTMLAttributes<HTMLElement>) => (
+    strong: (props: React.HTMLAttributes<HTMLElement>) => (
         <strong className="font-semibold text-[#2D2A26]" {...props} />
     ),
-ul: (props: React.HTMLAttributes<HTMLUListElement>) => (
+    ul: (props: React.HTMLAttributes<HTMLUListElement>) => (
         <ul className="list-disc list-inside space-y-2 text-[#6B6560]" {...props} />
     ),
-ol: (props: React.HTMLAttributes<HTMLOListElement>) => (
+    ol: (props: React.HTMLAttributes<HTMLOListElement>) => (
         <ol className="list-decimal list-inside space-y-2 text-[#6B6560]" {...props} />
     ),
     hr: () => <hr className="border-t border-[#2D2A26]/[0.08] my-12" />,
@@ -58,7 +58,7 @@ ol: (props: React.HTMLAttributes<HTMLOListElement>) => (
             {...props}
         />
     ),
-blockquote: (props: React.HTMLAttributes<HTMLQuoteElement>) => (
+    blockquote: (props: React.HTMLAttributes<HTMLQuoteElement>) => (
         <blockquote
             className="border-l-4 border-[#2D2A26]/10 pl-5 italic text-[#6B6560] my-6"
             {...props}
@@ -67,6 +67,11 @@ blockquote: (props: React.HTMLAttributes<HTMLQuoteElement>) => (
 };
 
 // ── Helpers ────────────────────────────────────────────────
+
+/** Strip UTF-8 BOM and normalise Windows (\r\n) line endings to \n. */
+function normalizeSource(raw: string): string {
+    return raw.replace(/^\uFEFF/, "").replace(/\r\n/g, "\n");
+}
 
 function slugify(text: string): string {
     return text
@@ -172,7 +177,7 @@ export async function getAllLocalChapterFrontmatters(): Promise<
         chapterFiles.map(async (entry) => {
             const slug = entry.name.replace(/\.mdx$/, "");
             const filePath = path.join(CONTENT_DIR, entry.name);
-            const source = fs.readFileSync(filePath, "utf-8");
+            const source = normalizeSource(fs.readFileSync(filePath, "utf-8"));
             return parseChapterFrontmatter(source, slug);
         })
     );
@@ -193,7 +198,7 @@ export async function getLocalChapterFrontmatter(
         return null;
     }
 
-    const source = fs.readFileSync(filePath, "utf-8");
+    const source = normalizeSource(fs.readFileSync(filePath, "utf-8"));
     return parseChapterFrontmatter(source, slug);
 }
 
@@ -210,7 +215,7 @@ export function getChapterRawContent(slug: string): {
         return null;
     }
 
-    const source = fs.readFileSync(filePath, "utf-8");
+    const source = normalizeSource(fs.readFileSync(filePath, "utf-8"));
     const contentSource = stripFrontmatter(source);
     const hasPaywallMarker = contentSource.includes(PAYWALL_MARKER);
     const previewSource = hasPaywallMarker
@@ -239,7 +244,7 @@ export async function getChapterContent(
         return null;
     }
 
-    const source = fs.readFileSync(filePath, "utf-8");
+    const source = normalizeSource(fs.readFileSync(filePath, "utf-8"));
     // Strip paywall marker — everything is free during beta
     const cleanSource = source.replace(PAYWALL_MARKER, "");
 
