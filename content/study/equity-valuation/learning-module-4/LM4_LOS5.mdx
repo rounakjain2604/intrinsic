@@ -1,0 +1,159 @@
+---
+format_version: "intrinsic-los-v2"
+topic_title: "Equity Valuation"
+topic_slug: "equity-valuation"
+learning_module_title: "Learning Module 4"
+learning_module_slug: "learning-module-4"
+los_title: "LOS 5: Underlying Earnings and Normalized EPS"
+los_slug: "los-5-underlying-earnings-and-normalized-eps"
+estimated_time_minutes: 35
+---
+## Intuition Building
+
+The headline "Earnings Per Share" (EPS) reported under GAAP or IFRS often contains transitory, nonrecurring noise. Because equity valuation is inherently forward-looking, analysts must derive a sustainable earnings baseline that ignores this noise. This Learning Outcome Statement (LOS) details how to adjust reported EPS to find **underlying earnings** (core earnings) and explains two primary methods for **normalizing EPS** to smooth out the severe distortions created by business and industry cycles. 
+
+## Core Concept Teaching
+
+To arrive at a reliable earnings stream for valuation, analysts deploy two distinct types of adjustments:
+
+**1. Adjusting for Nonrecurring Items (Underlying Earnings):**
+- **Definition:** Also referred to as persistent earnings, continuing earnings, or core earnings. 
+- **Goal:** To remove items from reported EPS that are purely transitory or one-off in nature.
+- **Items to Exclude:** Gains/losses from asset sales, asset write-downs (impairments), major restructuring charges, and provisions for future legal losses or settlements.
+- **The Analyst's Duty:** Do not blindly trust management-provided "Core EPS" or "Non-GAAP EPS." Management often attempts to classify recurring operating expenses (like serial restructuring costs or aggressive stock-based compensation) as "one-time" items to artificially inflate core metrics. Analysts must independently verify true nonrecurrence via the financial statement footnotes.
+
+**2. Normalizing EPS for Business Cycles:**
+For highly cyclical companies (e.g., auto manufacturers, commodities producers, semiconductors), current trailing EPS is a dangerous base for valuation. At the peak of an economic cycle, EPS is unsustainably high, driving the P/E ratio artificially low. Conversely, at the trough, EPS collapses, driving P/E artificially high (a countercyclical property famously known as the **Molodovsky Effect**).
+To execute a proper mid-cycle valuation, analysts "normalize" EPS across the most recent full economic cycle using one of two methods:
+- **Method 1: Historical Average EPS:** A simple arithmetic average of reported EPS over the most recent business cycle. 
+  - *Critical Flaw:* It completely ignores any growth or shrinkage in the company's operational footprint (equity base) over that cycle.
+- **Method 2: Average Return on Equity (ROE) Method:** Calculate the average ROE over the most recent cycle, and multiply it by the *current* Book Value Per Share (BVPS). 
+  - *Superiority:* This method applies a normalized, mid-cycle profitability metric (Average ROE) to the company's present-day size (Current BVPS).
+
+**Analyst Interpretation:**
+Proper earnings normalization bridges the gap between accounting reality and economic forecasting. The hardest part of the Average ROE method in practice is accurately defining the start and end of a standalone business cycle (usually 5 to 7 years). An analyst who arbitrarily selects a timeframe spanning two cyclical peaks and only one trough will artificially inflate the Average ROE and arrive at a dangerously high valuation.
+
+**Exam Trap:**
+When asked to normalize EPS via the Average ROE method, the CFA Institute frequently sets up a devastating distractor trap. You must multiply the arithmetic average of historical ROE by the **CURRENT** Book Value per Share. The exam question table will almost always provide you enough data to compute the *Average* Book Value per Share over the cycle. Do not use it; using the average BVPS nullifies the entire purpose of the method, which is to capture the firm's *current* operational size.
+
+## Ground-Up Framework
+
+**Underlying Earnings:**
+`Underlying EPS = Reported EPS - (Nonrecurring Gains / Shares) + (Nonrecurring Losses / Shares)`
+*(Note: If the adjustments are given pre-tax, ensure you use the after-tax impact on net income divided by shares outstanding)*
+
+**Normalized EPS:**
+1. **Method of Historical Average EPS:**
+   `Normalized EPS = Sum(EPS over the business cycle) / Number of Years`
+2. **Method of Average ROE:**
+   `Average ROE = Sum(ROE over the business cycle) / Number of Years`  
+   **`Normalized EPS = Average ROE × Current Book Value per Share`**
+
+## Examples / Applications
+
+**Scenario: Normalizing Earnings for a Cyclical Mining Company**
+An analyst is evaluating a mining firm at the perceived bottom of a commodities cycle. Over the previous 6-year cycle, the firm generated the following ROEs: `18%, 24%, 22%, 10%, 4%, -2%`. 
+The average of the historical EPS figures over this period is `$1.20`. 
+Due to heavy equity issuances and retained earnings during the boom years, the Current Book Value Per Share (BVPS) is `$15.00`.
+
+*Direct Anchor to Source Text:* Mirroring the curriculum's Example 4 ("Zenlandia Chemical"), the analyst calculates both methods.
+- **Historical Average EPS Method:** Normalized EPS = **$1.20**.
+- **Average ROE Method:**
+  1. Average ROE = `(18 + 24 + 22 + 10 + 4 - 2) / 6` = **12.67%**.
+  2. Normalized EPS = `12.67% × $15.00` = **$1.90**.
+
+Because the mining company expanded its capital base significantly during the cycle, the Average ROE method ($1.90) provides a much more economically accurate picture of the firm's true, present-day mid-cycle earning power than the simple historical EPS average.
+
+## Visual Anchor
+
+The following diagram illustrates the mechanics of the Molodovsky Effect and why normalization is mathematically required for cyclical valuations.
+
+<svg viewBox="0 0 650 350" xmlns="http://www.w3.org/2000/svg" style={{ width: '100%', height: 'auto', backgroundColor: '#fdfdfd', borderRadius: '8px', padding: '10px', boxShadow: '0 4px 6px rgba(0,0,0,0.05)' }}>
+  <style>
+    {`
+      .title { font-family: 'Inter', sans-serif; font-size: 16px; font-weight: bold; fill: #1e293b; }
+      .axis { stroke: #94a3b8; stroke-width: 2px; }
+      .eps-line { stroke: #3b82f6; stroke-width: 3px; fill: none; }
+      .pe-line { stroke: #ef4444; stroke-width: 3px; stroke-dasharray: 6 6; fill: none; }
+      .norm-line { stroke: #22c55e; stroke-width: 2.5px; fill: none; stroke-dasharray: 4 2; }
+      .text-label { font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 600; }
+      .text-small { font-family: 'Inter', sans-serif; font-size: 10px; fill: #64748b; }
+      .point { fill: #ffffff; stroke-width: 2px; }
+    `}
+  </style>
+
+  <text x="325" y="25" textAnchor="middle" className="title">The Molodovsky Effect & Earnings Normalization</text>
+
+  <!-- Axes -->
+  <line x1="50" y1="280" x2="600" y2="280" className="axis" />
+  <line x1="50" y1="280" x2="50" y2="50" className="axis" />
+  
+  <text x="325" y="300" textAnchor="middle" className="text-small">Time (Through a Full Business Cycle)</text>
+  <text x="20" y="165" textAnchor="middle" transform="rotate(-90 20 165)" className="text-small">Metric Value</text>
+
+  <!-- EPS Sine Wave (Solid Blue) -->
+  <path d="M 50 165 Q 120 40 187 165 T 325 165 T 462 165 T 600 165" className="eps-line" />
+  
+  <!-- Normalized EPS (Dotted Green) - Rising slightly to show growth -->
+  <line x1="50" y1="165" x2="600" y2="150" className="norm-line" />
+
+  <!-- P/E Line (Dashed Red, Inverse to EPS) -->
+  <path d="M 50 165 Q 120 290 187 165 T 325 165 T 462 165 T 600 165" className="pe-line" />
+
+  <!-- Annotations at Peak -->
+  <circle cx="118" cy="103" r="4" className="point" stroke="#3b82f6" />
+  <text x="118" y="90" textAnchor="middle" className="text-label" fill="#3b82f6">Cycle Peak</text>
+  <text x="118" y="115" textAnchor="middle" className="text-small">EPS Unsustainably High</text>
+  
+  <circle cx="118" cy="227" r="4" className="point" stroke="#ef4444" />
+  <text x="118" y="243" textAnchor="middle" className="text-label" fill="#ef4444">Low Trailing P/E</text>
+
+  <!-- Annotations at Trough -->
+  <circle cx="256" cy="227" r="4" className="point" stroke="#3b82f6" />
+  <text x="256" y="243" textAnchor="middle" className="text-label" fill="#3b82f6">Cycle Trough</text>
+  <text x="256" y="255" textAnchor="middle" className="text-small">EPS Depressed</text>
+
+  <circle cx="256" cy="103" r="4" className="point" stroke="#ef4444" />
+  <text x="256" y="90" textAnchor="middle" className="text-label" fill="#ef4444">High Trailing P/E</text>
+
+  <!-- Legend -->
+  <rect x="380" y="60" width="200" height="70" fill="#ffffff" stroke="#cbd5e1" rx="4" />
+  <line x1="390" y1="75" x2="420" y2="75" className="eps-line" />
+  <text x="430" y="79" className="text-label">Reported EPS</text>
+  
+  <line x1="390" y1="95" x2="420" y2="95" className="pe-line" />
+  <text x="430" y="99" className="text-label">Reported Trailing P/E</text>
+  
+  <line x1="390" y1="115" x2="420" y2="115" className="norm-line" />
+  <text x="430" y="119" className="text-label">Normalized Mid-Cycle EPS</text>
+</svg>
+
+## Summary / Key Takeaways
+
+*   **The "Recurring" Nonrecurring Item:** Management frequently labels restructuring charges as "one-time" in their press releases to boost non-GAAP core earnings. If a vignette explicitly states a company has taken restructuring charges in 4 of the last 5 years, *do not exclude them* when calculating underlying earnings; treat them as standard ongoing operating expenses.
+*   **Average ROE Calculation Flaw:** In the Average ROE method, do not accidentally compute the "Normalized EPS" for each historical year and then average those resulting EPS figures. You must average the historical ROE percentages first, then execute a single multiplication against Current BVPS.
+*   **The Valuation Illusion:** Unwary investors view cyclicals at the top of the cycle as "cheap" value stocks because their trailing P/E is single digits. Normalizing the EPS reveals that the true mid-cycle P/E is vastly higher, preventing a value trap investment at the peak of the market.
+
+## Testing / Practice Questions
+
+<QuizCard 
+  question="An analyst is normalizing earnings for an offshore drilling contractor. Over the past business cycle, the firm's average ROE was 14%, and its average Book Value per Share was $22. However, due to recent asset impairments, the current Book Value per Share has fallen to $16. Using the Average ROE method, what is the firm's normalized EPS?"
+  options={[
+    "$2.24",
+    "$2.64",
+    "$3.08"
+  ]}
+  correctAnswer="$2.24"
+  explanation="The Average ROE method calculates normalized EPS by multiplying the Average ROE over the cycle by the CURRENT Book Value per Share. 14% × $16.00 = $2.24. Using the average BVPS of $22 would incorrectly yield $3.08, which is an exam trap."
+/>
+
+<QuizCard 
+  question="A company reports EPS of $3.50. Deep within the footnotes, the analyst discovers the company recorded a pre-tax $40 million gain on the sale of a legacy warehouse, and booked a pre-tax $10 million restructuring charge that management claims is a 'one-time restructuring event'—despite the firm taking similar charges in three of the last four years. The firm has 20 million shares outstanding and a 25% tax rate. What is the firm's underlying EPS?"
+  options={[
+    "$2.00",
+    "$2.50",
+    "$3.12"
+  ]}
+  correctAnswer="$2.00"
+  explanation="First, determine which items are truly nonrecurring. The warehouse sale is nonrecurring, but the serial restructuring charges are effectively recurring operating expenses, so they should NOT be removed. The pre-tax gain is $40m, which is $30m after-tax ($40m × 0.75). The after-tax gain per share is $30m / 20m shares = $1.50 per share. Underlying EPS = Reported EPS ($3.50) - Transient Gain ($1.50) = $2.00."
+/>

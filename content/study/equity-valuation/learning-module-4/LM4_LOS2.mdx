@@ -1,0 +1,183 @@
+---
+format_version: "intrinsic-los-v2"
+topic_title: "Equity Valuation"
+topic_slug: "equity-valuation"
+learning_module_title: "Learning Module 4"
+learning_module_slug: "learning-module-4"
+los_title: "LOS 2: Calculate and interpret a justified price multiple"
+los_slug: "los-2-calculate-interpret-justified-price-multiple"
+estimated_time_minutes: 35
+---
+
+## Intuition Building
+
+When an analyst says a stock's actual P/E is 18, that is just a factual observation of the market price relative to earnings. But what *should* the P/E be? That is the essence of a **justified price multiple**. It is the multiple that the stock *deserves* based on its underlying fundamentals - its growth prospects, its risk profile, and its ability to generate cash payouts for shareholders.
+
+If we can determine the justified P/E (the fair multiple) and compare it to the actual market P/E, we can quickly assess whether the stock is undervalued or overvalued. Misunderstanding this concept causes an analyst to blindly buy stocks with low P/Es, failing to realize that a low multiple might be entirely justified by terrible growth prospects or exceedingly high risk - a classic value trap.
+
+## Ground-Up Framework
+
+A justified P/E is most easily derived using the simplest Discounted Cash Flow (DCF) model: the Gordon constant growth model.
+
+<FormulaBlock label="Justified Forward P/E">
+$$ \frac{P_0}{E_1} = \frac{D_1 / E_1}{r - g} = \frac{1 - b}{r - g} $$
+</FormulaBlock>
+
+<FormulaBlock label="Justified Trailing P/E">
+$$ \frac{P_0}{E_0} = \frac{D_0(1 + g)/E_0}{r - g} = \frac{(1 - b)(1 + g)}{r - g} $$
+</FormulaBlock>
+
+Where:
+- **$P_0$:** Current intrinsic value of the stock
+- **$E_1$ / $E_0$:** Next year's / Current year's earnings
+- **$D_1$ / $D_0$:** Next year's / Current year's dividend
+- **$r$:** Required rate of return (risk)
+- **$g$:** Expected constant growth rate of dividends
+- **$b$:** Retention rate (the portion of earnings kept by the company, $1 - \text{payout ratio}$)
+- **$1 - b$:** Dividend payout ratio
+
+## Core Concept Teaching
+
+The justified price multiple bridges absolute valuation (the intrinsic DCF value) and relative valuation (price multiples).
+
+<Callout type="key-concept">
+**The Fundamental Drivers of P/E**
+Reviewing the structure of the Gordon Growth equation, we clearly see that, all else being equal, a justified P/E is:
+1. **Positively related to growth ($g$):** Higher expected cash flow or dividend growth justifies a higher multiple.
+2. **Inversely related to risk ($r$):** A higher required rate of return drives the intrinsic value down, which justifies a lower multiple.
+3. **Positively related to the dividend payout ratio ($1 - b$):** Assuming $r > g$, a higher payout ratio increases the justified multiple for a stable growth firm.
+</Callout>
+
+**Deep Analyst Interpretation:**
+For a practicing analyst, this math clarifies market reactions. If the central bank suddenly hikes interest rates, $r$ increases across the market. The P/E multiple model tells us instantly that *all justified P/Es must contract*. Knowing this prevents a portfolio manager from assuming that all stocks have suddenly become cheap. They simply possess lower justified multiples because macro risk is now higher.
+
+<Callout type="trap">
+**Exam Trap: The Value Trap Illusion**
+A stock trading at an actual P/E of 8x might look incredibly cheap compared to the sector average of 15x. However, if its cost of equity ($r$) is sky-high and its growth ($g$) is negative, its fundamental justified P/E might calculate out to only 6x. The stock is not cheap; it is actually a value trap and overvalued at 8x.
+</Callout>
+
+### Complex DCF Derivation
+
+The Gordon Growth Model gives us a clean, closed-form equation tailored for mature, dividend-paying companies. But we do not have to use it for complex multi-stage companies. If an analyst uses a complex, multi-stage Free Cash Flow to Equity (FCFE) model, they simply take the final intrinsic value ($P_0$) output by that model and divide it by the forecasted earnings ($E_1$ or $E_0$) to express the absolute valuation in the familiar form of a relative multiple:
+
+$$ \text{Justified P/E} = \frac{\text{DCF Intrinsic Value}}{\text{Estimated EPS}} $$
+
+<Callout type="trap">
+**Exam Trap: Trailing vs. Forward Conflation**
+When you use a DCF intrinsic value to derive a P/E, be exceptionally careful which EPS you divide by. Dividing $P_0$ by $E_1$ gives the justified *forward* P/E. Dividing $P_0$ by $E_0$ gives the justified *trailing* P/E. The exam will often try to trick you by offering both and asking for the specific one.
+</Callout>
+
+## Visual Anchor
+
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="800" height="400" fill="#f8fafc" rx="8" />
+
+  <rect x="50" y="80" width="200" height="240" fill="#e2e8f0" stroke="#94a3b8" strokeWidth="2" rx="4" />
+  <text x="150" y="110" fontFamily="sans-serif" fontSize="16" fontWeight="bold" textAnchor="middle" fill="#0f172a">Fundamentals</text>
+
+  <rect x="70" y="130" width="160" height="40" fill="#10b981" rx="4" />
+  <text x="150" y="155" fontFamily="sans-serif" fontSize="14" fontWeight="bold" textAnchor="middle" fill="#ffffff">Growth (g) up</text>
+
+  <rect x="70" y="190" width="160" height="40" fill="#ef4444" rx="4" />
+  <text x="150" y="215" fontFamily="sans-serif" fontSize="14" fontWeight="bold" textAnchor="middle" fill="#ffffff">Risk (r) up</text>
+
+  <rect x="70" y="250" width="160" height="40" fill="#3b82f6" rx="4" />
+  <text x="150" y="275" fontFamily="sans-serif" fontSize="14" fontWeight="bold" textAnchor="middle" fill="#ffffff">Payout (1-b) up</text>
+
+  <line x1="250" y1="200" x2="330" y2="200" stroke="#94a3b8" strokeWidth="4" markerEnd="url(#arrow)" />
+
+  <rect x="350" y="130" width="180" height="140" fill="#cbd5e1" stroke="#64748b" strokeWidth="2" rx="8" />
+  <text x="440" y="170" fontFamily="sans-serif" fontSize="16" fontWeight="bold" textAnchor="middle" fill="#0f172a">Justified P/E</text>
+  <text x="440" y="200" fontFamily="sans-serif" fontSize="32" fontWeight="bold" textAnchor="middle" fill="#0f172a">Fair Multiple</text>
+  <text x="440" y="235" fontFamily="sans-serif" fontSize="14" textAnchor="middle" fill="#334155">Intrinsic Value Lens</text>
+
+  <line x1="530" y1="200" x2="610" y2="200" stroke="#94a3b8" strokeWidth="4" markerEnd="url(#arrow)" />
+
+  <rect x="630" y="150" width="120" height="100" fill="#f1f5f9" stroke="#94a3b8" strokeWidth="2" strokeDasharray="4" rx="4" />
+  <text x="690" y="180" fontFamily="sans-serif" fontSize="14" fontWeight="bold" textAnchor="middle" fill="#0f172a">Action</text>
+  <text x="690" y="205" fontFamily="sans-serif" fontSize="12" textAnchor="middle" fill="#334155">Compare to</text>
+  <text x="690" y="225" fontFamily="sans-serif" fontSize="12" fontWeight="bold" textAnchor="middle" fill="#ef4444">Actual Market P/E</text>
+
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#94a3b8" />
+    </marker>
+  </defs>
+</svg>
+
+## Examples / Applications
+
+<WorkedExample title="Forward P/E Based on Fundamental Forecasts (Gordon Growth Model)">
+**Source Anchor:** Drawn structurally from the CFA curriculum methodology for BP p.l.c.
+
+**Scenario:**
+An energy analyst forecasts a long-term earnings retention rate ($b$) for an oil company of 40% and a long-term constant earnings growth rate ($g$) of 3.5%. Given significant legal uncertainties, the analyst sets a high required rate of return ($r$) of 7.6%.
+
+**Calculate the justified forward P/E.**
+
+**Solution:**
+First, identify the dividend payout ratio ($1 - b$): 1 - 0.40 = 0.60, or 60%.
+
+Using the justified forward P/E formula:
+$$ \frac{P_0}{E_1} = \frac{1 - b}{r - g} $$
+$$ \frac{P_0}{E_1} = \frac{0.60}{0.076 - 0.035} = \frac{0.60}{0.041} = 14.63 $$
+
+**Deep Analyst Interpretation:**
+The fundamental characteristics of this company dictate that a fair price for its cash flow generation would be 14.6x forward earnings. If the stock is currently trading in the open market at a forward P/E of 10x, it is considered undervalued. If it is trading at 20x, it is overvalued.
+</WorkedExample>
+
+<WorkedExample title="Forward P/E Based on Fundamental Forecasts (Complex DCF)">
+**Source Anchor:** Directly derived from the CFA curriculum Toyota FCFE example.
+
+**Scenario:**
+You use a multi-stage Free Cash Flow to Equity (FCFE) model to value a massive vehicle manufacturer. Your complex DCF outputs an intrinsic value of JPY 6,980 for the stock. Your forecasted next-year EPS for the company is JPY 720. The current market price of the stock is JPY 6,688.
+
+1. What is the stock's justified forward P/E?
+2. Is the stock overvalued or undervalued?
+
+**Solution:**
+1. $$ \text{Justified Forward P/E} = \frac{\text{DCF Value}}{\text{Estimated EPS}} = \frac{6,980}{720} = 9.69x $$
+2. The stock's actual forward P/E based on the market price is $6,688 / 720 = 9.29x$. Because the justified multiple (9.69x) is higher than the actual multiple (9.29x), the stock is currently undervalued by the market.
+</WorkedExample>
+
+## Testing / Practice Questions
+
+<QuizCard
+  question="An analyst is updating the valuation model for a telecommunications company. Recognizing increased macro volatility, the analyst decides to increase the company's expected risk-free rate, which increases the required rate of return. All else being equal, what is the most likely mathematical effect on the company's justified trailing P/E?"
+  options={[
+    "A. The justified P/E will increase.",
+    "B. The justified P/E will decrease.",
+    "C. The justified P/E will remain unchanged because it is anchored to historical trailing earnings."
+  ]}
+  answer="B. The justified P/E will decrease."
+  explanation="The justified P/E ratio is inversely related to the required rate of return ($r$). If $r$ increases, the denominator $(r - g)$ increases, which causes the justified multiple to decrease."
+/>
+
+<QuizCard
+  question="A mature logistics company has an established dividend payout ratio of 45%, an expected constant growth rate of 6%, and an analyst-estimated cost of equity of 10%. What is its justified trailing P/E multiple?"
+  options={[
+    "A. 11.25x",
+    "B. 11.93x",
+    "C. 15.00x"
+  ]}
+  answer="B. 11.93x"
+  explanation="The formula for the justified trailing P/E is $(1 - b)(1 + g) / (r - g)$. With payout ratio 0.45, growth 0.06, and required return 0.10, the result is 0.45 x 1.06 / 0.04 = 11.925, or 11.93x."
+/>
+
+<QuizCard
+  question="You run a 3-stage FCFE model for a biotech firm and derive an absolute intrinsic value of $45.00. The trailing twelve months EPS was $2.00. Your forecasted next year EPS is $3.00. If the stock is currently trading at $50.00, what is the justified forward P/E, and is the stock overvalued or undervalued?"
+  options={[
+    "A. Justified forward P/E is 15.0x; the stock is overvalued.",
+    "B. Justified forward P/E is 22.5x; the stock is overvalued.",
+    "C. Justified forward P/E is 15.0x; the stock is undervalued."
+  ]}
+  answer="A. Justified forward P/E is 15.0x; the stock is overvalued."
+  explanation="Justified forward P/E = intrinsic value / forward EPS = $45.00 / $3.00 = 15.0x. Because the intrinsic value is below the current market price, the stock is overvalued."
+/>
+
+## Summary / Key Takeaways
+
+- **The Definition:** A justified price multiple is the fair value of a multiple, calculated using the company's internal fundamental cash flow drivers instead of external market comparables.
+- **The Drivers:** The justified P/E expands if the expected growth rate ($g$) rises or if the payout ratio ($1 - b$) rises. It contracts if the required return ($r$) rises.
+- **Two Ways to Calculate:** You can either use the closed-form Gordon Growth Model formulas for trailing and forward P/E, or you can run a complex multi-stage DCF and divide the resulting intrinsic value by estimated EPS.
+- **The Golden Rule:** If justified multiple > actual market multiple, the stock is undervalued. If justified multiple < actual market multiple, the stock is overvalued.

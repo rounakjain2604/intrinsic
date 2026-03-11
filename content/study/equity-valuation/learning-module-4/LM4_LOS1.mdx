@@ -1,0 +1,180 @@
+---
+format_version: "intrinsic-los-v2"
+topic_title: "Equity Valuation"
+topic_slug: "equity-valuation"
+learning_module_title: "Learning Module 4"
+learning_module_slug: "learning-module-4"
+los_title: "LOS 1: Contrast the method of comparables and the method based on forecasted fundamentals as approaches to using price multiples in valuation and explain economic rationales for each approach"
+los_slug: "los-1-method-of-comparables-vs-forecasted-fundamentals"
+estimated_time_minutes: 35
+---
+
+## Intuition Building
+
+When evaluating whether a stock is fairly valued, overvalued, or undervalued, analysts often use price or enterprise value multiples. The intuition is simple: what does one unit of currency actually buy in terms of earnings, net assets, or cash flow?
+
+However, obtaining a multiple is only half the battle. How do we know if a P/E of 20 is "good" or "bad"? To answer this, analysts use two primary approaches to justify a multiple: comparing it to similar assets (the **method of comparables**) or deriving it from the company's expected future cash flows (the **method based on forecasted fundamentals**).
+
+Misunderstanding or conflating these two approaches can lead to critical valuation errors, such as buying a seemingly "cheap" stock that is fundamentally broken, or assuming a stock is a bargain when the entire sector is overvalued relative to intrinsic cash flow generation.
+
+## Ground-Up Framework
+
+Before deep-diving into the two methods, let's look at the clean structural scaffold of how multiples are used.
+
+<ComparisonTable>
+  <ComparisonColumn title="Method of Comparables">
+    - **Valuation Type:** Relative valuation.
+    - **Economic Rationale:** Law of One Price (identical assets should sell at the same price).
+    - **Process:** Compare the asset's multiple to a benchmark multiple (for example, peer group median).
+    - **Result:** Indicates if the asset is undervalued or overvalued *relative* to the benchmark.
+  </ComparisonColumn>
+  <ComparisonColumn title="Method Based on Forecasted Fundamentals">
+    - **Valuation Type:** Absolute (Intrinsic) valuation.
+    - **Economic Rationale:** Value is driven by future cash flows (fundamentals like growth and risk).
+    - **Process:** Derive the multiple from a Discounted Cash Flow (DCF) model.
+    - **Result:** Indicates if the asset is undervalued or overvalued based on its *intrinsic* value.
+  </ComparisonColumn>
+</ComparisonTable>
+
+## Core Concept Teaching
+
+### The Method of Comparables
+
+The method of comparables evaluates an asset based on multiples of similar assets (often called comps, guideline assets, or guideline companies).
+
+<Callout type="key-concept">
+**The Law of One Price**
+The economic rationale underlying the method of comparables is the "Law of One Price" - the economic principle that two identical assets should sell at the same price.
+</Callout>
+
+To use this method, an analyst finds a benchmark value of a multiple (like the median P/E of a peer group) and multiplies it by an estimate of the company's fundamental (like EPS). This gives a quick estimate of the stock's value.
+
+**Analyst Interpretation:**
+In practice, the exact comparability of companies is an illusion. No two companies have the exact same growth prospects, risk profile, and accounting policies. Therefore, an analyst's primary job under this method is not just to calculate the multiple, but to explain *why* deviations exist. A premium multiple must be justified by superior fundamentals.
+
+<Callout type="trap">
+**The "Relative Value" Trap on the Exam**
+An asset may be undervalued *relative* to its peers, but if the entire peer group is overvalued in the open market, the stock could still be overvalued on an absolute basis (relative to its intrinsic value). On the exam, read carefully: are they asking if it is relatively undervalued or absolutely undervalued?
+</Callout>
+
+### The Method Based on Forecasted Fundamentals
+
+The method based on forecasted fundamentals derives multiples from the company's expected future cash flows and characteristics related to profitability, growth, or financial strength.
+
+Instead of looking outward at peers, this method looks inward. It relates the multiple back to company fundamentals through a DCF model. For instance, you calculate the present value of expected future cash flows, and then express that intrinsic value relative to a forecasted fundamental (like next year's EPS) to find the forward P/E.
+
+<Callout type="trap">
+**Exam Trap: Input Sensitivity**
+Because the fundamentals-based method relies on DCF models, the outputs (and thus the justified multiple) are highly sensitive to the inputs - specifically the discount rate ($r$) and the growth rate ($g$). A small tweak to the terminal growth assumption can wildly swing the justified multiple. Watch for questions that test your understanding of how a change in $r$ or $g$ impacts the justified multiple.
+</Callout>
+
+### The Justified Price Multiple
+
+Under either method, the analyst's eventual goal is to calculate the **justified price multiple** - the estimated *fair value* of that multiple.
+- **Justified by Comparables:** The benchmark multiple of the peer group.
+- **Justified by Fundamentals:** The multiple directly derived from a DCF model's intrinsic value.
+
+Once the justified multiple is found, it is compared against the actual multiple to form an actionable, structured opinion on valuation.
+
+## Visual Anchor
+
+<svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0" y="0" width="800" height="400" fill="#f8fafc" rx="8" />
+
+  <rect x="50" y="50" width="250" height="80" fill="#e2e8f0" stroke="#94a3b8" strokeWidth="2" rx="4" />
+  <text x="175" y="85" fontFamily="sans-serif" fontSize="16" fontWeight="bold" textAnchor="middle" fill="#0f172a">Method of Comparables</text>
+  <text x="175" y="110" fontFamily="sans-serif" fontSize="14" textAnchor="middle" fill="#334155">Outward Looking</text>
+
+  <line x1="175" y1="130" x2="175" y2="180" stroke="#94a3b8" strokeWidth="3" markerEnd="url(#arrow)" />
+
+  <rect x="50" y="180" width="250" height="60" fill="#cbd5e1" stroke="#94a3b8" rx="4" />
+  <text x="175" y="215" fontFamily="sans-serif" fontSize="14" fontWeight="bold" textAnchor="middle" fill="#0f172a">Law of One Price</text>
+
+  <line x1="175" y1="240" x2="175" y2="290" stroke="#94a3b8" strokeWidth="3" markerEnd="url(#arrow)" />
+
+  <rect x="50" y="290" width="250" height="60" fill="#38bdf8" stroke="#0284c7" rx="4" />
+  <text x="175" y="325" fontFamily="sans-serif" fontSize="14" fontWeight="bold" textAnchor="middle" fill="#ffffff">Relative Valuation</text>
+
+  <rect x="500" y="50" width="250" height="80" fill="#e2e8f0" stroke="#94a3b8" strokeWidth="2" rx="4" />
+  <text x="625" y="85" fontFamily="sans-serif" fontSize="16" fontWeight="bold" textAnchor="middle" fill="#0f172a">Forecasted Fundamentals</text>
+  <text x="625" y="110" fontFamily="sans-serif" fontSize="14" textAnchor="middle" fill="#334155">Inward Looking</text>
+
+  <line x1="625" y1="130" x2="625" y2="180" stroke="#94a3b8" strokeWidth="3" markerEnd="url(#arrow)" />
+
+  <rect x="500" y="180" width="250" height="60" fill="#cbd5e1" stroke="#94a3b8" rx="4" />
+  <text x="625" y="215" fontFamily="sans-serif" fontSize="14" fontWeight="bold" textAnchor="middle" fill="#0f172a">Future Cash Flows (DCF)</text>
+
+  <line x1="625" y1="240" x2="625" y2="290" stroke="#94a3b8" strokeWidth="3" markerEnd="url(#arrow)" />
+
+  <rect x="500" y="290" width="250" height="60" fill="#10b981" stroke="#059669" rx="4" />
+  <text x="625" y="325" fontFamily="sans-serif" fontSize="14" fontWeight="bold" textAnchor="middle" fill="#ffffff">Intrinsic Valuation</text>
+
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#94a3b8" />
+    </marker>
+  </defs>
+</svg>
+
+## Examples / Applications
+
+<WorkedExample title="The Method of Comparables at Its Simplest">
+**Source Anchor:** Based precisely on the CFA curriculum's "Method of Comparables at Its Simplest" example.
+
+**Scenario:**
+Company A's EPS is $1.50. Its closest competitor, Company B, is trading at a P/E of 22. Assume the companies have a similar operating and financial profile.
+
+1. If Company A's stock is trading at $37.50, what does that indicate about its value relative to Company B?
+2. If we assume that Company A's stock should trade at about the same P/E as Company B's stock, what will we estimate as an appropriate price for Company A's stock?
+
+**Solution:**
+1. If Company A's stock is trading at $37.50, its actual P/E is 25 ($37.50 / $1.50). If the companies are highly similar, this P/E indicates that Company A is overvalued relative to Company B (P/E of 22).
+2. If we assume Company A should trade at the target benchmark P/E of 22, the estimated appropriate price is $33 ($1.50 x 22).
+
+**Deep Analyst Interpretation:**
+Here, the analyst applies the law of one price mechanically. Because Company A and B have similar financial profiles, they should command the same multiple. Since Company A is trading at a higher multiple (25 > 22), it is relatively overvalued.
+
+However, professional analysts rarely stop here. The key question is *why* the market assigns a P/E of 25 to Company A. Are they using more aggressive accounting? Is the growth trajectory slightly steeper? This is where the method of comparables breaks down in the real world: perfect comparables do not exist. Furthermore, if the entire sector is in a massive bubble, paying $33 for Company A might still be a terrible absolute investment, despite being cheaper than $37.50.
+</WorkedExample>
+
+## Testing / Practice Questions
+
+<QuizCard
+  question="An analyst determines that a stock's justified P/E based on forecasted fundamentals is 14.0x, while its actual trailing P/E is 18.0x. Which of the following is the most appropriate conclusion?"
+  options={[
+    "A. The stock is undervalued on a relative basis.",
+    "B. The stock is overvalued on an absolute basis.",
+    "C. The stock is undervalued because the actual P/E is higher than the justified P/E."
+  ]}
+  answer="B. The stock is overvalued on an absolute basis."
+  explanation="When the actual P/E (18.0x) is greater than the justified P/E based on forecasted fundamentals (14.0x), it means the market price is higher than the intrinsic value derived from the DCF model. Therefore, the stock is overvalued on an absolute basis. Statement A relates to relative valuation, which requires a peer group, and C is incorrect because a higher actual P/E means it is more expensive."
+/>
+
+<QuizCard
+  question="Which of the following best describes the core economic rationale underlying the method of comparables?"
+  options={[
+    "A. The intrinsic value of an asset is the present value of its future cash flows.",
+    "B. Two identical assets should sell at the same price.",
+    "C. P/E multiples tend to revert to their historical mean over the business cycle."
+  ]}
+  answer="B. Two identical assets should sell at the same price."
+  explanation="The method of comparables relies directly on the Law of One Price, which states that two identical or highly similar assets should sell at the same price. Option A describes the rationale for the method based on forecasted fundamentals."
+/>
+
+<QuizCard
+  question="An analyst notes that Stock X trades at a P/E of 10, whereas its closely matched peer group median P/E is 16. Using the method of comparables, the analyst concludes Stock X is significantly undervalued. A second analyst argues that Stock X might actually be overvalued. Under what condition is the second analyst most likely correct?"
+  options={[
+    "A. Stock X has recently reported an unexpected drop in EPS.",
+    "B. The entire peer group is severely overvalued relative to its intrinsic value.",
+    "C. Stock X has a lower required rate of return than its peers."
+  ]}
+  answer="B. The entire peer group is severely overvalued relative to its intrinsic value."
+  explanation="This tests the classic relative value trap. A stock can have a lower multiple than its peers and still be overvalued on an absolute basis if the entire peer group trades far above intrinsic value."
+/>
+
+## Summary / Key Takeaways
+
+- **Comparables vs. Fundamentals:** The method of comparables is outward-looking and uses peer benchmarks to determine relative value. The method based on forecasted fundamentals is inward-looking and uses DCF models to determine absolute intrinsic value.
+- **Economic Rationales:** Comparables rely on the *Law of One Price*, while fundamentals rely on the idea that *value is driven by future cash flows*.
+- **The Justified Multiple:** It is the estimated fair value of the multiple. It can be derived from either method. You compare the actual multiple to the justified multiple to determine overvaluation or undervaluation.
+- **Highest-Risk Trap:** Finding a stock that is undervalued against its peer group using the method of comparables does not mean it is a good investment. If the entire peer group is severely overvalued, your stock might just be the least expensive name in a fundamental bubble.

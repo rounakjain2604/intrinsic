@@ -1,0 +1,134 @@
+---
+format_version: "intrinsic-los-v2"
+topic_title: "Equity Valuation"
+topic_slug: "equity-valuation"
+learning_module_title: "Learning Module 4"
+learning_module_slug: "learning-module-4"
+los_title: "LOS 10: The PEG Ratio: Application and Flaws"
+los_slug: "los-10-the-peg-ratio-application-and-flaws"
+estimated_time_minutes: 35
+---
+## Intuition Building
+
+A persistent challenge in relative valuation is comparing the Price-to-Earnings (P/E) ratios of companies growing at vastly different speeds. A high-growth technology stock will virtually always trade at a higher P/E than a mature utility. To bridge this gap, practitioners developed the **P/E-to-Growth (PEG) ratio**, which attempts to calculate the "cost" of a stock per single percentage point of expected growth. While Wall Street relies heavily on the PEG ratio as a quick heuristic to spot undervalued growth stocks, the CFA curriculum emphasizes its significant theoretical flaws. 
+
+## Core Concept Teaching
+
+**1. The Mechanics of the PEG Ratio:**
+The PEG ratio standardizes the P/E multiple by dividing it by the expected earnings growth rate (expressed as a whole integer, not a decimal). 
+- **The Heuristic:** All else being equal, lower PEG ratios are definitively more attractive than higher PEG ratios. A widely cited (though overly simplistic) rule of thumb on Wall Street is that a stock is "fairly valued" when its P/E equals its growth rate (a PEG exactly equal to 1.0). A PEG below 1.0 flags potential undervaluation.
+
+**2. The Three Fatal Theoretical Flaws of the PEG Ratio:**
+While mathematically convenient, the PEG ratio breaks several foundational rules of equity valuation dictating how multiples actually behave.
+
+1.  **It assumes a linear relationship between P/E and growth:** The PEG formula assumes that if growth doubles, the justified P/E should exactly double. However, the Gordon Growth Model ($\frac{1 - b}{r - g}$) mathematically proves the relationship between P/E and growth is absolutely *not* linear—it is exponential.
+2.  **It completely ignores differences in risk:** The P/E multiple is heavily driven by the required rate of return (risk). Two companies might have identical P/E ratios and identical growth rates ( yielding identical PEG ratios), but if Company A operates with massive financial leverage and Company B is debt-free, Company A is actually significantly overvalued relative to its high risk. The PEG ratio is utterly blind to this.
+3.  **It ignores the duration of growth:** The PEG ratio typically divides the current P/E by a short-term (e.g., 3-to-5 year) growth forecast. A company expected to grow at 15% for only 3 years will generate the exact same PEG ratio as a company expected to grow at 15% for 20 years. The latter is obviously vastly more valuable.
+
+**Analyst Interpretation:**
+Top-tier analysts never use the PEG ratio in isolation to make a hard buy/sell decision. They use it as a rapid filtering mechanism across a sector. If an analyst screens 50 enterprise software stocks, all with relatively similar risk profiles and growth durations, the stocks floating to the top with the lowest PEG ratios become the prime candidates for grueling, full-scale DCF modeling.
+
+**Exam Trap:**
+The CFA Institute loves testing the calculation of the PEG ratio specifically to check if you remember to use the growth rate as a *whole number integer* rather than a decimal. If a stock trades at a 20x P/E and has a 10% expected growth rate, the PEG is $20 / 10 = 2.0x$. If you accidentally divide by 0.10, you will calculate a PEG of 200, which will always be a distractor option designed to trap you. 
+
+## Ground-Up Framework
+
+**PEG Ratio** = `(P/E Ratio) / (Expected Earnings Growth Rate × 100)`
+
+*Note: The growth rate in the denominator is input as a whole number. A 12% growth rate is entered as 12, not 0.12.*
+
+## Examples / Applications
+
+**Scenario: Comparing High-Growth Telecoms via PEG**
+An analyst is evaluating two telecommunications companies. 
+- **CenturyLink:** Trailing P/E = 8.9x, Expected 5-Year EPS Growth = 8.5%
+- **Charter Communications:** Trailing P/E = 30.3x, Expected 5-Year EPS Growth = 45.3%
+
+Which stock is relatively more undervalued adjusting for growth?
+
+*Step 1: Calculate CenturyLink's PEG*
+`PEG = 8.9 / 8.5` = **1.04**
+
+*Step 2: Calculate Charter's PEG*
+`PEG = 30.3 / 45.3` = **0.67**
+
+*Direct Source Anchoring:* Matching the curriculum's Example 11, despite Charter trading at an astronomical 30.3x P/E multiple (more than triple CenturyLink's), its explosive expected 45% growth rate results in a vastly superior PEG ratio (0.67 vs 1.04). Assuming risk levels are comparable, Charter is actually the "cheaper" stock per unit of expected growth.
+
+## Visual Anchor
+
+The following diagram illustrates the linear assumption of the PEG ratio versus the non-linear reality of the Gordon Growth Model.
+
+<svg viewBox="0 0 650 350" xmlns="http://www.w3.org/2000/svg" style={{ width: '100%', height: 'auto', backgroundColor: '#ffffff', borderRadius: '8px', padding: '10px', boxShadow: '0 4px 6px rgba(0,0,0,0.05)' }}>
+  <style>
+    {`
+      .title { font-family: 'Inter', sans-serif; font-size: 16px; font-weight: bold; fill: #1e293b; }
+      .axis { stroke: #94a3b8; stroke-width: 2px; }
+      .peg-line { stroke: #ef4444; stroke-width: 3px; stroke-dasharray: 6 6; fill: none; }
+      .ddm-curve { stroke: #22c55e; stroke-width: 3.5px; fill: none; }
+      .text-label { font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600; fill: #1e293b; }
+      .text-small { font-family: 'Inter', sans-serif; font-size: 11px; fill: #64748b; }
+      .legend-box { fill: #f8fafc; stroke: #cbd5e1; stroke-width: 1px; rx: 4px; }
+    `}
+  </style>
+
+  <text x="325" y="25" textAnchor="middle" className="title">The PEG Ratio's Fatal Theoretical Assumption</text>
+
+  <!-- Axes -->
+  <line x1="60" y1="280" x2="600" y2="280" className="axis" />
+  <line x1="60" y1="280" x2="60" y2="50" className="axis" />
+  
+  <text x="330" y="315" textAnchor="middle" className="text-label">Expected Growth Rate (g)</text>
+  <text x="25" y="165" textAnchor="middle" transform="rotate(-90 25 165)" className="text-label">Justified P/E Multiple</text>
+
+  <!-- The PEG Linear Assumption (y = mx) -->
+  <line x1="60" y1="280" x2="550" y2="60" className="peg-line" />
+  <text x="470" y="75" className="text-label" fill="#ef4444">PEG Linear Assumption</text>
+
+  <!-- The True DDM Exponential Reality (y = k / (r - x)) -->
+  <path d="M 60 260 Q 300 250 500 50" className="ddm-curve" />
+  <text x="375" y="150" className="text-label" fill="#166534">True Reality (Gordon Growth Model)</text>
+
+  <!-- Annotations showing the divergence -->
+  <line x1="420" y1="120" x2="420" y2="200" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="2 2" />
+  <text x="430" y="180" className="text-small">Massive Pricing Error at</text>
+  <text x="430" y="195" className="text-small">High Growth Levels</text>
+
+  <!-- Legend -->
+  <rect x="75" y="60" width="220" height="70" className="legend-box" />
+  <line x1="85" y1="80" x2="120" y2="80" className="peg-line" />
+  <text x="130" y="84" className="text-small">PEG Ratio Assumes Linear Growth</text>
+  
+  <line x1="85" y1="105" x2="120" y2="105" className="ddm-curve" />
+  <text x="130" y="109" className="text-small">Intrinsic Reality is Non-Linear</text>
+</svg>
+
+## Summary / Key Takeaways
+
+*   **Entering $g$ as a Decimal:** The absolute most common error when calculating the PEG ratio is dividing the P/E by a decimal. If the growth rate is 15%, you must divide the P/E by 15. If a stock has a P/E of 30x, the PEG is 2.0x. Dividing 30 by 0.15 yields 200, an absurd figure that will instantly ruin a comparative analysis on the exam.
+*   **The Negative Growth Trap:** If a company is expected to shrink (negative expected earnings growth), the PEG ratio generates a negative number, rendering the entire metric mathematically meaningless. The PEG ratio structurally cannot evaluate highly mature companies drifting into terminal decline.
+*   **The Risk Blindspot:** If an exam vignette asks *why* an analyst should avoid blindly buying the stock with the lowest PEG ratio across two wildly different sectors, the primary answer is "Ignoring Risk." A highly regulated, safe utility and a volatile biotech startup have fundamentally different Costs of Equity ($r$); the PEG ratio ignores this disparity entirely.
+
+## Testing / Practice Questions
+
+<QuizCard 
+  question="An analyst generates a screen of mid-cap industrial stocks. Company X trades at a P/E of 28.5x and has an expected consensus earnings growth rate of 15.0%. Company Y trades at a P/E of 16.0x and has an expected growth rate of 8.0%. Based strictly on the PEG ratio, which company is more attractively valued?"
+  options={[
+    "Company X, with a PEG ratio of 1.90.",
+    "Company Y, with a PEG ratio of 2.00.",
+    "Company X, with a PEG ratio of 0.52.",
+    "Company Y, with a PEG ratio of 0.50."
+  ]}
+  correctAnswer="Company X, with a PEG ratio of 1.90."
+  explanation="First, calculate the PEG ratios by dividing the P/E by the growth rate integer. Company X: 28.5 / 15.0 = 1.90. Company Y: 16.0 / 8.0 = 2.00. Because a lower PEG ratio represents a cheaper acquisition cost per unit of expected growth, Company X is structurally more attractive despite its substantially higher raw P/E multiple."
+/>
+
+<QuizCard 
+  question="Why might an equity portfolio manager criticize an analyst for relying exclusively on the PEG ratio to select stocks across a broad, diversified multi-sector universe?"
+  options={[
+    "The PEG ratio penalizes companies that pay a high dividend yield.",
+    "The PEG ratio fundamentally assumes that risk (the required rate of return) is identical across all evaluated companies.",
+    "The PEG ratio is highly susceptible to the Molodovsky effect during economic troughs."
+  ]}
+  correctAnswer="The PEG ratio fundamentally assumes that risk (the required rate of return) is identical across all evaluated companies."
+  explanation="One of the fatal theoretical flaws of the PEG ratio is its complete blindness to risk. The P/E multiple is heavily dictated by a firm's required rate of return. A highly risky firm might have a low P/E (and thus a wonderfully low PEG ratio), but that low multiple is entirely justified by its existential risk—not because it's an unrecognized value bargain."
+/>

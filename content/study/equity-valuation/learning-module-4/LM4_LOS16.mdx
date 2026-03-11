@@ -1,0 +1,139 @@
+---
+format_version: "intrinsic-los-v2"
+topic_title: "Equity Valuation"
+topic_slug: "equity-valuation"
+learning_module_title: "Learning Module 4"
+learning_module_slug: "learning-module-4"
+los_title: "LOS 16: Momentum Indicators in Valuation"
+los_slug: "los-16-momentum-indicators-in-valuation"
+estimated_time_minutes: 35
+---
+## Intuition Building
+
+While price multiples (like P/E and EV/EBITDA) define intrinsic, fundamental value, they often fail to dictate the precise timing of when a stock will move. To supplement fundamental valuation, practitioners heavily utilize **Momentum Indicators**. These indicators are based on the premise that market prices take time to fully absorb new information. If a company announces shockingly good news, the stock price will rise immediately, but it will often continue drifting upward for months. This LOS details how analysts construct and interpret momentum indicators, specifically focusing on Earnings Surprises and Relative Strength.
+
+## Core Concept Teaching
+
+**1. Unexpected Earnings (The Earnings Surprise)**
+The most powerful momentum indicator on Wall Street is the "Earnings Surprise." It evaluates a company's recently reported earnings against the consensus estimate built by equity research analysts.
+*   **Positive Surprise:** The company reports earnings higher than expected. The market reacts positively. Critically, empirical research shows a phenomenon called *post-earnings-announcement drift*: the stock tends to continue outperforming its peers for several months as the market slowly digests the fundamentally altered cash flow trajectory.
+*   **The SUE Metric:** Analysts standardize this surprise to separate genuine shocks from normal volatility. **Standardized Unexpected Earnings (SUE)** divides the raw earnings surprise by the historical standard deviation of the analysts' forecasting errors. A high SUE mathematically confirms that the earnings shock was massively outside the bounds of normal expectation.
+
+**2. Relative Strength (Price Momentum)**
+Relative Strength is purely a technical indicator based on historical price movement, rather than underlying corporate fundamentals.
+*   **The Mechanics:** An analyst divides the percentage return of a target stock over a specific timeframe (usually 6 to 12 months) by the percentage return of a benchmark index (or a peer group) over the identical timeframe.
+*   **The Rationale:** If a stock has outperformed the S&P 500 by 15% over the last 6 months, it exhibits high *positive relative strength*. Momentum investors hypothesize that "winners keep winning." Institutional capital tends to flow toward outperforming names, creating a self-fulfilling prophecy of continued price appreciation. 
+
+**Analyst Interpretation:**
+Quantitative hedge funds frequently combine fundamental multiples with momentum indicators to generate "Value + Momentum" portfolios. They will screen a universe of 3,000 stocks to find the 100 cheapest stocks structurally (lowest EV/EBITDA multiples), and then they will sort those 100 cheap stocks by their 6-month Relative Strength, buying only the names that have already begun to move upward. This strategy attempts to sidestep the classic "Value Trap" (buying a cheap stock that does nothing but continuously get cheaper) by demanding positive technical momentum before capital is deployed.
+
+**Exam Trap:**
+Be careful not to confuse "Relative Valuation" (using the Method of Comparables based on P/E) with "Relative Strength." The former is a fundamental check of what earnings cost. The latter is a purely technical check of past price trajectories. A question might ask you which momentum indicator utilizes analyst estimates—the answer is strictly SUE, not Relative Strength.
+
+## Ground-Up Framework
+
+**1. SUE (Standardized Unexpected Earnings)**
+`SUE = (Reported EPS - Expected EPS) / (Standard Deviation of Expected EPS)`
+
+**2. Relative Strength**
+`Relative Strength = Target Stock Return (Time Period t) / Benchmark Return (Time Period t)`
+*(Note: Can also be defined simply as the stock price divided by an index level over time. An upward sloping line indicates positive relative strength).*
+
+## Examples / Applications
+
+**Scenario: Analyzing the SUE of Competing Software Firms**
+An analyst is evaluating two competing enterprise software firms that both just reported Q3 earnings.
+*   **Firm A:** Expected EPS was $1.50. Reported EPS is $1.80. The historical standard deviation of analyst estimates for Firm A is $0.10.
+*   **Firm B:** Expected EPS was $3.00. Reported EPS is $3.60. The historical standard deviation of analyst estimates for Firm B is $0.60.
+
+Which firm delivered the more significant momentum shock?
+
+*Step 1: Calculate Raw Surprise*
+*   Firm A Raw Surprise: `$1.80 - $1.50` = $0.30
+*   Firm B Raw Surprise: `$3.60 - $3.00` = $0.60
+*(A naive look suggests Firm B had a larger shock).*
+
+*Step 2: Calculate SUE*
+*   Firm A SUE = `$0.30 / $0.10` = **3.0**
+*   Firm B SUE = `$0.60 / $0.60` = **1.0**
+
+*Direct Source Anchoring:* Following the curriculum's emphasis on standardization, Firm A delivered a drastically stronger momentum signal. Even though Firm B's absolute dollar "beat" was double Firm A's, Firm B's earnings are naturally volatile (as evidenced by a $0.60 standard deviation of estimates). Firm A's $0.30 beat represents a massive 3 standard deviation shock to the market. Firm A will likely experience much stronger post-earnings-announcement drift.
+
+## Visual Anchor
+
+The chart below visualizes the life cycle of the classic Post-Earnings-Announcement Drift, the foundational theory behind the SUE momentum indicator.
+
+<svg viewBox="0 0 700 350" xmlns="http://www.w3.org/2000/svg" style={{ width: '100%', height: 'auto', backgroundColor: '#fdfdfd', borderRadius: '8px', padding: '10px', boxShadow: '0 4px 6px rgba(0,0,0,0.05)' }}>
+  <style>
+    {`
+      .title { font-family: 'Inter', sans-serif; font-size: 16px; font-weight: bold; fill: #1e293b; }
+      .axis { stroke: #64748b; stroke-width: 2px; }
+      .line-efficient { stroke: #cbd5e1; stroke-width: 3px; stroke-dasharray: 4 4; fill: none; }
+      .line-momentum { stroke: #3b82f6; stroke-width: 4px; fill: none; }
+      .text-main { font-family: 'Inter', sans-serif; font-size: 13px; font-weight: bold; fill: #0f172a; }
+      .text-sub { font-family: 'Inter', sans-serif; font-size: 12px; fill: #475569; }
+      .highlight-box { fill: #eff6ff; stroke: #3b82f6; stroke-width: 1px; rx: 4px; }
+    `}
+  </style>
+
+  <text x="350" y="30" textAnchor="middle" className="title">Post-Earnings-Announcement Drift (PEAD)</text>
+
+  <!-- Axes -->
+  <line x1="60" y1="280" x2="650" y2="280" className="axis" />
+  <line x1="60" y1="280" x2="60" y2="60" className="axis" />
+  
+  <text x="355" y="315" textAnchor="middle" className="text-main">Time (Days since high SUE Earnings Announcement)</text>
+  <text x="25" y="170" textAnchor="middle" transform="rotate(-90 25 170)" className="text-main">Cumulative Abnormal Return (%)</text>
+
+  <!-- Ticker Marks for Zero Day -->
+  <line x1="200" y1="275" x2="200" y2="285" stroke="#334155" stroke-width="2" />
+  <text x="200" y="300" textAnchor="middle" className="text-sub" fill="#1e293b" font-weight="bold">Day 0 (Earnings)</text>
+
+  <!-- Efficient Market Theory Line (Hypothetical immediate incorporation) -->
+  <path d="M 60 250 L 195 240 L 205 100 L 600 100" className="line-efficient" />
+  <text x="450" y="85" className="text-sub" fill="#64748b">Efficient Market (Instant Pricing)</text>
+
+  <!-- Actual Momentum Reality Line -->
+  <path d="M 60 250 Q 150 245 195 240 Q 205 150 215 140 Q 400 120 600 100" className="line-momentum" />
+  
+  <!-- Annotations -->
+  <circle cx="205" cy="145" r="5" fill="#ef4444" />
+  <text x="220" y="165" className="text-main" fill="#b91c1c">Initial Price Spike</text>
+  <text x="220" y="180" className="text-sub">Fails to price in full shock</text>
+
+  <rect x="350" y="140" width="180" height="40" className="highlight-box" />
+  <text x="440" y="157" textAnchor="middle" className="text-main" fill="#1d4ed8">The Momentum 'Drift'</text>
+  <text x="440" y="172" textAnchor="middle" className="text-sub">The alpha generation zone.</text>
+
+</svg>
+
+## Summary / Key Takeaways
+
+*   **Positive Surprises in Bear Markets:** Does a high SUE guarantee positive absolute returns? Absolutely not. A momentum indicator only indicates *relative* strength. If the overall stock market crashes by 20%, a stock with a massive positive SUE might only drop by 5%. It generated a massive "positive abnormal return" relative to the market, but the investor still lost absolute capital.
+*   **The Zero Variance Trap:** If a company historically hits its estimates completely flawlessly quarter after quarter, its historical standard deviation of estimates will be near zero. If they ever deliver even a tiny $0.01 earnings surprise, the SUE formula (division by near zero) will explode to an impossibly high number like 1,000. While rare, analysts must manually normalize the denominator if predicting the company.
+*   **Overbought RSI vs Relative Strength:** Do not confuse "Relative Strength" (a simple comparison of two prices) with the "Relative Strength Index (RSI)." RSI is an oscillator used by day-traders to flag overbought/oversold conditions (bounded 0 to 100). The CFA curriculum for equity valuation explicitly focuses on raw Relative Strength comparing return trajectories.
+
+## Testing / Practice Questions
+
+<QuizCard 
+  question="An equity analyst has identified four industrial companies that all recently reported positive earnings surprises of exactly $0.25 per share. The analyst decides to utilize the Standardized Unexpected Earnings (SUE) metric to determine which stock exhibits the strongest momentum buy signal. Based on the SUE methodology, which company will generate the strongest indicator?"
+  options={[
+    "The company with the highest historical standard deviation of analyst earnings forecasts.",
+    "The company with the lowest historical standard deviation of analyst earnings forecasts.",
+    "The company with the largest absolute market capitalization.",
+    "The company with the highest historical Trailing P/E multiple."
+  ]}
+  correctAnswer="The company with the lowest historical standard deviation of analyst earnings forecasts."
+  explanation="SUE divides the raw earnings surprise by the historical standard deviation of analysts' forecast errors. A lower denominator (standard deviation) mathematical inflates the SUE value. Fundamentally, this means the $0.25 surprise was a massive, highly unusual shock for the company with low volatility, whereas a $0.25 surprise is routine and expected for a highly volatile company. The larger the SUE, the stronger the momentum signal."
+/>
+
+<QuizCard 
+  question="Which of the following statements most accurately contrasts a pure momentum indicator strategy against a relative valuation strategy utilizing EV/EBITDA?"
+  options={[
+    "A momentum strategy calculates intrinsic cash flow generation per share, while EV/EBITDA relies strictly on historical price movements.",
+    "A momentum strategy assumes 'winners keep winning' based on recent price strength, while EV/EBITDA identifies fundamentally cheap companies that the market has ignored.",
+    "A momentum strategy requires calculating the market value of debt, whereas EV/EBITDA relies on analyst earnings estimates."
+  ]}
+  correctAnswer="A momentum strategy assumes 'winners keep winning' based on recent price strength, while EV/EBITDA identifies fundamentally cheap companies that the market has ignored."
+  explanation="Momentum indicators (like Relative Strength) are purely technical models assuming that price trends persist into the future. They do not calculate intrinsic value. Conversely, EV/EBITDA is a fundamental relative valuation tool designed to find companies that are structurally cheap relative to the actual operating cash flows they generate, completely independent of the stock's recent price chart."
+/>

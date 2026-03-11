@@ -1,0 +1,157 @@
+---
+format_version: "intrinsic-los-v2"
+topic_title: "Equity Valuation"
+topic_slug: "equity-valuation"
+learning_module_title: "Learning Module 4"
+learning_module_slug: "learning-module-4"
+los_title: "LOS 6: Earnings Yield (E/P): Justification and Use"
+los_slug: "los-6-earnings-yield-e-p-justification-and-use"
+estimated_time_minutes: 35
+---
+## Intuition Building
+
+While the Price-to-Earnings (P/E) ratio is the foundational metric of equity valuation, it suffers a catastrophic mathematical breakdown when earnings approach zero or turn negative. When division by zero is undefined, and division by a negative number yields a meaningless result, attempting to rank-order a portfolio of stocks by P/E becomes impossible. The **Earnings Yield (E/P)**—an inverse price ratio—elegantly resolves these mathematical dead-ends and helps mitigate the statistical skewness caused by extreme outliers in index calculations.
+
+## Core Concept Teaching
+
+Understanding when to invert the P/E ratio into an Earnings Yield is critical for quantitative analysis and portfolio ranking.
+
+**1. The Problem with Negative and Zero Earnings:**
+- **Zero Earnings:** Calculating a P/E involves dividing Price by EPS. If EPS is exactly zero, the ratio is mathematically undefined (division by zero).
+- **Negative Earnings:** A stock suffering losses will report negative EPS, generating a negative P/E ratio. In a traditional valuation ranking, an investor buys the lowest P/E stock because it's considered the "cheapest." However, a negative P/E is mathematically lower than any positive P/E. If an algorithm blindly buys the "lowest P/E," it will buy bankrupt companies losing money, rather than highly profitable value stocks. P/E simply cannot logically rank unprofitable companies.
+
+**2. The Solution: Earnings Yield (E/P):**
+By placing price in the denominator (which is never negative for a going concern) and EPS in the numerator, Earnings Yield permanently solves the ranking problem:
+- **Positive E/P:** The company is earning money. A higher E/P means the stock is mathematically "cheaper" (you get a higher percentage "yield" of earnings per dollar invested).
+- **Negative E/P:** The company is losing money. Because negative numbers are lower than positive numbers, unprofitable companies correctly filter to the absolute bottom of a "highest-to-lowest" yield ranking. 
+- This allows an analyst to seamlessly rank an entire universe of stocks from highest E/P (cheapest deep value) down to the lowest negative E/P (most expensive cash-burning).
+
+**3. Portfolio Skewness and Outliers:**
+When calculating the average P/E of an industry or portfolio, a single company with near-zero, microscopic earnings will generate an astronomical, outlier P/E (e.g., $100 price / $0.01 EPS = 10,000x P/E). This single outlier will massively upwardly distort the arithmetic mean P/E of the entire portfolio. 
+**Earnings Yield** inherently bounds this distortion. That same exact company translates to an E/P of 0.01%, which barely pushes the portfolio's average yield, making E/P inherently less susceptible to outlier-induced skewness.
+
+**Analyst Interpretation:**
+Quantitative analysts and programmers screening thousands of stocks algorithmically almost exclusively use Earnings Yield (and other inverse metrics like Book-to-Market or Cash Flow Yield). Algorithms break when they hit `NaN` (Not a Number) from zero-earnings division, and quant funds will hemorrhage capital if their models accidentally view a -2.0x P/E as computationally "cheaper" than a healthy 10.0x P/E.
+
+**Exam Trap:**
+If given a table of stocks on the exam and asked to identify the "cheapest" on an earnings basis, and one company possesses a negative P/E, do **not** select it just because the absolute number looks small. The safest exam strategy is to immediately convert all the provided P/Es to Earnings Yields (1 / PE). The highest positive Earnings Yield is definitively the cheapest stock. The curriculum will explicitly test if you realize a negative P/E represents infinite cost, not deep value.
+
+## Ground-Up Framework
+
+Calculating the yield is simply the reciprocal of the multiple:
+
+**Earnings Yield (E/P)** = `Earnings Per Share (EPS) / Price Per Share`
+*Alternatively:* `E / P = 1 / (P / E)`
+
+*(Note: Earnings Yield can be calculated using trailing EPS, forward EPS, or normalized EPS, depending on the analyst's focus)*
+
+## Examples / Applications
+
+**Scenario: Ranking an Auto Manufacturer Group**
+An analyst is evaluating four auto manufacturers to build a value-oriented portfolio. The raw data provides several challenges:
+- **Company A:** Price $10, EPS $0.80 -> P/E 12.5x
+- **Company B:** Price $25, EPS $3.10 -> P/E 8.1x
+- **Company C:** Price $38, EPS $0.05 -> P/E 760.0x *(Astronomical outlier)*
+- **Company D:** Price $220, EPS -$5.00 -> P/E -44.0x *(Negative earnings)*
+
+*Direct Source Anchoring:* As explicitly demonstrated in the curriculum's Example 2 ("P/E and E/P for Five Automobile Companies"), sorting this list by P/E breaks down immediately because Company D has a negative P/E and Company C distorts any group averages. 
+
+However, by converting to and sorting by **Earnings Yield (highest to lowest)**:
+1. **Company B:** 12.4% (Cheapest)
+2. **Company A:** 8.0%
+3. **Company C:** 0.13%
+4. **Company D:** -2.27% (Most Expensive / Losing Money)
+
+Company B is mathematically verified as the cheapest, the negative earner is correctly pushed to the bottom, and Company C's near-zero earnings no longer threaten to blow up the dataset calculations.
+
+## Visual Anchor
+
+The following diagram illustrates the mapping between traditional Price Multiples and their respective Inverse Price Ratios used in quantitative ranking.
+
+<svg viewBox="0 0 650 350" xmlns="http://www.w3.org/2000/svg" style={{ width: '100%', height: 'auto', backgroundColor: '#f8fafc', borderRadius: '8px', padding: '10px' }}>
+  <style>
+    {`
+      .title { font-family: 'Inter', sans-serif; font-size: 16px; font-weight: bold; fill: #0f172a; }
+      .header-box { fill: #334155; rx: 4px; }
+      .header-text { font-family: 'Inter', sans-serif; font-size: 14px; font-weight: bold; fill: #ffffff; }
+      .row-bg-even { fill: #ffffff; }
+      .row-bg-odd { fill: #f1f5f9; }
+      .cell-main { font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 600; fill: #1e293b; }
+      .cell-sub { font-family: 'Inter', sans-serif; font-size: 12px; fill: #475569; }
+      .alert-box { fill: #fef2f2; stroke: #ef4444; stroke-width: 2px; rx: 4px; }
+      .alert-text { font-family: 'Inter', sans-serif; font-size: 12px; font-weight: bold; fill: #b91c1c; }
+    `}
+  </style>
+
+  <text x="325" y="30" textAnchor="middle" className="title">Price Ratios vs. Inverse Price Ratios (Yields)</text>
+
+  <!-- Table Headers -->
+  <rect x="20" y="50" width="200" height="30" className="header-box" />
+  <text x="120" y="70" textAnchor="middle" className="header-text">Standard Price Ratio</text>
+
+  <rect x="225" y="50" width="200" height="30" className="header-box" />
+  <text x="325" y="70" textAnchor="middle" className="header-text">Inverse Price Ratio</text>
+
+  <rect x="430" y="50" width="200" height="30" className="header-box" />
+  <text x="530" y="70" textAnchor="middle" className="header-text">Primary Use Case</text>
+
+  <!-- Row 1: P/E -->
+  <rect x="20" y="85" width="610" height="40" className="row-bg-even" />
+  <text x="120" y="110" textAnchor="middle" className="cell-main">Price-to-Earnings (P/E)</text>
+  <text x="325" y="110" textAnchor="middle" className="cell-main">Earnings Yield (E/P)</text>
+  <text x="530" y="110" textAnchor="middle" className="cell-sub">Handling negative/zero EPS</text>
+
+  <!-- Row 2: P/B -->
+  <rect x="20" y="125" width="610" height="40" className="row-bg-odd" />
+  <text x="120" y="150" textAnchor="middle" className="cell-main">Price-to-Book (P/B)</text>
+  <text x="325" y="150" textAnchor="middle" className="cell-main">Book-to-Market (B/P)</text>
+  <text x="530" y="150" textAnchor="middle" className="cell-sub">Fama-French academic research</text>
+
+  <!-- Row 3: P/CF -->
+  <rect x="20" y="165" width="610" height="40" className="row-bg-even" />
+  <text x="120" y="190" textAnchor="middle" className="cell-main">Price-to-Cash Flow (P/CF)</text>
+  <text x="325" y="190" textAnchor="middle" className="cell-main">Cash Flow Yield (CF/P)</text>
+  <text x="530" y="190" textAnchor="middle" className="cell-sub">Ranking CF-negative firms</text>
+
+  <!-- Row 4: P/S -->
+  <rect x="20" y="205" width="610" height="40" className="row-bg-odd" />
+  <text x="120" y="230" textAnchor="middle" className="cell-main">Price-to-Sales (P/S)</text>
+  <text x="325" y="230" textAnchor="middle" className="cell-main">Sales-to-Price (S/P)</text>
+  <text x="530" y="230" textAnchor="middle" className="cell-sub">Rarely used (Sales never negative)</text>
+
+  <!-- Alert Box -->
+  <rect x="50" y="270" width="550" height="60" className="alert-box" />
+  <text x="325" y="295" textAnchor="middle" className="alert-text">Exam Ranking Rule</text>
+  <text x="325" y="315" textAnchor="middle" className="cell-sub">With P/E: Lowest Positive = Cheapest | With E/P: Highest Positive = Cheapest</text>
+
+</svg>
+
+## Summary / Key Takeaways
+
+*   **Ranking Inversion:** Always mentally reaffirm: *"Lowest P/E = Cheapest"*, but *"Highest E/P = Cheapest"*. Do not let the exam switch the metrics on you mid-vignette without subsequently flipping your valuation logic.
+*   **"NM" Designation:** When displaying P/E tables professionally, analysts should label companies with negative earnings as "NM" (Not Meaningful) rather than publishing a raw negative P/E number. 
+*   **The Portfolio Weighting Trap:** When asked to calculate the weighted average P/E of a portfolio, it is often mathematically superior (and required by most leading index providers) to calculate the weighted average Earnings Yield first, and then invert that final result back into a portfolio P/E. This is known as the harmonic mean approach to multiple calculation, which entirely bypasses outlier P/E distortions.
+
+## Testing / Practice Questions
+
+<QuizCard 
+  question="When screening a universe of 500 stocks to find the most undervalued decile for a value portfolio, why is Earnings Yield (E/P) mathematically superior to the Price-to-Earnings (P/E) ratio?"
+  options={[
+    "E/P utilizes operating cash flow rather than net income, avoiding accrual manipulation.",
+    "E/P ranks negative earnings companies at the bottom of the list and bounds mathematical outliers near zero.",
+    "E/P automatically normalizes for different capital structures and leverage ratios."
+  ]}
+  correctAnswer="E/P ranks negative earnings companies at the bottom of the list and bounds mathematical outliers near zero."
+  explanation="Because P/E generates negative numbers for unprofitable companies, sorting by lowest P/E incorrectly places money-losing bankrupt companies at the top of a 'deep value' screen. Furthermore, near-zero earnings create astronomical P/E outliers. Earnings Yield places price in the denominator, properly slotting negative earnings at the bottom of the ranking and compressing near-zero earnings tightly to 0%."
+/>
+
+<QuizCard 
+  question="An analyst is presenting a valuation summary for a struggling biotech firm that recently reported trailing EPS of -$2.50 against a stock price of $20.00. How should the analyst present the firm's trailing P/E ratio in a professional research report?"
+  options={[
+    "-8.0x",
+    "0.0x",
+    "NM (Not Meaningful)"
+  ]}
+  correctAnswer="NM (Not Meaningful)"
+  explanation="In professional financial analysis, negative P/E ratios are not economically meaningful because you cannot 'recover' your purchase price through negative earnings. Therefore, the standard convention is to print 'NM' (Not Meaningful) rather than report the negative figure."
+/>

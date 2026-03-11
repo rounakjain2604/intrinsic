@@ -1,3 +1,5 @@
+import fs from "fs/promises";
+import path from "path";
 import matter from "gray-matter";
 import { compileMDX } from "next-mdx-remote/rsc";
 import rehypeKatex from "rehype-katex";
@@ -13,9 +15,13 @@ import QuizCard from "@/components/chapter/QuizCard";
 import WorkedExample from "@/components/chapter/WorkedExample";
 import DCFDiagram from "@/components/chapter/diagrams/DCFDiagram";
 import YieldCurveChart from "@/components/charts/YieldCurveChart";
-import { createServerClient } from "@/lib/supabase/server";
+import {
+    createServerClient,
+    hasServerSupabaseEnv,
+} from "@/lib/supabase/server";
 
 export const STUDY_CONTENT_BUCKET = "study-los-content";
+const LOCAL_STUDY_CONTENT_DIR = path.join(process.cwd(), "content", "study");
 
 export const SECTION_ORDER = [
     "intuition_building",
@@ -81,6 +87,25 @@ export interface LibraryTopicEntry {
     title: string;
     slug: string;
     modules: LibraryModuleEntry[];
+}
+
+interface LibraryAccumulatorLosEntry {
+    title: string;
+    slug: string;
+    quizCount: number;
+    estimatedTimeMinutes: number | null;
+}
+
+interface LibraryAccumulatorModuleEntry {
+    title: string;
+    slug: string;
+    losses: Map<string, LibraryAccumulatorLosEntry>;
+}
+
+interface LibraryAccumulatorTopicEntry {
+    title: string;
+    slug: string;
+    modules: Map<string, LibraryAccumulatorModuleEntry>;
 }
 
 const SECTION_LABELS: Record<SectionKey, string> = {
@@ -544,11 +569,234 @@ async function renderStudySectionMdx(source: string) {
     return content;
 }
 
+async function pathExists(targetPath: string) {
+    try {
+        await fs.access(targetPath);
+        return true;
+    } catch {
+        return false;
+    }
+}
+
+async function listDirectory(targetPath: string) {
+    try {
+        return await fs.readdir(targetPath, { withFileTypes: true });
+    } catch {
+        return [];
+    }
+}
+
+async function getLocalLosFilePath(
+    topicSlug: string,
+    moduleSlug: string,
+    losSlug: string
+) {
+    const directoryPath = path.join(
+        LOCAL_STUDY_CONTENT_DIR,
+        topicSlug,
+        moduleSlug
+    );
+    const entries = await listDirectory(directoryPath);
+    const matchedEntry = entries.find(
+        (entry) =>
+            entry.isFile() &&
+            entry.name.replace(/\.[^.]+$/, "") === losSlug &&
+            [".md", ".mdx", ".markdown"].includes(path.extname(entry.name).toLowerCase())
+    );
+
+    return matchedEntry ? path.join(directoryPath, matchedEntry.name) : null;
+}
+
+async function getLocalLosContent(
+    topicSlug: string,
+    moduleSlug: string,
+    losSlug: string
+) {
+    const filePath = await getLocalLosFilePath(topicSlug, moduleSlug, losSlug);
+
+    if (!filePath) {
+        return null;
+    }
+
+    const source = await fs.readFile(filePath, "utf-8");
+    return parseStudyMarkdown(source, path.basename(filePath));
+}
+
+function addLosToAccumulator(
+    topics: Map<string, LibraryAccumulatorTopicEntry>,
+    content: ParsedStudyContent
+) {
+    const topic =
+        topics.get(content.topicSlug) ??
+        {
+            title: content.topicTitle,
+            slug: content.topicSlug,
+            modules: new Map<string, LibraryAccumulatorModuleEntry>(),
+        };
+    topic.title = content.topicTitle;
+
+    const moduleEntry =
+        topic.modules.get(content.moduleSlug) ??
+        {
+            title: content.moduleTitle,
+            slug: content.moduleSlug,
+            losses: new Map<string, LibraryAccumulatorLosEntry>(),
+        };
+    moduleEntry.title = content.moduleTitle;
+    moduleEntry.losses.set(content.losSlug, {
+        title: content.losTitle,
+        slug: content.losSlug,
+        quizCount: content.quizCount,
+        estimatedTimeMinutes: content.estimatedTimeMinutes,
+    });
+
+    topic.modules.set(content.moduleSlug, moduleEntry);
+    topics.set(content.topicSlug, topic);
+}
+
+function libraryFromAccumulator(topics: Map<string, LibraryAccumulatorTopicEntry>) {
+    return [...topics.values()]
+        .map((topic) => ({
+            title: topic.title,
+            slug: topic.slug,
+            modules: [...topic.modules.values()]
+                .map((module) => ({
+                    title: module.title,
+                    slug: module.slug,
+                    losses: [...module.losses.values()].sort((left, right) =>
+                        left.title.localeCompare(right.title, undefined, {
+                            numeric: true,
+                            sensitivity: "base",
+                        })
+                    ),
+                }))
+                .sort((left, right) =>
+                    left.title.localeCompare(right.title, undefined, {
+                        numeric: true,
+                        sensitivity: "base",
+                    })
+                ),
+        }))
+        .sort((left, right) =>
+            left.title.localeCompare(right.title, undefined, {
+                numeric: true,
+                sensitivity: "base",
+            })
+        );
+}
+
+async function listLocalStudyLibrary(): Promise<LibraryTopicEntry[]> {
+    if (!(await pathExists(LOCAL_STUDY_CONTENT_DIR))) {
+        return [];
+    }
+
+    const topicFolders = await listDirectory(LOCAL_STUDY_CONTENT_DIR);
+    const topics = new Map<string, LibraryAccumulatorTopicEntry>();
+
+    for (const topicFolder of topicFolders) {
+        if (!topicFolder.isDirectory()) {
+            continue;
+        }
+
+        const topicPath = path.join(LOCAL_STUDY_CONTENT_DIR, topicFolder.name);
+        const moduleFolders = await listDirectory(topicPath);
+
+        for (const moduleFolder of moduleFolders) {
+            if (!moduleFolder.isDirectory()) {
+                continue;
+            }
+
+            const modulePath = path.join(topicPath, moduleFolder.name);
+            const losFiles = await listDirectory(modulePath);
+
+            for (const losFile of losFiles) {
+                if (
+                    !losFile.isFile() ||
+                    ![".md", ".mdx", ".markdown"].includes(
+                        path.extname(losFile.name).toLowerCase()
+                    )
+                ) {
+                    continue;
+                }
+
+                const filePath = path.join(modulePath, losFile.name);
+                const source = await fs.readFile(filePath, "utf-8");
+                const parsed = parseStudyMarkdown(source, losFile.name);
+                addLosToAccumulator(topics, parsed);
+            }
+        }
+    }
+
+    return libraryFromAccumulator(topics);
+}
+
+function mergeLibraries(
+    primaryLibrary: LibraryTopicEntry[],
+    secondaryLibrary: LibraryTopicEntry[]
+) {
+    const topics = new Map<string, LibraryAccumulatorTopicEntry>();
+
+    for (const topic of secondaryLibrary) {
+        for (const moduleEntry of topic.modules) {
+            for (const los of moduleEntry.losses) {
+                addLosToAccumulator(topics, {
+                    topicTitle: topic.title,
+                    topicSlug: topic.slug,
+                    moduleTitle: moduleEntry.title,
+                    moduleSlug: moduleEntry.slug,
+                    losTitle: los.title,
+                    losSlug: los.slug,
+                    sections: [],
+                    sourceFileName: "",
+                    uploadedAt: "",
+                    quizCount: los.quizCount,
+                    visualCount: 0,
+                    estimatedTimeMinutes: los.estimatedTimeMinutes,
+                    formatVersion: "intrinsic-los-v2",
+                });
+            }
+        }
+    }
+
+    for (const topic of primaryLibrary) {
+        for (const moduleEntry of topic.modules) {
+            for (const los of moduleEntry.losses) {
+                addLosToAccumulator(topics, {
+                    topicTitle: topic.title,
+                    topicSlug: topic.slug,
+                    moduleTitle: moduleEntry.title,
+                    moduleSlug: moduleEntry.slug,
+                    losTitle: los.title,
+                    losSlug: los.slug,
+                    sections: [],
+                    sourceFileName: "",
+                    uploadedAt: "",
+                    quizCount: los.quizCount,
+                    visualCount: 0,
+                    estimatedTimeMinutes: los.estimatedTimeMinutes,
+                    formatVersion: "intrinsic-los-v2",
+                });
+            }
+        }
+    }
+
+    return libraryFromAccumulator(topics);
+}
+
 export async function getLosContent(
     topicSlug: string,
     moduleSlug: string,
     losSlug: string
 ) {
+    const localContent = await getLocalLosContent(topicSlug, moduleSlug, losSlug);
+    if (localContent) {
+        return localContent;
+    }
+
+    if (!hasServerSupabaseEnv()) {
+        return null;
+    }
+
     return downloadJson<ParsedStudyContent>(
         `parsed/${topicSlug}/${moduleSlug}/${losSlug}.json`
     );
@@ -579,6 +827,12 @@ export async function getRenderableLosContent(
 }
 
 export async function listStudyLibrary(): Promise<LibraryTopicEntry[]> {
+    const localLibrary = await listLocalStudyLibrary();
+
+    if (!hasServerSupabaseEnv()) {
+        return localLibrary;
+    }
+
     const supabase = createServerClient();
     await ensureStudyBucket();
 
@@ -676,5 +930,5 @@ export async function listStudyLibrary(): Promise<LibraryTopicEntry[]> {
         });
     }
 
-    return topics.sort((left, right) => left.title.localeCompare(right.title));
+    return mergeLibraries(localLibrary, topics);
 }

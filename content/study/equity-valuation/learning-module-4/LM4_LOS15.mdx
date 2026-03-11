@@ -1,0 +1,171 @@
+---
+format_version: "intrinsic-los-v2"
+topic_title: "Equity Valuation"
+topic_slug: "equity-valuation"
+learning_module_title: "Learning Module 4"
+learning_module_slug: "learning-module-4"
+los_title: "LOS 15: Cross-Border Valuation Comparisons"
+los_slug: "los-15-cross-border-valuation-comparisons"
+estimated_time_minutes: 35
+---
+## Intuition Building
+
+As global capital markets integrate, equity analysts frequently must compare the valuation of a company in one country (e.g., a US biotech firm) to a peer in another country (e.g., a Swiss biotech firm). However, applying the Method of Comparables across borders is perilous. A lower P/E ratio in a foreign market does not automatically indicate an undervalued stock; it often simply reflects profound differences in accounting standards, inflation rates, and geopolitical risk premiums. This LOS dissects the primary sources of cross-border valuation discrepancies and how analysts adjust for them to find true relative value.
+
+## Core Concept Teaching
+
+**1. Accounting Standard Distortions**
+The foundation of any price multiple (like P/E or P/B) is the accounting metric in the denominator. If two identical companies operate under different accounting regimes, their multiples will wildly diverge.
+*   **IFRS vs. US GAAP:** While convergence has occurred, significant differences remain. For example, US GAAP strictly requires research and development (R&D) to be expensed immediately, depressing current Earnings and Book Value. IFRS allows certain development costs to be capitalized, artificially inflating current Earnings and Book Value relative to the US peer.
+*   **The Adjustment:** Before an analyst can compare the P/E of the US firm to the European firm, they must manually reconstruct the European firm's financial statements to expense all R&D, creating an "apples-to-apples" fundamental denominator.
+
+**2. Macroeconomic Distortions (Inflation & Pass-Through)**
+Inflation wreaks havoc on justified valuation multiples. If a company operates in an emerging market with 15% annual inflation, its justified P/E will fundamentally differ from a US peer facing 2% inflation.
+*   **The Pass-Through Concept:** If a company can pass 100% of its inflated costs directly to its consumers via higher prices, the inflation rate does not mathematically damage its true intrinsic value. However, very few companies have 100% pricing power.
+*   **The Rule:** If the "inflation pass-through rate" is *less* than 100%, higher inflation directly and permanently destroys value. Therefore, companies operating in high-inflation environments will structurally trade at **lower justified P/E multiples** than identical companies in low-inflation environments.
+
+**3. Differences in Required Rates of Return ($r$)**
+Recall the Gordon Growth formula for the Justified Forward P/E: $\frac{1 - b}{r - g}$.
+The denominator is heavily dictated by $r$ (the required rate of return). This rate is constructed from the Risk-Free Rate + Equity Risk Premium.
+*   **The Sovereign Risk Premium:** A telecommunications firm in a politically unstable emerging market will face a significantly higher required return ($r$) from investors demanding compensation for currency devaluation risk, expropriation risk, and volatile local interest rates. 
+*   **The Multiplier Effect:** Because $r$ is in the denominator of the Gordon Growth equation, a higher $r$ mathematically compresses the entire P/E ratio. Therefore, emerging market stocks almost always look "cheap" (low P/E) compared to developed market peers, but the discount is entirely justified by the elevated sovereign risk.
+
+**Analyst Interpretation:**
+Global portfolio managers never screen for "the cheapest stocks globally based on P/E." They recognize that a Russian oil major trading at a 3x P/E is not necessarily cheaper than a US oil major trading at a 12x P/E. Instead, they utilize multiples like **EV/EBITDA**, which bypasses local taxation differences and accounting depreciation rules, providing a slightly cleaner (though not perfect) cross-border comparison tool.
+
+**Exam Trap:**
+The CFA exam heavily tests the interaction between inflation and the pass-through rate. If the vignette states that Company A and Company B both have 100% inflation pass-through capability, then their justified P/Es will be *unaffected* by their respective local inflation rates. Only when pass-through is less than 100% does inflation drag down the multiple.
+
+## Ground-Up Framework
+
+*(Cross-border comparisons require conceptual adjustments rather than a single unifying formula. However, the mechanism runs through the Gordon Growth Justified P/E derivation).*
+
+`Justified P/E` $\propto \frac{1}{\text{Required Return } (r)} \propto \frac{1}{\text{Inflation Rate (if Pass-Through < 100%)}}$
+
+*   Higher Accounting Capitalization $\rightarrow$ Higher Earnings $\rightarrow$ Lower P/E.
+*   Higher Inflation (w/ low pass-through) $\rightarrow$ Lower Justified P/E.
+*   Higher Sovereign Risk $\rightarrow$ Higher $r \rightarrow$ Lower Justified P/E.
+
+## Examples / Applications
+
+**Scenario: Evaluating Inflation's Impact on Cross-Border Valuation**
+An analyst is comparing two identical consumer goods firms. Firm Americana operates in the US, and Firm Brasilia operates in Brazil. 
+*   Both firms have a real required rate of return ($\rho$) of 4%.
+*   Both firms can pass exactly 60% of inflation-driven cost increases to their customers (Pass-Through $= 0.60$).
+*   US expected inflation is 2%.
+*   Brazil expected inflation is 8%.
+
+The formula to adjust the required return for incomplete inflation pass-through is:
+$r_{adjusted} = \rho + (1 - \text{Pass-Through Rate}) \times \text{Inflation}$
+
+*Step 1: Calculate Americana's Adjusted Return*
+$r_{Americana} = 0.04 + (1 - 0.60) \times 0.02 = 0.04 + 0.008$ = **4.8% (0.048)**
+
+*Step 2: Calculate Brasilia's Adjusted Return*
+$r_{Brasilia} = 0.04 + (1 - 0.60) \times 0.08 = 0.04 + 0.032$ = **7.2% (0.072)**
+
+*Step 3: Analyze the Multiple Impact*
+Because Firm Brasilia faces a significantly higher adjusted required rate of return (7.2% vs 4.8%) due to unmitigated high inflation, it will generate a vastly lower Justified P/E multiple. If Firm Americana trades at a 15x P/E and Firm Brasilia trades at an 11x P/E, the naive analyst will call Brazil "cheap." The informed analyst will recognize the discount is mathematically justified by the un-passed inflation destroying value.
+
+## Visual Anchor
+
+This flow chart maps how domestic differences cascade down to alter the final market multiple.
+
+<svg viewBox="0 0 650 350" xmlns="http://www.w3.org/2000/svg" style={{ width: '100%', height: 'auto', backgroundColor: '#f8fafc', borderRadius: '8px', padding: '10px' }}>
+  <style>
+    {`
+      .title { font-family: 'Inter', sans-serif; font-size: 16px; font-weight: bold; fill: #0f172a; }
+      .source-box { fill: #1e293b; rx: 6px; }
+      .source-text { font-family: 'Inter', sans-serif; font-size: 13px; font-weight: bold; fill: #ffffff; }
+      .effect-box { fill: #e2e8f0; stroke: #94a3b8; stroke-width: 2px; rx: 4px; }
+      .result-box-down { fill: #fef2f2; stroke: #ef4444; stroke-width: 2px; rx: 6px; }
+      .result-box-up { fill: #f0fdf4; stroke: #22c55e; stroke-width: 2px; rx: 6px; }
+      .text-main { font-family: 'Inter', sans-serif; font-size: 12px; font-weight: bold; fill: #1e293b; }
+      .text-sub { font-family: 'Inter', sans-serif; font-size: 11px; fill: #475569; }
+      .line { stroke: #64748b; stroke-width: 2px; marker-end: url(#arrow); }
+    `}
+  </style>
+
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#64748b" />
+    </marker>
+  </defs>
+
+  <text x="325" y="30" textAnchor="middle" className="title">Sources of Cross-Border Multiple Distortions</text>
+
+  <!-- Pillar 1: Accounting -->
+  <rect x="25" y="70" width="180" height="40" className="source-box" />
+  <text x="115" y="95" textAnchor="middle" className="source-text">1. Accounting Standards</text>
+
+  <rect x="25" y="140" width="180" height="50" className="effect-box" />
+  <text x="115" y="160" textAnchor="middle" className="text-main">e.g., IFRS capitalizes</text>
+  <text x="115" y="175" textAnchor="middle" className="text-main">development costs</text>
+
+  <rect x="25" y="220" width="180" height="60" className="result-box-up" />
+  <text x="115" y="245" textAnchor="middle" className="text-main">Reported EPS Inflated</text>
+  <text x="115" y="265" textAnchor="middle" className="text-sub">Apparent P/E Decreases</text>
+
+  <path d="M 115 110 L 115 140" className="line" />
+  <path d="M 115 190 L 115 220" className="line" />
+
+  <!-- Pillar 2: Macro/Inflation -->
+  <rect x="235" y="70" width="180" height="40" className="source-box" />
+  <text x="325" y="95" textAnchor="middle" className="source-text">2. Structural Inflation</text>
+
+  <rect x="235" y="140" width="180" height="50" className="effect-box" />
+  <text x="325" y="160" textAnchor="middle" className="text-main">Pass-Through < 100%</text>
+  <text x="325" y="175" textAnchor="middle" className="text-main">in local economy</text>
+
+  <rect x="235" y="220" width="180" height="60" className="result-box-down" />
+  <text x="325" y="245" textAnchor="middle" className="text-main">Real Returns Destroyed</text>
+  <text x="325" y="265" textAnchor="middle" className="text-sub">Justified P/E Plummets</text>
+
+  <path d="M 325 110 L 325 140" className="line" />
+  <path d="M 325 190 L 325 220" className="line" />
+
+  <!-- Pillar 3: Sovereign Risk -->
+  <rect x="445" y="70" width="180" height="40" className="source-box" />
+  <text x="535" y="95" textAnchor="middle" className="source-text">3. Geopolitical Risk</text>
+
+  <rect x="445" y="140" width="180" height="50" className="effect-box" />
+  <text x="535" y="160" textAnchor="middle" className="text-main">Higher risk of currency</text>
+  <text x="535" y="175" textAnchor="middle" className="text-main">collapse/expropriation</text>
+
+  <rect x="445" y="220" width="180" height="60" className="result-box-down" />
+  <text x="535" y="245" textAnchor="middle" className="text-main">Extremely High 'r'</text>
+  <text x="535" y="265" textAnchor="middle" className="text-sub">Justified P/E Plummets</text>
+
+  <path d="M 535 110 L 535 140" className="line" />
+  <path d="M 535 190 L 535 220" className="line" />
+
+</svg>
+
+## Summary / Key Takeaways
+
+*   **The 100% Pass-Through Illusion:** If the vignette specifically dictates that a company operating in an unstable, hyper-inflationary South American market has a unique "100% inflation pass-through capability," do not fall into the trap of aggressively discounting its justified P/E relative to inflation. If pass-through is perfect, inflation does not mathematically alter the Gordon Growth intrinsic valuation multiple.
+*   **The LIFO/FIFO Trap:** A classic cross-border accounting trap involves inventory. US GAAP permits LIFO (which lowers taxes and boosts cash flow in inflationary periods but depresses reported EPS/book value). IFRS strictly bans LIFO. If you compare a US LIFO firm to an EU FIFO firm during a period of high inflation, the US firm will report artificially lower EPS, artificially inflating its P/E multiple and making it look "expensive" compared to the EU firm. You must restate the US firm to FIFO before comparing.
+
+## Testing / Practice Questions
+
+<QuizCard 
+  question="An analyst is comparing a German auto manufacturer (reporting under IFRS) to an American competitor (reporting under US GAAP). The analyst notes that the German firm's P/E ratio is substantially lower. Assuming both firms have identical economic fundamentals and market share, what is the most likely accounting-based reason for this discrepancy?"
+  options={[
+    "US GAAP mandates the capitalization of all internal development costs, artificially suppressing the American firm's EPS.",
+    "IFRS permits the capitalization of certain development costs, inflating the German firm's EPS and thereby depressing its calculating P/E multiple.",
+    "IFRS strictly bans the use of FIFO inventory accounting, forcing the German firm to report higher Cost of Goods Sold during inflationary periods."
+  ]}
+  correctAnswer="IFRS permits the capitalization of certain development costs, inflating the German firm's EPS and thereby depressing its calculating P/E multiple."
+  explanation="IFRS allows for the capitalization of development costs (moving the expense to the balance sheet as an asset), which artificially increases reported Net Income in the current year. Conversely, US GAAP generally requires R&D to be expensed immediately on the income statement, crushing current Net Income. If the German firm capitalizes expenses, its EPS (the denominator) will be higher, resulting in a lower (cheaper looking) P/E ratio relative to the US peer."
+/>
+
+<QuizCard 
+  question="Firm X and Firm Y operate in the exact same industry with identical cost structures, but Firm X is located in a country with 1% annual inflation and Firm Y is in a country with 12% annual inflation. Neither firm can pass their input cost increases fully onto consumers. How will this macroeconomic difference theoretically impact their relative valuations?"
+  options={[
+    "Firm Y will trade at a higher justified P/E multiple because hyper-inflation increases the nominal terminal value of its assets.",
+    "Both firms will trade at identical justified multiples because inflation destroys purchasing power equally across borders.",
+    "Firm Y will trade at a lower justified P/E multiple because its inability to fully pass through the high inflation mathematically destroys real returns."
+  ]}
+  correctAnswer="Firm Y will trade at a lower justified P/E multiple because its inability to fully pass through the high inflation mathematically destroys real returns."
+  explanation="When a firm has less than 100% inflation pass-through capability, inflation acts as a direct tax on the firm's real profitability. Higher inflation in Firm Y's home country increases the firm's adjusted real required rate of return (making the 'r' denominator in the Gordon Growth Model larger). A larger denominator fundamentally compresses the justified P/E multiple. Therefore, Firm Y is justified in trading significantly 'cheaper' than Firm X."
+/>

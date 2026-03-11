@@ -1,0 +1,162 @@
+---
+format_version: "intrinsic-los-v2"
+topic_title: "Equity Valuation"
+topic_slug: "equity-valuation"
+learning_module_title: "Learning Module 4"
+learning_module_slug: "learning-module-4"
+los_title: "LOS 17: Central Tendency of Price Multiples"
+los_slug: "los-17-central-tendency-of-price-multiples"
+estimated_time_minutes: 35
+---
+## Intuition Building
+
+When an analyst wants to determine the valuation of an entire sector or index (like the S&P 500), they cannot simply look at one stock. They must aggregate the price multiples of hundreds of different companies to find a single representative benchmark. While a novice might instinctively calculate a simple average (the Arithmetic Mean) of the P/E ratios, this approach is fundamentally mathematically flawed when dealing with ratios. This LOS covers the four methods used to measure central tendency—the Arithmetic Mean, the Median, the Harmonic Mean, and the Weighted Harmonic Mean—and explains why the Harmonic Mean is the only mathematically pure way to average price multiples.
+
+## Core Concept Teaching
+
+**1. The Arithmetic Mean (The Flawed Baseline)**
+The arithmetic mean simply sums all the P/E ratios and divides by the number of stocks. 
+*   **The Limitation:** It is massively distorted by upward outliers. If you have nine stocks trading at a 10x P/E, and one tech stock trading at a 100x P/E, the arithmetic mean is $190 / 10 = 19x$. The average is nearly double the valuation of 90% of the sample. This upward bias makes the arithmetic mean virtually useless for calculating portfolio multiples.
+
+**2. The Median (The Outlier Resistant)**
+The median is the exact middle value of the dataset.
+*   **The Rationale:** It completely ignores the magnitude of outliers. In the 10-stock example above, the median remains exactly 10x, accurately representing the vast majority of the portfolio. 
+*   **The Limitation:** While robust against outliers, it discards valuable data about the sizing and magnitude of the other stocks in the portfolio.
+
+**3. The Harmonic Mean (The Mathematical Solution for Ratios)**
+A price multiple (Price / Earnings) is a fraction. You cannot mathematically take a simple average of fractions that have different denominators. 
+*   **The Mechanics:** The harmonic mean solves this by first *inverting* the P/E ratios into Earnings Yields ($E/P$). It then calculates the average Earnings Yield of the portfolio, and finally *re-inverts* that average back into a P/E multiple.
+*   **The Result:** The Harmonic Mean will *always* be less than the Arithmetic Mean (unless all multiples are exactly identical). By averaging the Earnings Yields first, it mathematically suppresses the impact of massive P/E outliers (a 100x P/E is only a tiny 1% Earnings Yield, which barely moves the average yield).
+
+**4. The Weighted Harmonic Mean (The Industry Standard)**
+While the raw harmonic mean treats every stock equally, large-cap indexes (like the S&P 500) must give more weight to massive companies like Apple than to tiny regional banks. 
+*   **The Mechanics:** This applies market-capitalization weights to the harmonic mean calculation. This is the exact mathematical methodology index providers (like MSCI and S&P) use to publish the official P/E ratio of their indices.
+
+**Analyst Interpretation:**
+If a portfolio manager asks a junior analyst, "What is the average P/E of our portfolio?" and the analyst provides the Arithmetic Mean, they will be sent back to their desk. Because the arithmetic mean is structurally biased upward, the analyst is artificially making the portfolio look vastly more expensive than the underlying earnings generation actually dictates.
+
+**Exam Trap:**
+The most frequent calculation trap is forcing you to calculate all three (Arithmetic, Median, Harmonic) for a small data set of 3 or 4 stocks, and then asking "Which metric generates the lowest calculation?" You do not need to calculate them if you remember the mathematical rule: **Harmonic Mean < Arithmetic Mean**. The harmonic mean will *always* be lower than the arithmetic mean when outliers are present.
+
+## Ground-Up Framework
+
+**1. Arithmetic Mean:**
+$\overline{X} = \frac{\sum P/E_i}{n}$
+
+**2. Harmonic Mean:**
+$X_H = \frac{n}{\sum (\frac{1}{P/E_i})}$
+*(Note: $\frac{1}{P/E}$ is simply the Earnings Yield ($E/P$))*
+
+**3. Weighted Harmonic Mean:**
+$X_{WH} = \frac{1}{\sum (W_i \times \frac{1}{P/E_i})}$
+*(Where $W_i$ is the market-cap weight of the stock)*
+
+## Examples / Applications
+
+**Scenario: Calculating the P/E of a concentrated 3-stock Tech Portfolio**
+An analyst holds an equally-weighted portfolio of three cybersecurity stocks:
+*   **Stock A:** P/E = 15.0x
+*   **Stock B:** P/E = 20.0x
+*   **Stock C:** P/E = 80.0x (Massive upward outlier)
+
+*Calculation 1: The Flawed Arithmetic Mean*
+$\overline{X} = \frac{15 + 20 + 80}{3} = \frac{115}{3}$ = **38.3x**
+*(This implies the portfolio is wildly expensive, completely skewed by Stock C).*
+
+*Calculation 2: The Harmonic Mean*
+First, invert the P/Es into Earnings Yields:
+Yield A: $1 / 15 = 0.0667$
+Yield B: $1 / 20 = 0.0500$
+Yield C: $1 / 80 = 0.0125$
+
+Sum the Yields: $0.0667 + 0.0500 + 0.0125 = 0.1292$
+Apply the Harmonic formula ($n / \text{Sum}$):
+$X_H = \frac{3}{0.1292}$ = **23.2x**
+
+*Direct Source Anchoring:* Matching the core theory of the curriculum, the Harmonic P/E (23.2x) is drastically lower than the Arithmetic P/E (38.3x). The Harmonic mean successfully mitigated the absurd 80x outlier by recognizing that it only contributed a tiny 1.25% earnings yield to the overall portfolio. 23.2x is the mathematically valid representation of what an investor is actually paying for the total pooled earnings of those three firms.
+
+## Visual Anchor
+
+This diagram provides a visual proof of why the Arithmetic Mean fails when averaging ratios.
+
+<svg viewBox="0 0 650 350" xmlns="http://www.w3.org/2000/svg" style={{ width: '100%', height: 'auto', backgroundColor: '#ffffff', borderRadius: '8px', padding: '10px', boxShadow: '0 4px 6px rgba(0,0,0,0.05)' }}>
+  <style>
+    {`
+      .title { font-family: 'Inter', sans-serif; font-size: 16px; font-weight: bold; fill: #1e293b; }
+      .bar-normal { fill: #3b82f6; }
+      .bar-outlier { fill: #ef4444; }
+      .line-arith { stroke: #ef4444; stroke-width: 3px; stroke-dasharray: 6 6; }
+      .line-harm { stroke: #22c55e; stroke-width: 3px; }
+      .text-main { font-family: 'Inter', sans-serif; font-size: 13px; font-weight: bold; fill: #0f172a; }
+      .text-sub { font-family: 'Inter', sans-serif; font-size: 11px; fill: #475569; }
+      .legend-box { fill: #f8fafc; stroke: #cbd5e1; stroke-width: 1px; rx: 4px; }
+    `}
+  </style>
+
+  <text x="325" y="25" textAnchor="middle" className="title">Distribution of Portfolio P/E and the Mean Variance</text>
+
+  <!-- Axes -->
+  <line x1="60" y1="280" x2="600" y2="280" stroke="#94a3b8" stroke-width="2" />
+  <line x1="60" y1="280" x2="60" y2="60" stroke="#94a3b8" stroke-width="2" />
+  
+  <text x="330" y="315" textAnchor="middle" className="text-main">Individual Stock P/E Ratios</text>
+  <text x="25" y="170" textAnchor="middle" transform="rotate(-90 25 170)" className="text-main">P/E Magnitude</text>
+
+  <!-- Bars representing Stocks -->
+  <rect x="100" y="220" width="40" height="60" className="bar-normal" /> <!-- 15x -->
+  <text x="120" y="210" textAnchor="middle" className="text-sub">15x</text>
+
+  <rect x="250" y="200" width="40" height="80" className="bar-normal" /> <!-- 20x -->
+  <text x="270" y="190" textAnchor="middle" className="text-sub">20x</text>
+
+  <rect x="400" y="80" width="40" height="200" className="bar-outlier" /> <!-- 80x Outlier -->
+  <text x="420" y="70" textAnchor="middle" className="text-sub" fill="#ef4444">80x (Outlier)</text>
+
+  <!-- The Means -->
+  <!-- Arithmetic (Average is dragged up to 38x) -->
+  <line x1="60" y1="130" x2="600" y2="130" className="line-arith" />
+  <text x="500" y="120" className="text-main" fill="#b91c1c">Arithmetic Mean (38.3x)</text>
+
+  <!-- Harmonic (mitigates outlier, stays near 23x) -->
+  <line x1="60" y1="190" x2="600" y2="190" className="line-harm" />
+  <text x="500" y="180" className="text-main" fill="#166534">Harmonic Mean (23.2x)</text>
+
+  <!-- Legend -->
+  <rect x="70" y="60" width="180" height="60" className="legend-box" />
+  <line x1="80" y1="75" x2="110" y2="75" className="line-arith" />
+  <text x="120" y="80" className="text-sub">Biased upward by outlier</text>
+  
+  <line x1="80" y1="100" x2="110" y2="100" className="line-harm" />
+  <text x="120" y="105" className="text-sub">Math mathematically correct</text>
+
+</svg>
+
+## Summary / Key Takeaways
+
+*   **Zero or Negative EPS:** The Harmonic Mean relies on inverting the P/E ratio into an Earnings Yield (EPS / Price). If a company in the portfolio has negative EPS, its earnings yield becomes negative, which will mathematically break or artificially depress the Harmonic Mean of the portfolio. Analysts typically exclude negative EPS companies from the index calculation entirely, or assign them an aggregate value of zero.
+*   **The Inversion Forgetting Trap:** The formula for the Harmonic Mean is $n / \sum (1 / X)$. A common exam mistake is executing the denominator (summing the inverted EPS yields) and then completely forgetting to divide $n$ by that sum, resulting in an answer that represents the aggregate earnings yield rather than the aggregate P/E multiple. The final answer should look like a normal P/E ratio (e.g., 18.5x), not a tiny decimal (e.g., 0.054).
+
+## Testing / Practice Questions
+
+<QuizCard 
+  question="An equity analyst has been tasked with calculating the aggregate Price-to-Earnings (P/E) multiple for a newly constructed, equally-weighted index of 500 global equities. Which calculation methodology is considered the most mathematically robust for avoiding upward bias from extreme valuation outliers?"
+  options={[
+    "The Arithmetic Mean.",
+    "The Weighted Arithmetic Mean.",
+    "The Harmonic Mean.",
+    "The Median."
+  ]}
+  correctAnswer="The Harmonic Mean."
+  explanation="Because the P/E multiple is a ratio, calculating a simple arithmetic mean is mathematically flawed as it fails to properly weight the fractions and is severely dragged upward by massive outliers (e.g., a single stock trading at 250x P/E). The Harmonic Mean solves this by averaging the inverted earnings yields, mathematically mitigating the impact of high-P/E outliers and accurately capturing the true cost of the aggregate earnings pool."
+/>
+
+<QuizCard 
+  question="An equally-weighted portfolio consists of two stocks. Stock Alpha trades at a P/E of 10.0x. Stock Beta trades at a P/E of 40.0x. The Arithmetic Mean P/E of the portfolio is 25.0x. What is the Harmonic Mean P/E of the portfolio, and how does it relate to the Arithmetic Mean?"
+  options={[
+    "16.0x, which is lower than the Arithmetic Mean because it suppresses the impact of the 40.0x outlier.",
+    "20.0x, which is lower than the Arithmetic Mean because it normalizes the denominator spread.",
+    "31.5x, which is higher than the Arithmetic Mean due to the inversion of the 10.0x multiple.",
+  ]}
+  correctAnswer="16.0x, which is lower than the Arithmetic Mean because it suppresses the impact of the 40.0x outlier."
+  explanation="Step 1: Invert the P/Es into Yields (1/10 = 0.10) and (1/40 = 0.025). Step 2: Sum the yields (0.10 + 0.025 = 0.125). Step 3: Divide n (2) by the sum (2 / 0.125 = 16.0). The Harmonic Mean is 16.0x, and per the mathematical rule of averages, the Harmonic Mean will always be lower than the Arithmetic Mean."
+/>

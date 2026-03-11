@@ -1,0 +1,189 @@
+---
+format_version: "intrinsic-los-v2"
+topic_title: "Equity Valuation"
+topic_slug: "equity-valuation"
+learning_module_title: "Learning Module 4"
+learning_module_slug: "learning-module-4"
+los_title: "LOS 9: Calculating Justified Multiples from Fundamentals"
+los_slug: "los-9-calculating-justified-multiples-from-fundamentals"
+estimated_time_minutes: 35
+---
+## Intuition Building
+
+In the method of forecasted fundamentals, a price multiple is not determined by looking at peers, but by mathematically deriving what a company's multiple *should* be based on its intrinsic growth, profitability, and risk profile. By rearranging the Gordon Growth Model (Constant Growth Dividend Discount Model), analysts can calculate a **justified multiple**. If a stock's actual trading multiple in the market is lower than this justified multiple, the stock is theoretically undervalued. This LOS covers the specific mathematical formulas to calculate the Justified P/E, P/B, and P/S ratios.
+
+## Core Concept Teaching
+
+Every justified multiple begins with the foundational Gordon Growth Model:
+$V_0 = \frac{D_1}{r - g}$ 
+*(Where $D_1$ is next year's dividend, $r$ is the required return, and $g$ is the constant growth rate).*
+
+By strategically dividing both sides of this equation by different fundamental denominators ($E_1$, $E_0$, $B_0$, $S_0$), the model transforms into distinct price multiples.
+
+**1. Justified Price-to-Earnings (P/E)**
+The math differs slightly depending on whether you are calculating a *forward* (leading) P/E or a *trailing* P/E.
+- The dividend payout ratio is mathematically represented as $(1 - b)$, where $b$ is the retention rate.
+- **Forward P/E:** You divide the model by *next* year's earnings ($E_1$). The formula simplifies cleanly to just the payout ratio divided by $(r - g)$.
+- **Trailing P/E:** You divide the model by *this* year's earnings ($E_0$). Because the current price is driven by next year's dividend ($D_1$), which equals $D_0 \times (1 + g)$, the $(1 + g)$ term must remain in the numerator.
+
+**2. Justified Price-to-Book (P/B)**
+By substituting the Sustainable Growth Rate formula ($g = ROE \times b$) into the Gordon Growth Model and dividing both sides by Book Value ($B_0$), the $(1 - b)$ payout ratio algebraically transforms into $(ROE - g)$.
+- **Key Insight:** If a firm earns exactly what its investors demand ($ROE = r$), the numerator $(ROE - g)$ equals the denominator $(r - g)$, and the justified P/B is exactly 1.0x. This is known as "par value" in equity valuation.
+
+**3. Justified Price-to-Sales (P/S)**
+To derive P/S, we take the Justified Trailing P/E formula and simply multiply it by the Net Profit Margin ($E_0 / S_0$).
+- **Key Insight:** This mathematical derivation proves that, holding growth and risk constant, a company's justified sales multiple is entirely dictated by its net profit margin.
+
+**Analyst Interpretation:**
+These formulas force analysts to align their assumptions. If a junior analyst forecasts a massive 30% ROE for a mature industrial firm but models a low 5% growth rate and an 8% cost of equity, the formula will spit out a Justified P/B of `(0.30 - 0.05) / (0.08 - 0.05) = 8.3x`. A senior portfolio manager will immediately recognize that an 8x book value for a mature industrial is absurd, proving the 30% ROE forecast is likely impossibly optimistic. The mathematics act as a lie detector for the assumptions.
+
+**Exam Trap:**
+The most common mistake on test day is confusing the Trailing P/E formula with the Forward P/E formula. If the question gives you $E_0$ and asks for the trailing justified multiple, you **must** multiply the numerator by $(1 + g)$. If the question provides $E_1$ and asks for the forward justified multiple, do **not** use the $(1 + g)$ term. The examiners will relentlessly test this exact nuance.
+
+## Ground-Up Framework
+
+These formulas must be memorized flawlessly for the exam:
+
+**1. Justified Forward P/E:**
+$\frac{P_0}{E_1} = \frac{Payout\_Ratio}{r - g} = \frac{1 - b}{r - g}$
+
+**2. Justified Trailing P/E:**
+$\frac{P_0}{E_0} = \frac{Payout\_Ratio \times (1 + g)}{r - g} = \frac{D_0 / E_0 \times (1 + g)}{r - g}$
+
+**3. Justified Price-to-Book (P/B):**
+$\frac{P_0}{B_0} = \frac{ROE - g}{r - g}$
+
+**4. Justified Trailing Price-to-Sales (P/S):**
+$\frac{P_0}{S_0} = \text{Profit Margin} \times \frac{Payout\_Ratio \times (1 + g)}{r - g} = \frac{E_0}{S_0} \times \frac{(1 - b)(1 + g)}{r - g}$
+
+## Examples / Applications
+
+**Scenario: Calculating the Trifecta of Justified Multiples**
+An analyst is evaluating Zenlandia Robotics using the following forecasted fundamentals:
+- Required Rate of Return ($r$): 10.0%
+- Expected Constant Growth Rate ($g$): 4.0%
+- Return on Equity ($ROE$): 14.5%
+- Dividend Payout Ratio ($1 - b$): 45.0%
+- Net Profit Margin ($E_0 / S_0$): 12.0%
+
+*Calculation 1: Justified Forward P/E*
+`P0 / E1 = 0.45 / (0.10 - 0.04) = 0.45 / 0.06` = **7.50x**
+
+*Calculation 2: Justified Trailing P/E*
+`P0 / E0 = [0.45 × (1 + 0.04)] / (0.10 - 0.04) = 0.468 / 0.06` = **7.80x**
+
+*Calculation 3: Justified P/B*
+`P0 / B0 = (0.145 - 0.04) / (0.10 - 0.04) = 0.105 / 0.06` = **1.75x**
+
+*Calculation 4: Justified Trailing P/S*
+`P0 / S0 = 0.12 × 7.80` (using the Trailing P/E calculated above) = **0.936x**
+
+If Zenlandia Robotics is currently trading in the market at a trailing P/E of 9.0x, a P/B of 2.2x, and a P/S of 1.5x, the analyst can confidently conclude the stock is broadly **overvalued** across all metrics, as the actual market multiples significantly exceed the multiples justified by the company's underlying fundamentals.
+
+## Visual Anchor
+
+The following diagram tracks how the single Gordon Growth Model equation spawns the three different valuation multiples.
+
+<svg viewBox="0 0 650 350" xmlns="http://www.w3.org/2000/svg" style={{ width: '100%', height: 'auto', backgroundColor: '#f8fafc', borderRadius: '8px', padding: '10px' }}>
+  <style>
+    {`
+      .title { font-family: 'Inter', sans-serif; font-size: 16px; font-weight: bold; fill: #0f172a; }
+      .root-box { fill: #1e293b; rx: 6px; }
+      .root-text { font-family: 'Inter', sans-serif; font-size: 14px; font-weight: bold; fill: #ffffff; }
+      .branch-box { fill: #ffffff; stroke: #cbd5e1; stroke-width: 2px; rx: 6px; }
+      .multiple-box { fill: #eff6ff; stroke: #3b82f6; stroke-width: 2px; rx: 6px; }
+      .math-box { fill: #f0fdf4; stroke: #22c55e; stroke-width: 2px; rx: 4px; }
+      .text-main { font-family: 'Inter', sans-serif; font-size: 13px; font-weight: bold; fill: #1e293b; }
+      .text-sub { font-family: 'Inter', sans-serif; font-size: 11px; fill: #475569; }
+      .math-text { font-family: monospace; font-size: 13px; font-weight: bold; fill: #166534; }
+      .line { stroke: #94a3b8; stroke-width: 2px; marker-end: url(#arrow); }
+    `}
+  </style>
+
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8" />
+    </marker>
+  </defs>
+
+  <text x="325" y="30" textAnchor="middle" className="title">Derivation of Justified Multiples</text>
+
+  <!-- Root: Gordon Growth Model -->
+  <rect x="225" y="50" width="200" height="40" className="root-box" />
+  <text x="325" y="75" textAnchor="middle" className="root-text">Gordon Growth Model</text>
+
+  <!-- Level 2: Division Actions -->
+  <!-- Divide by E1 -->
+  <rect x="20" y="130" width="180" height="30" className="branch-box" />
+  <text x="110" y="150" textAnchor="middle" className="text-sub">Divide by Next Year Earnings</text>
+  <path d="M 270 90 L 110 130" className="line" />
+
+  <!-- Divide by B0 -->
+  <rect x="235" y="130" width="180" height="30" className="branch-box" />
+  <text x="325" y="150" textAnchor="middle" className="text-sub">Divide by Current Book Value</text>
+  <path d="M 325 90 L 325 130" className="line" />
+
+  <!-- Divide by E0, multiply by Margin -->
+  <rect x="450" y="130" width="180" height="30" className="branch-box" />
+  <text x="540" y="150" textAnchor="middle" className="text-sub">Derived via Trailing P/E</text>
+  <path d="M 380 90 L 540 130" className="line" />
+
+  <!-- Level 3: The Multiples -->
+  <rect x="20" y="200" width="180" height="40" className="multiple-box" />
+  <text x="110" y="225" textAnchor="middle" className="text-main">Justified Forward P/E</text>
+  <path d="M 110 160 L 110 200" className="line" />
+
+  <rect x="235" y="200" width="180" height="40" className="multiple-box" />
+  <text x="325" y="225" textAnchor="middle" className="text-main">Justified P/B</text>
+  <path d="M 325 160 L 325 200" className="line" />
+
+  <rect x="450" y="200" width="180" height="40" className="multiple-box" />
+  <text x="540" y="225" textAnchor="middle" className="text-main">Justified Trailing P/S</text>
+  <path d="M 540 160 L 540 200" className="line" />
+
+  <!-- Level 4: The Final Math -->
+  <rect x="20" y="270" width="180" height="40" className="math-box" />
+  <text x="110" y="295" textAnchor="middle" className="math-text">(1 - b) / (r - g)</text>
+  <path d="M 110 240 L 110 270" className="line" />
+
+  <rect x="235" y="270" width="180" height="40" className="math-box" />
+  <text x="325" y="295" textAnchor="middle" className="math-text">(ROE - g) / (r - g)</text>
+  <path d="M 325 240 L 325 270" className="line" />
+
+  <rect x="450" y="270" width="180" height="40" className="math-box" />
+  <text x="540" y="295" textAnchor="middle" className="math-text">Margin × Tr. P/E</text>
+  <path d="M 540 240 L 540 270" className="line" />
+
+</svg>
+
+## Summary / Key Takeaways
+
+*   **The Zero-Growth ($g=0$) Simplification:** If a vignette specifies a "no-growth" or mature, stagnant firm, the formulas dramatically simplify. `P/E = 1 / r`, `P/B = ROE / r`, and `P/S = Net Margin / r`. If you memorize these shortcuts, you can save 30 seconds of exam crunch-time.
+*   **Payout Ratio Phrasing:** The curriculum uses `(1 - b)` to represent the Dividend Payout Ratio. If a vignette gives the Retention Rate ($b$) as 60%, do not blindly plug 0.60 into the numerator. The payout ratio is $1 - 0.60 = 0.40$ (or 40%).
+*   **Mismatching $E_0$ and $E_1$:** If the exam asks for the *Trailing P/E*, but the table gives you the *Forward* P/E formula framework, remember that the only difference is the $(1 + g)$ term in the numerator. *Trailing* multiple numerators essentially compound the current metric forward one year.
+
+## Testing / Practice Questions
+
+<QuizCard 
+  question="An analyst determines that a company possesses a required rate of return of 9.0%, an expected dividend growth rate of 4.5%, and an expected sustainable ROE of 12.0%. What is the intrinsic justifiable Price-to-Book (P/B) ratio for this stock?"
+  options={[
+    "1.33x",
+    "1.50x",
+    "1.67x",
+    "2.67x"
+  ]}
+  correctAnswer="1.67x"
+  explanation="The formula for Justified P/B is (ROE - g) / (r - g). Plugging in the inputs: (0.12 - 0.045) / (0.09 - 0.045) = 0.075 / 0.045 = 1.666x (or 1.67x)."
+/>
+
+<QuizCard 
+  question="A multinational consumer staples firm has a required return of 8%, a long-term growth rate of 3%, and retains 30% of its earnings to fund operations. Its current actual trailing P/E ratio is 13.0x. Based on a forecasted fundamentals analysis, is the stock currently undervalued or overvalued?"
+  options={[
+    "Undervalued, because its Justified Trailing P/E is 14.4x.",
+    "Overvalued, because its Justified Trailing P/E is 14.0x.",
+    "Undervalued, because its Justified Forward P/E is 14.0x.",
+    "Overvalued, because its Justified Trailing P/E is 12.5x."
+  ]}
+  correctAnswer="Undervalued, because its Justified Trailing P/E is 14.4x."
+  explanation="First, find the payout ratio: (1 - retention rate) = (1 - 0.30) = 0.70. Next, calculate the Justified Trailing P/E: [Payout Ratio × (1 + g)] / (r - g) = [0.70 × (1 + 0.03)] / (0.08 - 0.03) = 0.721 / 0.05 = 14.42x. Because its Justified Trailing P/E (14.4x) is higher than its Actual Trailing P/E (13.0x), the stock is currently trading for less than its fundamentals justify, making it undervalued."
+/>
