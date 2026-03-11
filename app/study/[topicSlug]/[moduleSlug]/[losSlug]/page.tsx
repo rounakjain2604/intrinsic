@@ -1,5 +1,9 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getRenderableLosContent } from "@/lib/study-content";
+import {
+    getLosNavigation,
+    getRenderableLosContent,
+} from "@/lib/study-content";
 
 export const dynamic = "force-dynamic";
 
@@ -29,7 +33,10 @@ export default async function LosPage({
     params: Promise<{ topicSlug: string; moduleSlug: string; losSlug: string }>;
 }) {
     const { topicSlug, moduleSlug, losSlug } = await params;
-    const content = await getRenderableLosContent(topicSlug, moduleSlug, losSlug);
+    const [content, navigation] = await Promise.all([
+        getRenderableLosContent(topicSlug, moduleSlug, losSlug),
+        getLosNavigation(topicSlug, moduleSlug, losSlug),
+    ]);
 
     if (!content) {
         notFound();
@@ -80,6 +87,42 @@ export default async function LosPage({
                         </section>
                     ))}
                 </div>
+
+                {(navigation.previous || navigation.next) && (
+                    <nav className="mt-10 grid gap-4 sm:grid-cols-2">
+                        {navigation.previous ? (
+                            <Link
+                                href={navigation.previous.href}
+                                className="rounded-[1.5rem] border border-[#2D2A26]/10 bg-white p-5 text-left shadow-[0_6px_24px_rgba(45,42,38,0.05)] transition hover:border-[#E8694A]/20 hover:bg-[#FFFDF9]"
+                            >
+                                <span className="font-[family-name:var(--font-mono)] text-[11px] uppercase tracking-[0.18em] text-[#A09890]">
+                                    Previous LOS
+                                </span>
+                                <p className="mt-2 font-[family-name:var(--font-sans)] text-sm text-[#6B6560]">
+                                    {navigation.previous.title}
+                                </p>
+                            </Link>
+                        ) : (
+                            <div />
+                        )}
+
+                        {navigation.next ? (
+                            <Link
+                                href={navigation.next.href}
+                                className="rounded-[1.5rem] border border-[#2D2A26]/10 bg-[#F5F1EA] p-5 text-left shadow-[0_6px_24px_rgba(45,42,38,0.05)] transition hover:border-[#E8694A]/20 hover:bg-[#FFF7ED]"
+                            >
+                                <span className="font-[family-name:var(--font-mono)] text-[11px] uppercase tracking-[0.18em] text-[#A09890]">
+                                    Next LOS
+                                </span>
+                                <p className="mt-2 font-[family-name:var(--font-sans)] text-sm font-medium text-[#2D2A26]">
+                                    {navigation.next.title}
+                                </p>
+                            </Link>
+                        ) : (
+                            <div />
+                        )}
+                    </nav>
+                )}
             </div>
         </section>
     );

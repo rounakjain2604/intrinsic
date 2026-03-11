@@ -89,6 +89,17 @@ export interface LibraryTopicEntry {
     modules: LibraryModuleEntry[];
 }
 
+export interface LosNavigationEntry {
+    title: string;
+    slug: string;
+    href: string;
+}
+
+export interface LosNavigation {
+    previous: LosNavigationEntry | null;
+    next: LosNavigationEntry | null;
+}
+
 interface LibraryAccumulatorLosEntry {
     title: string;
     slug: string;
@@ -931,4 +942,52 @@ export async function listStudyLibrary(): Promise<LibraryTopicEntry[]> {
     }
 
     return mergeLibraries(localLibrary, topics);
+}
+
+export async function getLosNavigation(
+    topicSlug: string,
+    moduleSlug: string,
+    losSlug: string
+): Promise<LosNavigation> {
+    const library = await listStudyLibrary();
+    const topic = library.find((entry) => entry.slug === topicSlug);
+    const moduleEntry = topic?.modules.find((entry) => entry.slug === moduleSlug);
+
+    if (!topic || !moduleEntry) {
+        return {
+            previous: null,
+            next: null,
+        };
+    }
+
+    const currentIndex = moduleEntry.losses.findIndex((entry) => entry.slug === losSlug);
+    if (currentIndex === -1) {
+        return {
+            previous: null,
+            next: null,
+        };
+    }
+
+    const previousLos = currentIndex > 0 ? moduleEntry.losses[currentIndex - 1] : null;
+    const nextLos =
+        currentIndex < moduleEntry.losses.length - 1
+            ? moduleEntry.losses[currentIndex + 1]
+            : null;
+
+    return {
+        previous: previousLos
+            ? {
+                title: previousLos.title,
+                slug: previousLos.slug,
+                href: `/study/${topic.slug}/${moduleEntry.slug}/${previousLos.slug}`,
+            }
+            : null,
+        next: nextLos
+            ? {
+                title: nextLos.title,
+                slug: nextLos.slug,
+                href: `/study/${topic.slug}/${moduleEntry.slug}/${nextLos.slug}`,
+            }
+            : null,
+    };
 }
