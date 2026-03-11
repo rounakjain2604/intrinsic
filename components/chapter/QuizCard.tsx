@@ -5,7 +5,8 @@ import { useState } from "react";
 interface QuizCardProps {
     question: string;
     options?: string[];
-    answer: string;
+    answer?: string;
+    correctAnswer?: string;
     explanation?: string;
 }
 
@@ -13,15 +14,22 @@ export default function QuizCard({
     question,
     options,
     answer,
+    correctAnswer,
     explanation,
 }: QuizCardProps) {
     const [showAnswer, setShowAnswer] = useState(false);
     const [selectedOption, setSelectedOption] = useState<string | null>(null);
     const answerOptions = options ?? [];
     const hasInteractiveOptions = answerOptions.length > 0;
-    const answerLabel = answer.trim().charAt(0).toUpperCase();
+    const resolvedAnswer =
+        typeof answer === "string" && answer.trim().length > 0
+            ? answer
+            : typeof correctAnswer === "string" && correctAnswer.trim().length > 0
+              ? correctAnswer
+              : "";
+    const answerLabel = resolvedAnswer.trim().charAt(0).toUpperCase();
     const selectedLabel = selectedOption?.trim().charAt(0).toUpperCase() ?? null;
-    const isCorrect = selectedLabel === answerLabel;
+    const isCorrect = resolvedAnswer.length > 0 && selectedLabel === answerLabel;
 
     return (
         <div className="my-6 overflow-hidden rounded-2xl border border-[#2D2A26]/10 bg-[#faf8f4] shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
@@ -90,11 +98,13 @@ export default function QuizCard({
                             >
                                 {isCorrect
                                     ? "Correct. You picked the right answer."
-                                    : `Not quite. You picked ${selectedLabel}, but the correct answer is ${answerLabel}.`}
+                                    : resolvedAnswer
+                                      ? `Not quite. You picked ${selectedLabel}, but the correct answer is ${answerLabel}.`
+                                      : "The answer key is missing for this question."}
                             </p>
                         )}
                         <p className="font-[family-name:var(--font-sans)] text-[15px] leading-relaxed text-[#1e1e1e] sm:text-base">
-                            <strong>Answer:</strong> {answer}
+                            <strong>Answer:</strong> {resolvedAnswer || "Not provided"}
                         </p>
                         {explanation && (
                             <p className="mt-2 font-[family-name:var(--font-sans)] text-sm leading-relaxed text-[#6B6560]">
