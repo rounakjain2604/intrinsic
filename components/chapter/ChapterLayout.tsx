@@ -26,8 +26,8 @@ export default function ChapterLayout({
         <>
             <ScrollProgress />
 
-            <section className="min-h-screen pt-28 pb-20 px-4 lg:px-8">
-                <div className="w-full max-w-none mx-auto">
+            <section className="min-h-screen px-4 pb-20 pt-28 lg:px-8">
+                <div className="mx-auto w-full max-w-[1680px]">
                     <div className="flex gap-0 lg:gap-12 relative">
                         {/* ── Mobile overlay backdrop ── */}
                         {mobileOpen && (
@@ -51,7 +51,7 @@ export default function ChapterLayout({
                                 lg:pt-0 lg:px-0 lg:pb-0 lg:bg-transparent
                                 lg:block lg:flex-shrink-0
                                 lg:transition-all lg:duration-300 lg:ease-in-out
-                                ${collapsed ? "lg:w-12" : "lg:w-64"}
+                                ${collapsed ? "lg:w-12" : "lg:w-72 xl:w-80"}
                             `}
                             style={{
                                 boxShadow: "2px 0 12px rgba(0,0,0,0.06)",
@@ -100,11 +100,11 @@ export default function ChapterLayout({
                         </button>
 
                         {/* ── Main reading column ── */}
-                        <article className="flex-1 min-w-0 max-w-none">
+                        <article className="min-w-0 flex-1 max-w-none">
                             {header}
 
                             {content && (
-                                <div className="prose-intrinsic w-full space-y-6 font-[family-name:var(--font-sans)] text-[#1e1e1e] leading-[1.75]">
+                                <div className="prose-intrinsic w-full space-y-6 font-[family-name:var(--font-sans)] text-[#1e1e1e] leading-[1.8]">
                                     {content}
                                 </div>
                             )}

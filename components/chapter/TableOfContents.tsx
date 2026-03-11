@@ -3,13 +3,15 @@
 import { useState, useEffect } from "react";
 import type { TOCHeading } from "@/lib/types";
 
+const EMPTY_HEADINGS: TOCHeading[] = [];
+
 interface TableOfContentsProps {
     headings?: TOCHeading[];
 }
 
 export default function TableOfContents({ headings }: TableOfContentsProps) {
     const [activeId, setActiveId] = useState<string>("");
-    const items = headings ?? [];
+    const items = headings ?? EMPTY_HEADINGS;
 
     useEffect(() => {
         const observer = new IntersectionObserver(

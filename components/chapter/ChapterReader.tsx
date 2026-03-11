@@ -23,17 +23,17 @@ export default function ChapterReader({
     const tocHeadings = headings ?? [];
 
     return (
-        <section className="min-h-screen pt-28 pb-20 px-4 lg:px-8">
-            <div className="w-full max-w-none mx-auto">
+        <section className="min-h-screen px-4 pb-20 pt-28 lg:px-8">
+            <div className="mx-auto w-full max-w-[1680px]">
                 {/* Two-column layout */}
                 <div className="flex gap-8 xl:gap-12 items-start">
                     {/* Sidebar — Table of Contents (desktop only) */}
-                    <aside className="hidden lg:block w-64 xl:w-72 flex-shrink-0">
+                    <aside className="hidden w-64 flex-shrink-0 xl:w-72 2xl:w-80 lg:block">
                         <TableOfContents headings={tocHeadings} />
                     </aside>
 
                     {/* Main reading column */}
-                    <article className="flex-1 min-w-0 max-w-none">
+                    <article className="min-w-0 flex-1 max-w-none">
                         {/* Chapter header */}
                         <header className="mb-10">
                             {/* Eyebrow */}
@@ -44,7 +44,7 @@ export default function ChapterReader({
                                         ? "Premium Chapter"
                                         : "Standard Chapter"}
                             </span>
-                            <h1 className="font-[family-name:var(--font-serif)] text-4xl font-bold text-[#2D2A26] mt-2 mb-3 leading-tight">
+                            <h1 className="mt-2 mb-3 font-[family-name:var(--font-serif)] text-4xl font-bold leading-tight text-[#2D2A26] md:text-5xl">
                                 {chapter.title}
                             </h1>
                             {chapter.description && (

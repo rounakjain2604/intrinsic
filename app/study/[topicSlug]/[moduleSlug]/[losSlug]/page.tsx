@@ -36,13 +36,13 @@ export default async function LosPage({
     }
 
     return (
-        <section className="min-h-screen px-6 pb-20 pt-28">
-            <div className="mx-auto max-w-4xl">
-                <header className="mb-10 overflow-hidden rounded-[2rem] border border-[#2D2A26]/10 bg-[linear-gradient(135deg,#F5F1EA_0%,#FFFDF9_100%)] p-8 shadow-[0_8px_30px_rgba(45,42,38,0.07)]">
+        <section className="min-h-screen px-4 pb-20 pt-28 sm:px-6 lg:px-10">
+            <div className="mx-auto max-w-[1480px]">
+                <header className="mb-10 overflow-hidden rounded-[2rem] border border-[#2D2A26]/10 bg-[linear-gradient(135deg,#F5F1EA_0%,#FFFDF9_100%)] p-6 shadow-[0_8px_30px_rgba(45,42,38,0.07)] sm:p-8 lg:p-10">
                     <p className="font-[family-name:var(--font-mono)] text-xs uppercase tracking-[0.18em] text-[#A09890]">
                         {content.topicTitle} / {content.moduleTitle}
                     </p>
-                    <h1 className="mt-3 font-[family-name:var(--font-serif)] text-4xl font-semibold text-[#2D2A26]">
+                    <h1 className="mt-3 font-[family-name:var(--font-serif)] text-4xl font-semibold text-[#2D2A26] lg:text-5xl">
                         {content.losTitle}
                     </h1>
                     <div className="mt-5 flex flex-wrap gap-3 text-sm text-[#6B6560]">
@@ -64,7 +64,7 @@ export default async function LosPage({
                     {content.renderedSections.map((section) => (
                         <section
                             key={section.key}
-                            className="rounded-[2rem] border border-[#2D2A26]/10 bg-white p-8 shadow-[0_6px_24px_rgba(45,42,38,0.05)]"
+                            className="rounded-[2rem] border border-[#2D2A26]/10 bg-white p-6 shadow-[0_6px_24px_rgba(45,42,38,0.05)] sm:p-8 lg:p-10"
                         >
                             <div className="mb-5 flex items-center justify-between gap-4 border-b border-[#2D2A26]/8 pb-4">
                                 <h2 className="font-[family-name:var(--font-serif)] text-2xl font-semibold text-[#2D2A26]">

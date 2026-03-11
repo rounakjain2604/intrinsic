@@ -80,38 +80,27 @@ function inferDescription(source: string): string {
 
 function convertCallouts(source: string): string {
     // Convert blockquotes with specific prefixes to Callout components
-    const calloutPatterns: [RegExp, string][] = [
-        [/^>\s*\*\*Exam Tip:\*\*\s*/im, "exam-tip"],
-        [/^>\s*\*\*Key Concept:\*\*\s*/im, "key-concept"],
-        [/^>\s*\*\*Warning:\*\*\s*/im, "warning"],
-        [/^>\s*\*\*Note:\*\*\s*/im, "note"],
-    ];
+    return source.replace(
+        new RegExp(
+            `(^>\\s*\\*\\*(?:Exam Tip|Key Concept|Warning|Note):\\*\\*\\s*)(.+(?:\\n>\\s*.+)*)`,
+            "gim"
+        ),
+        (_match, prefix: string, content: string) => {
+            const prefixLower = prefix.toLowerCase();
+            let calloutType = "note";
+            if (prefixLower.includes("exam tip")) calloutType = "exam-tip";
+            else if (prefixLower.includes("key concept")) calloutType = "key-concept";
+            else if (prefixLower.includes("warning")) calloutType = "warning";
 
-    let result = source;
+            const cleanContent = content
+                .split("\n")
+                .map((line: string) => line.replace(/^>\s*/, "").trim())
+                .join("\n")
+                .trim();
 
-    for (const [pattern, type] of calloutPatterns) {
-        // Find blockquote blocks with these patterns
-        result = result.replace(
-            new RegExp(`(^>\\s*\\*\\*(?:Exam Tip|Key Concept|Warning|Note):\\*\\*\\s*)(.+(?:\\n>\\s*.+)*)`, "gim"),
-            (_match, prefix: string, content: string) => {
-                const prefixLower = prefix.toLowerCase();
-                let calloutType = "note";
-                if (prefixLower.includes("exam tip")) calloutType = "exam-tip";
-                else if (prefixLower.includes("key concept")) calloutType = "key-concept";
-                else if (prefixLower.includes("warning")) calloutType = "warning";
-
-                const cleanContent = content
-                    .split("\n")
-                    .map((line: string) => line.replace(/^>\s*/, "").trim())
-                    .join("\n")
-                    .trim();
-
-                return `<Callout type="${calloutType}">\n${cleanContent}\n</Callout>`;
-            }
-        );
-    }
-
-    return result;
+            return `<Callout type="${calloutType}">\n${cleanContent}\n</Callout>`;
+        }
+    );
 }
 
 function convertFormulaBlocks(source: string): string {

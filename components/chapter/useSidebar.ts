@@ -1,20 +1,18 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useCallback } from "react";
 
 const STORAGE_KEY = "sidebar-collapsed";
 
 export function useSidebar() {
-    const [collapsed, setCollapsed] = useState(false);
-
-    useEffect(() => {
+    const [collapsed, setCollapsed] = useState(() => {
         try {
             const stored = localStorage.getItem(STORAGE_KEY);
-            if (stored === "true") setCollapsed(true);
+            return stored === "true";
         } catch {
-            // localStorage unavailable
+            return false;
         }
-    }, []);
+    });
 
     const toggle = useCallback(() => {
         setCollapsed((prev) => {
