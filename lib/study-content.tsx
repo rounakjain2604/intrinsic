@@ -538,9 +538,13 @@ async function downloadJson<T>(path: string) {
     return (JSON.parse(await data.text()) as T) ?? null;
 }
 
+function sanitizeStudySectionMdx(source: string) {
+    return source.replace(/<!--[\s\S]*?-->/g, "");
+}
+
 async function renderStudySectionMdx(source: string) {
     const { content } = await compileMDX({
-        source,
+        source: sanitizeStudySectionMdx(source),
         components: mdxComponents,
         options: {
             mdxOptions: {
