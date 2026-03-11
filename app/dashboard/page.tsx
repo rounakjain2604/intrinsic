@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { syncUser } from "@/lib/supabase/syncUser";
+import { isContentAdmin } from "@/lib/admin";
 import {
     getAllChapters,
     getUserPurchasedChapterIds,
@@ -81,6 +82,7 @@ export default async function DashboardPage() {
         totalModules > 0
             ? Math.round((completedCount / totalModules) * 100)
             : 0;
+    const contentAdmin = await isContentAdmin();
 
     return (
         <section className="min-h-screen pt-28 pb-20 px-6">
@@ -93,6 +95,22 @@ export default async function DashboardPage() {
                     <p className="font-[family-name:var(--font-sans)] text-base text-[#6B6560]">
                         10 subjects. {totalModules} learning modules. Your CFA Level 2 library.
                     </p>
+                    <div className="mt-4 flex flex-wrap gap-3">
+                        <a
+                            href="/study"
+                            className="inline-flex rounded-xl border border-[#2D2A26]/10 bg-[#F5F1EA] px-4 py-2 text-sm font-medium text-[#2D2A26] transition hover:bg-white"
+                        >
+                            Open Study Library
+                        </a>
+                        {contentAdmin && (
+                            <a
+                                href="/dashboard/import"
+                                className="inline-flex rounded-xl bg-[#E8694A] px-4 py-2 text-sm font-semibold text-white shadow-[0_2px_8px_rgba(232,105,74,0.25)] transition hover:bg-[#D45E40]"
+                            >
+                                Upload Study Notes
+                            </a>
+                        )}
+                    </div>
                 </div>
 
                 {/* Progress bar */}
