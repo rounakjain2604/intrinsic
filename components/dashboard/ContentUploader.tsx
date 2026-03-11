@@ -126,7 +126,7 @@ export default function ContentUploader() {
                     <input
                         id="study-file-input"
                         type="file"
-                        accept=".md,.markdown,text/markdown,text/plain"
+                        accept=".md,.mdx,.markdown,text/markdown,text/plain"
                         multiple
                         onChange={(event) => setFiles(event.target.files)}
                         className="block w-full rounded-xl border border-dashed border-[#2D2A26]/20 bg-white px-4 py-4 text-sm text-[#6B6560]"

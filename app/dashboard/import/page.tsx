@@ -60,9 +60,17 @@ export default async function ContentImportPage() {
                             Study Content Pipeline
                         </h1>
                         <p className="mt-2 max-w-2xl text-base leading-8 text-[#6B6560]">
-                            Upload LOS markdown files here. The app will parse the six
-                            teaching sections, overwrite older versions safely, and make the
-                            result available inside the study library.
+                            Upload LOS markdown or MDX files here. The app will parse the
+                            teaching sections, keep formulas and SVG visuals intact, extract
+                            quiz counts, overwrite older versions safely, and publish the
+                            result to the study library.
+                        </p>
+                        <p className="mt-3 text-sm text-[#A09890]">
+                            Use the app-ready prompt in
+                            <code className="mx-1 rounded bg-[#EDE8DF] px-2 py-1 text-xs text-[#2D2A26]">
+                                docs/EQUITY_VALUATION_APP_PROMPT.md
+                            </code>
+                            when generating new LOS files.
                         </p>
                     </div>
                     <Link

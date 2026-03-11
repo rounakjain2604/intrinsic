@@ -1,4 +1,18 @@
 import matter from "gray-matter";
+import { compileMDX } from "next-mdx-remote/rsc";
+import rehypeKatex from "rehype-katex";
+import remarkGfm from "remark-gfm";
+import remarkMath from "remark-math";
+import BondPricePlayable from "@/components/chapter/BondPricePlayable";
+import Callout from "@/components/chapter/Callout";
+import ComparisonTable, {
+    ComparisonColumn,
+} from "@/components/chapter/ComparisonTable";
+import FormulaBlock from "@/components/chapter/FormulaBlock";
+import QuizCard from "@/components/chapter/QuizCard";
+import WorkedExample from "@/components/chapter/WorkedExample";
+import DCFDiagram from "@/components/chapter/diagrams/DCFDiagram";
+import YieldCurveChart from "@/components/charts/YieldCurveChart";
 import { createServerClient } from "@/lib/supabase/server";
 
 export const STUDY_CONTENT_BUCKET = "study-los-content";
@@ -7,6 +21,7 @@ export const SECTION_ORDER = [
     "intuition_building",
     "ground_up_framework",
     "core_concept_teaching",
+    "visual_anchor",
     "examples_applications",
     "testing_practice_questions",
     "summary_key_takeaways",
@@ -30,6 +45,18 @@ export interface ParsedStudyContent {
     sections: StudySection[];
     sourceFileName: string;
     uploadedAt: string;
+    quizCount: number;
+    visualCount: number;
+    estimatedTimeMinutes: number | null;
+    formatVersion: string;
+}
+
+export interface RenderedStudySection extends StudySection {
+    renderedContent: React.ReactElement;
+}
+
+export interface RenderableStudyContent extends ParsedStudyContent {
+    renderedSections: RenderedStudySection[];
 }
 
 export interface UploadOverrides {
@@ -37,12 +64,14 @@ export interface UploadOverrides {
     moduleTitle?: string;
 }
 
-interface LibraryLosEntry {
+export interface LibraryLosEntry {
     title: string;
     slug: string;
+    quizCount: number;
+    estimatedTimeMinutes: number | null;
 }
 
-interface LibraryModuleEntry {
+export interface LibraryModuleEntry {
     title: string;
     slug: string;
     losses: LibraryLosEntry[];
@@ -58,6 +87,7 @@ const SECTION_LABELS: Record<SectionKey, string> = {
     intuition_building: "Intuition Building",
     ground_up_framework: "Ground-Up Framework",
     core_concept_teaching: "Core Concept Teaching",
+    visual_anchor: "Visual Anchor",
     examples_applications: "Examples / Applications",
     testing_practice_questions: "Testing / Practice Questions",
     summary_key_takeaways: "Summary / Key Takeaways",
@@ -69,6 +99,7 @@ const SECTION_ALIASES: Record<SectionKey, string[]> = {
         "intuition",
         "the why",
         "why this matters",
+        "orientation",
     ],
     ground_up_framework: [
         "ground up framework",
@@ -83,6 +114,13 @@ const SECTION_ALIASES: Record<SectionKey, string[]> = {
         "concept teaching",
         "the concept",
         "concept",
+    ],
+    visual_anchor: [
+        "visual anchor",
+        "visual build",
+        "visual intuition",
+        "diagram anchor",
+        "svg visual",
     ],
     examples_applications: [
         "examples applications",
@@ -102,6 +140,7 @@ const SECTION_ALIASES: Record<SectionKey, string[]> = {
         "exam lens",
         "practice",
         "green signal check",
+        "quiz checkpoint",
     ],
     summary_key_takeaways: [
         "summary key takeaways",
@@ -110,6 +149,91 @@ const SECTION_ALIASES: Record<SectionKey, string[]> = {
         "takeaways",
         "recap",
     ],
+};
+
+const mdxComponents = {
+    Callout,
+    FormulaBlock,
+    ComparisonTable,
+    ComparisonColumn,
+    WorkedExample,
+    QuizCard,
+    DCFDiagram,
+    BondPricePlayable,
+    YieldCurveChart,
+    h2: (props: React.HTMLAttributes<HTMLHeadingElement>) => (
+        <h2
+            id={slugify(String(props.children))}
+            className="font-[family-name:var(--font-serif)] text-2xl font-semibold text-[#2D2A26] mt-12 mb-4"
+            {...props}
+        />
+    ),
+    h3: (props: React.HTMLAttributes<HTMLHeadingElement>) => (
+        <h3
+            id={slugify(String(props.children))}
+            className="font-[family-name:var(--font-sans)] text-lg font-semibold text-[#2D2A26] mt-8 mb-3"
+            {...props}
+        />
+    ),
+    p: (props: React.HTMLAttributes<HTMLParagraphElement>) => (
+        <p
+            className="font-[family-name:var(--font-sans)] text-base text-[#6B6560] leading-8"
+            {...props}
+        />
+    ),
+    a: (props: React.AnchorHTMLAttributes<HTMLAnchorElement>) => (
+        <a
+            className="font-[family-name:var(--font-sans)] text-[#E8694A] underline decoration-[#E8694A]/35 underline-offset-4 transition-colors hover:text-[#D45E40]"
+            target={props.href?.startsWith("http") ? "_blank" : undefined}
+            rel={props.href?.startsWith("http") ? "noreferrer" : undefined}
+            {...props}
+        />
+    ),
+    strong: (props: React.HTMLAttributes<HTMLElement>) => (
+        <strong className="font-semibold text-[#2D2A26]" {...props} />
+    ),
+    ul: (props: React.HTMLAttributes<HTMLUListElement>) => (
+        <ul className="list-disc list-inside space-y-2 text-[#6B6560]" {...props} />
+    ),
+    ol: (props: React.HTMLAttributes<HTMLOListElement>) => (
+        <ol className="list-decimal list-inside space-y-2 text-[#6B6560]" {...props} />
+    ),
+    li: (props: React.HTMLAttributes<HTMLLIElement>) => (
+        <li className="font-[family-name:var(--font-sans)] text-base leading-8" {...props} />
+    ),
+    hr: () => <hr className="my-12 border-t border-[#2D2A26]/[0.08]" />,
+    code: (props: React.HTMLAttributes<HTMLElement>) => (
+        <code
+            className="rounded bg-[#EDE8DF] px-2 py-1 font-[family-name:var(--font-mono)] text-sm text-[#E8694A]"
+            {...props}
+        />
+    ),
+    blockquote: (props: React.HTMLAttributes<HTMLQuoteElement>) => (
+        <blockquote
+            className="my-6 border-l-4 border-[#2D2A26]/10 pl-5 italic text-[#6B6560]"
+            {...props}
+        />
+    ),
+    table: (props: React.HTMLAttributes<HTMLTableElement>) => (
+        <div className="table-wrapper my-8 overflow-x-auto rounded-2xl border border-[#2D2A26]/10 bg-[#FFFDF9] shadow-[0_2px_12px_rgba(45,42,38,0.04)]">
+            <table className="w-full border-collapse font-[family-name:var(--font-sans)] text-sm" {...props} />
+        </div>
+    ),
+    tr: (props: React.HTMLAttributes<HTMLTableRowElement>) => (
+        <tr className="even:bg-[#F5F1EA]/80" {...props} />
+    ),
+    th: (props: React.HTMLAttributes<HTMLTableCellElement>) => (
+        <th
+            className="bg-[#2D2A26] px-4 py-3 text-left font-[family-name:var(--font-mono)] text-[11px] font-medium uppercase tracking-[0.18em] text-[#FAF8F5]"
+            {...props}
+        />
+    ),
+    td: (props: React.HTMLAttributes<HTMLTableCellElement>) => (
+        <td
+            className="border-b border-[#2D2A26]/8 px-4 py-3 align-top text-[#2D2A26]"
+            {...props}
+        />
+    ),
 };
 
 function slugify(value: string) {
@@ -141,6 +265,10 @@ function inferTitleFromFilename(filename: string) {
         .replace(/\.[^.]+$/, "")
         .replace(/[_-]+/g, " ")
         .replace(/\b\w/g, (char) => char.toUpperCase());
+}
+
+function countMatches(source: string, pattern: RegExp) {
+    return [...source.matchAll(pattern)].length;
 }
 
 function findSectionKey(heading: string): SectionKey | null {
@@ -215,7 +343,7 @@ function inferMetadata(
 
     const topicTitle =
         overrides.topicTitle?.trim() ||
-        String(data.topic ?? data.topic_title ?? "") ||
+        String(data.topic ?? data.topic_title ?? data.subject_title ?? "") ||
         learningModuleMatch?.[1]?.trim() ||
         "General";
 
@@ -238,13 +366,28 @@ function inferMetadata(
         secondHeading ||
         inferTitleFromFilename(filename);
 
+    const estimatedTime =
+        typeof data.estimated_time_minutes === "number"
+            ? data.estimated_time_minutes
+            : typeof data.estimated_time_minutes === "string"
+              ? Number(data.estimated_time_minutes)
+              : null;
+
     return {
         topicTitle,
-        topicSlug: slugify(topicTitle),
+        topicSlug: slugify(
+            String(data.topic_slug ?? data.subject_slug ?? "") || topicTitle
+        ),
         moduleTitle,
-        moduleSlug: slugify(moduleTitle),
+        moduleSlug: slugify(
+            String(data.learning_module_slug ?? data.module_slug ?? "") ||
+                moduleTitle
+        ),
         losTitle,
-        losSlug: slugify(losTitle),
+        losSlug: slugify(String(data.los_slug ?? "") || losTitle),
+        estimatedTimeMinutes:
+            estimatedTime && !Number.isNaN(estimatedTime) ? estimatedTime : null,
+        formatVersion: String(data.format_version ?? "intrinsic-los-v2"),
     };
 }
 
@@ -265,7 +408,7 @@ export function parseStudyMarkdown(
 
     if (filledSections.length < 4) {
         throw new Error(
-            `${filename} does not contain enough recognizable study sections. Add clear section headings like "Intuition Building" and "Summary / Key Takeaways".`
+            `${filename} does not contain enough recognizable study sections. Use clear headings such as "Intuition Building", "Ground-Up Framework", and "Testing / Practice Questions".`
         );
     }
 
@@ -274,6 +417,11 @@ export function parseStudyMarkdown(
         sections,
         sourceFileName: filename,
         uploadedAt: new Date().toISOString(),
+        quizCount:
+            countMatches(source, /<QuizCard\b/g) +
+            countMatches(source, /```quiz\b/g),
+        visualCount:
+            countMatches(source, /<svg\b/g) + countMatches(source, /<DCFDiagram\b/g),
     };
 }
 
@@ -286,6 +434,7 @@ export async function ensureStudyBucket() {
         allowedMimeTypes: [
             "text/markdown",
             "text/plain",
+            "text/x-markdown",
             "application/json",
             "application/octet-stream",
         ],
@@ -322,17 +471,22 @@ export async function uploadStudyMarkdownFile(
 
     await ensureStudyBucket();
 
-    const rawPath = `raw/${parsed.topicSlug}/${parsed.moduleSlug}/${parsed.losSlug}.md`;
+    const extension = file.name.includes(".")
+        ? file.name.slice(file.name.lastIndexOf("."))
+        : ".md";
+    const rawPath = `raw/${parsed.topicSlug}/${parsed.moduleSlug}/${parsed.losSlug}${extension}`;
     const parsedPath = `parsed/${parsed.topicSlug}/${parsed.moduleSlug}/${parsed.losSlug}.json`;
 
     const { error: rawError } = await supabase.storage
         .from(STUDY_CONTENT_BUCKET)
         .upload(
             rawPath,
-            new File([source], file.name, { type: file.type || "text/markdown" }),
+            new File([source], file.name, {
+                type: file.type || "text/markdown",
+            }),
             {
-            upsert: true,
-            contentType: "text/markdown; charset=utf-8",
+                upsert: true,
+                contentType: file.type || "text/markdown; charset=utf-8",
             }
         );
 
@@ -375,6 +529,21 @@ async function downloadJson<T>(path: string) {
     return (JSON.parse(await data.text()) as T) ?? null;
 }
 
+async function renderStudySectionMdx(source: string) {
+    const { content } = await compileMDX({
+        source,
+        components: mdxComponents,
+        options: {
+            mdxOptions: {
+                remarkPlugins: [remarkGfm, remarkMath],
+                rehypePlugins: [rehypeKatex],
+            },
+        },
+    });
+
+    return content;
+}
+
 export async function getLosContent(
     topicSlug: string,
     moduleSlug: string,
@@ -385,13 +554,40 @@ export async function getLosContent(
     );
 }
 
+export async function getRenderableLosContent(
+    topicSlug: string,
+    moduleSlug: string,
+    losSlug: string
+): Promise<RenderableStudyContent | null> {
+    const content = await getLosContent(topicSlug, moduleSlug, losSlug);
+
+    if (!content) {
+        return null;
+    }
+
+    const renderedSections = await Promise.all(
+        content.sections.map(async (section) => ({
+            ...section,
+            renderedContent: await renderStudySectionMdx(section.content || "_No content yet._"),
+        }))
+    );
+
+    return {
+        ...content,
+        renderedSections,
+    };
+}
+
 export async function listStudyLibrary(): Promise<LibraryTopicEntry[]> {
     const supabase = createServerClient();
     await ensureStudyBucket();
 
     const { data: topicFolders, error: topicError } = await supabase.storage
         .from(STUDY_CONTENT_BUCKET)
-        .list("parsed", { limit: 200, sortBy: { column: "name", order: "asc" } });
+        .list("parsed", {
+            limit: 200,
+            sortBy: { column: "name", order: "asc" },
+        });
 
     if (topicError) {
         throw topicError;
@@ -417,6 +613,7 @@ export async function listStudyLibrary(): Promise<LibraryTopicEntry[]> {
         }
 
         const modules: LibraryModuleEntry[] = [];
+        let topicTitle = toTitleCaseFromSlug(topicSlug);
 
         for (const moduleFolder of moduleFolders ?? []) {
             if (moduleFolder.name.includes(".")) {
@@ -437,7 +634,6 @@ export async function listStudyLibrary(): Promise<LibraryTopicEntry[]> {
 
             const losses: LibraryLosEntry[] = [];
             let moduleTitle = toTitleCaseFromSlug(moduleSlug);
-            let topicTitle = toTitleCaseFromSlug(topicSlug);
 
             for (const losFile of losFiles ?? []) {
                 if (!losFile.name.endsWith(".json")) {
@@ -453,11 +649,15 @@ export async function listStudyLibrary(): Promise<LibraryTopicEntry[]> {
                     losses.push({
                         title: payload.losTitle,
                         slug: payload.losSlug,
+                        quizCount: payload.quizCount,
+                        estimatedTimeMinutes: payload.estimatedTimeMinutes,
                     });
                 } else {
                     losses.push({
                         title: toTitleCaseFromSlug(losSlug),
                         slug: losSlug,
+                        quizCount: 0,
+                        estimatedTimeMinutes: null,
                     });
                 }
             }
@@ -467,20 +667,13 @@ export async function listStudyLibrary(): Promise<LibraryTopicEntry[]> {
                 slug: moduleSlug,
                 losses,
             });
-
-            if (!topics.find((topic) => topic.slug === topicSlug)) {
-                topics.push({
-                    title: topicTitle,
-                    slug: topicSlug,
-                    modules: [],
-                });
-            }
         }
 
-        const topic = topics.find((entry) => entry.slug === topicSlug);
-        if (topic) {
-            topic.modules = modules;
-        }
+        topics.push({
+            title: topicTitle,
+            slug: topicSlug,
+            modules,
+        });
     }
 
     return topics.sort((left, right) => left.title.localeCompare(right.title));
