@@ -16,46 +16,31 @@ import WorkedExample from "@/components/chapter/WorkedExample";
 import DCFDiagram from "@/components/chapter/diagrams/DCFDiagram";
 import YieldCurveChart from "@/components/charts/YieldCurveChart";
 import {
+    SECTION_ORDER,
+    slugify,
+    STUDY_CONTENT_BUCKET,
+} from "@/lib/study-content-parser";
+import type {
+    ParsedStudyContent,
+    SectionKey,
+    StudySection,
+    UploadOverrides,
+} from "@/lib/study-content-parser";
+import {
     createServerClient,
     hasServerSupabaseEnv,
 } from "@/lib/supabase/server";
-
-export const STUDY_CONTENT_BUCKET = "study-los-content";
+export {
+    SECTION_ORDER,
+    STUDY_CONTENT_BUCKET,
+} from "@/lib/study-content-parser";
+export type {
+    ParsedStudyContent,
+    SectionKey,
+    StudySection,
+    UploadOverrides,
+} from "@/lib/study-content-parser";
 const LOCAL_STUDY_CONTENT_DIR = path.join(process.cwd(), "content", "study");
-
-export const SECTION_ORDER = [
-    "intuition_building",
-    "ground_up_framework",
-    "core_concept_teaching",
-    "visual_anchor",
-    "examples_applications",
-    "testing_practice_questions",
-    "summary_key_takeaways",
-] as const;
-
-export type SectionKey = (typeof SECTION_ORDER)[number];
-
-export interface StudySection {
-    key: SectionKey;
-    label: string;
-    content: string;
-}
-
-export interface ParsedStudyContent {
-    topicTitle: string;
-    topicSlug: string;
-    moduleTitle: string;
-    moduleSlug: string;
-    losTitle: string;
-    losSlug: string;
-    sections: StudySection[];
-    sourceFileName: string;
-    uploadedAt: string;
-    quizCount: number;
-    visualCount: number;
-    estimatedTimeMinutes: number | null;
-    formatVersion: string;
-}
 
 export interface RenderedStudySection extends StudySection {
     renderedContent: React.ReactElement;
@@ -63,11 +48,6 @@ export interface RenderedStudySection extends StudySection {
 
 export interface RenderableStudyContent extends ParsedStudyContent {
     renderedSections: RenderedStudySection[];
-}
-
-export interface UploadOverrides {
-    topicTitle?: string;
-    moduleTitle?: string;
 }
 
 export interface LibraryLosEntry {
@@ -272,13 +252,6 @@ const mdxComponents = {
     ),
 };
 
-function slugify(value: string) {
-    return value
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, "-")
-        .replace(/(^-|-$)/g, "");
-}
-
 function normalizeHeading(value: string) {
     return value
         .toLowerCase()
@@ -286,14 +259,6 @@ function normalizeHeading(value: string) {
         .replace(/[^a-z0-9\s-]+/g, "")
         .replace(/\s+/g, " ")
         .trim();
-}
-
-function toTitleCaseFromSlug(slug: string) {
-    return slug
-        .split("-")
-        .filter(Boolean)
-        .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-        .join(" ");
 }
 
 function inferTitleFromFilename(filename: string) {
@@ -356,6 +321,14 @@ function extractMarkdownSections(source: string) {
         label: SECTION_LABELS[key],
         content: (sections.get(key) ?? []).join("\n").trim(),
     }));
+}
+
+function toTitleCaseFromSlug(slug: string) {
+    return slug
+        .split("-")
+        .filter(Boolean)
+        .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+        .join(" ");
 }
 
 function inferMetadata(
@@ -597,7 +570,31 @@ async function listDirectory(targetPath: string) {
     }
 }
 
-async function getLocalLosFilePath(
+function isStudyMarkdownFile(filename: string) {
+    return [".md", ".mdx", ".markdown"].includes(
+        path.extname(filename).toLowerCase()
+    );
+}
+
+interface LocalStudyFileMatch {
+    filePath: string;
+    content: ParsedStudyContent;
+}
+
+async function parseLocalStudyFile(
+    directoryPath: string,
+    entryName: string
+): Promise<LocalStudyFileMatch> {
+    const filePath = path.join(directoryPath, entryName);
+    const source = await fs.readFile(filePath, "utf-8");
+
+    return {
+        filePath,
+        content: parseStudyMarkdown(source, entryName),
+    };
+}
+
+async function findLocalLosMatch(
     topicSlug: string,
     moduleSlug: string,
     losSlug: string
@@ -607,15 +604,38 @@ async function getLocalLosFilePath(
         topicSlug,
         moduleSlug
     );
-    const entries = await listDirectory(directoryPath);
-    const matchedEntry = entries.find(
-        (entry) =>
-            entry.isFile() &&
-            entry.name.replace(/\.[^.]+$/, "") === losSlug &&
-            [".md", ".mdx", ".markdown"].includes(path.extname(entry.name).toLowerCase())
+    const entries = (await listDirectory(directoryPath)).filter(
+        (entry) => entry.isFile() && isStudyMarkdownFile(entry.name)
     );
 
-    return matchedEntry ? path.join(directoryPath, matchedEntry.name) : null;
+    const directEntry = entries.find(
+        (entry) => entry.name.replace(/\.[^.]+$/, "") === losSlug
+    );
+    if (directEntry) {
+        return parseLocalStudyFile(directoryPath, directEntry.name);
+    }
+
+    for (const entry of entries) {
+        const parsed = await parseLocalStudyFile(directoryPath, entry.name);
+        if (
+            parsed.content.topicSlug === topicSlug &&
+            parsed.content.moduleSlug === moduleSlug &&
+            parsed.content.losSlug === losSlug
+        ) {
+            return parsed;
+        }
+    }
+
+    return null;
+}
+
+async function getLocalLosFilePath(
+    topicSlug: string,
+    moduleSlug: string,
+    losSlug: string
+) {
+    const matchedFile = await findLocalLosMatch(topicSlug, moduleSlug, losSlug);
+    return matchedFile?.filePath ?? null;
 }
 
 async function getLocalLosContent(
@@ -623,14 +643,8 @@ async function getLocalLosContent(
     moduleSlug: string,
     losSlug: string
 ) {
-    const filePath = await getLocalLosFilePath(topicSlug, moduleSlug, losSlug);
-
-    if (!filePath) {
-        return null;
-    }
-
-    const source = await fs.readFile(filePath, "utf-8");
-    return parseStudyMarkdown(source, path.basename(filePath));
+    const matchedFile = await findLocalLosMatch(topicSlug, moduleSlug, losSlug);
+    return matchedFile?.content ?? null;
 }
 
 function addLosToAccumulator(

@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "backfill:study-lm4": "node --import tsx scripts/backfill-study-content.ts"
   },
   "dependencies": {
     "@clerk/nextjs": "^6.38.2",
