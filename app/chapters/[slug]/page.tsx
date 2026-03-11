@@ -7,6 +7,7 @@ import {
 } from "@/lib/chapters";
 import { getChapterContent, getChapterRawContent } from "@/lib/mdx";
 import ChapterReader from "@/components/chapter/ChapterReader";
+import MarkdownFallback from "@/components/chapter/MarkdownFallback";
 
 // ── Dynamic Metadata ──────────────────────────────────────
 export async function generateMetadata({
@@ -109,11 +110,15 @@ export default async function ChapterPage({
                         <p className="mb-4 text-sm text-[#A09890]">
                             Visual rendering is temporarily unavailable for this chapter, so the source text is shown instead.
                         </p>
-                        <pre className="whitespace-pre-wrap break-words font-[family-name:var(--font-sans)] text-sm leading-7 text-[#2D2A26]">
-                            {access || !rawResult.previewSource
-                                ? rawResult.fullSource
-                                : rawResult.previewSource}
-                        </pre>
+                        <div className="space-y-6">
+                            <MarkdownFallback
+                                source={
+                                    access || !rawResult.previewSource
+                                        ? rawResult.fullSource
+                                        : rawResult.previewSource
+                                }
+                            />
+                        </div>
                     </div>
                 }
                 hasAccess={access}
